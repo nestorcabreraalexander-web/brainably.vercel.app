@@ -11,7 +11,7 @@
 --brand:#0D9488;--brand-dark:#0F766E;--brand-light:#F0FDFA;
 --yellow:#FDE68A;--yellow-dark:#F59E0B;
 --bg:#F8FAFC;--text:#0F172A;--muted:#64748B;
---white:#fff;--shadow:0 4px 20px rgba(13,148,136,.07);
+--white:#fff;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
@@ -22,7 +22,8 @@ nav ul { list-style: none; display: flex; gap: 2px; }
 nav ul li button { background: none; border: none; font-family: 'Nunito', sans-serif; font-size: .83rem; font-weight: 700; color: var(--muted); cursor: pointer; padding: 6px 11px; border-radius: 50px; transition: all .2s; }
 nav ul li button:hover, nav ul li button.active { background: var(--brand-light); color: var(--brand); }
 
-.page{display:none;animation:fadeIn .3s ease;flex:1;flex-direction:column}.page.active{display:flex}
+.page{display:none;flex-direction:column;flex:1;animation:fadeIn .3s ease;}
+.page.active{display:flex !important;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
 
 .hero{text-align:center;padding:60px 20px 40px;background:linear-gradient(150deg,#F0FDFA 0%,#F8FAFC 55%,#FEF3C7 100%);flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center}
@@ -33,7 +34,6 @@ nav ul li button:hover, nav ul li button.active { background: var(--brand-light)
 .btn-primary{background:var(--brand);color:white;border:none;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;padding:14px 32px;border-radius:50px;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(13,148,136,.3);text-decoration:none;display:inline-block}
 .btn-primary:hover{background:var(--brand-dark);transform:translateY(-2px)}
 
-/* Layout containing our perfectly whitelabeled native web chat */
 .app-container {
     flex: 1;
     width: 100%;
@@ -68,7 +68,7 @@ nav ul li button:hover, nav ul li button.active { background: var(--brand-light)
       <div class="hero-badge">🚀 Empowering Students</div>
       <h1>Stuck on schoolwork?<br>Meet <em>Brainably</em>.</h1>
       <p>Your brilliant AI companion that drops direct answers to break down complex homework problems step-by-step.</p>
-      <a href="#" onclick="showPage('helper')" class="btn-primary">Open AI Assistant →</a>
+      <button onclick="showPage('helper')" class="btn-primary">Open AI Assistant →</button>
     </section>
   </div>
 
@@ -78,39 +78,23 @@ nav ul li button:hover, nav ul li button.active { background: var(--brand-light)
     </div>
   </div>
 
-  <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
-
   <script>
+  // Page Switcher Layout Engine
   function showPage(pageId) {
-    document.querySelectorAll('.page').forEach(p => { p.style.display = 'none'; p.classList.remove('active'); });
-    document.querySelectorAll('nav ul li button').forEach(b => b.classList.remove('active'));
-    const activePage = document.getElementById('page-' + pageId);
-    activePage.style.display = 'flex';
-    setTimeout(() => activePage.classList.add('active'), 10);
-    const activeNav = document.getElementById('nav-' + pageId);
-    if(activeNav) activeNav.classList.add('active');
+    document.getElementById('page-home').classList.remove('active');
+    document.getElementById('page-helper').classList.remove('active');
+    document.getElementById('nav-home').classList.remove('active');
+    document.getElementById('nav-helper').classList.remove('active');
+    
+    document.getElementById('page-' + pageId).classList.add('active');
+    document.getElementById('nav-' + pageId).classList.add('active');
   }
+  </script>
 
-  // Pure Token Initialization layout - connects directly without needing to switch pages or configure OAuth
-  new CozeWebSDK.WebChatClient({
-    config: {
-      bot_id: '7645022260021461045',
-    },
-    componentProps: {
-      title: 'Brainably Assistant',
-    },
-    el: document.getElementById('coze-web-layout'),
-    ui: {
-      layout: 'inline', // Keeps it seamlessly embedded right inside your design frame!
-    },
-    auth: {
-      type: 'token',
-      token: 'pat_K3Xw39E2Xm9w...', /cztei_0XLfAU2yVuuG8ALOKHIEOXCO3ujAkxSWvrhbvyXWn0QP8wjXRmdWIJIDbeKpvuW7A/
-      onRefreshToken: function () {
-        return 'pat_K3Xw39E2Xm9w...' /cztei_0XLfAU2yVuuG8ALOKHIEOXCO3ujAkxSWvrhbvyXWn0QP8wjXRmdWIJIDbeKpvuW7A/
-      }
-    }
-  });
+  <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
+  <script>
+    // Paste the custom layout configuration right here from Coze's screen!
+    // Make sure it includes: el: document.getElementById('coze-web-layout'), and layout: 'inline'
   </script>
 
 </body>
