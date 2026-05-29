@@ -95,7 +95,28 @@ nav ul li button:hover, nav ul li button.active { background: var(--brand-light)
   <script>
     // Paste the custom layout configuration right here from Coze's screen!
     // Make sure it includes: el: document.getElementById('coze-web-layout'), and layout: 'inline'
+  <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
+  
+  <script>
+    new CozeWebSDK.WebChatClient({
+      config: {
+        bot_id: '7645022260021461045',
+      },
+      componentProps: {
+        title: 'Brainably Assistant',
+      },
+      el: document.getElementById('coze-web-layout'), // Forces it inside your page
+      ui: {
+        layout: 'inline',                            // Keeps it hidden from Coze.com
+      },
+      auth: {
+        type: 'token',
+        token: 'cztei_0uBW3DVTUmYWhNgdD6eYDvdK56Wa8ILFdWMlQfn1wzysrhDICJWMW2EnAk09BpViE',
+        onRefreshToken: function () {
+          return 'cztei_0uBW3DVTUmYWhNgdD6eYDvdK56Wa8ILFdWMlQfn1wzysrhDICJWMW2EnAk09BpViE'
+        }
+      }
+    });
   </script>
-
 </body>
 </html>
