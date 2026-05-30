@@ -24,7 +24,7 @@
             position: relative;
         }
 
-        /* Lava Lamp Background */
+        /* Ambient Lava Lamp Background Elements */
         .lava-lamp-container {
             position: fixed;
             top: 0;
@@ -67,7 +67,7 @@
             100% { transform: translateY(0px) translateX(0px); }
         }
 
-        /* Navigation Bar */
+        /* High-Tech Translucent Navigation Header */
         .app-nav {
             background: rgba(15, 23, 42, 0.4);
             backdrop-filter: blur(20px);
@@ -109,7 +109,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* Main Grid Area */
+        /* Main Content Grid Workspace */
         .main-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -134,7 +134,7 @@
             font-size: 1.1rem;
         }
 
-        /* Search and Filtering Interface Controls */
+        /* Filtering Interface Station Control Panel */
         .search-filter-container {
             display: flex;
             flex-direction: column;
@@ -195,7 +195,7 @@
             box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
         }
 
-        /* Interactive Video Card Layout Grid */
+        /* Interactive Video Grid Component */
         .video-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -222,7 +222,7 @@
         .thumbnail-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            padding-top: 56.25%; /* 16:9 Video Aspect Ratio */
             background: #020617;
         }
 
@@ -262,7 +262,7 @@
             line-height: 1.4;
         }
 
-        /* Ask AI Integration Link Layout Button */
+        /* Ask AI Functional Integration Button Link */
         .ask-ai-btn {
             margin-top: auto;
             padding: 12px;
@@ -288,7 +288,7 @@
             box-shadow: 0 0 15px rgba(124, 58, 237, 0.3);
         }
 
-        /* Empty State Warning Label */
+        /* Empty State Label alert */
         .no-results {
             grid-column: 1 / -1;
             text-align: center;
@@ -320,7 +320,7 @@
 
         <div class="search-filter-container">
             <div class="search-wrapper">
-                <input type="text" id="videoSearch" placeholder="🔍 Search topics or subjects (e.g., Algebra, Motion, Chemistry)...">
+                <input type="text" id="videoSearch" placeholder="🔍 Search topics or subjects (e.g., Algebra, Motion, Chemical)...">
             </div>
             <div class="filter-pills">
                 <button class="pill active" data-category="all">All Subjects</button>
@@ -336,27 +336,72 @@
     </main>
 
     <script>
-        // 1. ADD NEW VIDEOS DIRECTLY TO THIS DATA ARRAY LIST BELOW
+        // MASSIVE 12-TRACK COMPILATION CURATED DATA DATABASE ARRAY
         const videoData = [
+            // === MATHEMATICS TRACK ===
             {
                 title: "How to Master Algebra Basics Fast",
                 category: "mathematics",
                 embedId: "ZdphZ7_rD9c"
             },
             {
+                title: "The Essence of Calculus (Chapter 1)",
+                category: "mathematics",
+                embedId: "WUvTyaaNkzM"
+            },
+            {
+                title: "Understanding Fractions & Layout Ratios Visually",
+                category: "mathematics",
+                embedId: "3m6vC9WvjGg"
+            },
+            {
+                title: "Probability & Statistics Core Concepts",
+                category: "mathematics",
+                embedId: "A1mQ9kD-i9I"
+            },
+
+            // === CHEMISTRY TRACK ===
+            {
                 title: "The Periodic Table Explained Completely",
                 category: "chemistry",
                 embedId: "b87S_V7H3M0"
             },
+            {
+                title: "What Are Atoms and How Do They Work?",
+                category: "chemistry",
+                embedId: "rcKilE9CyiA"
+            },
+            {
+                title: "Chemical Reactions & Equations Overview",
+                category: "chemistry",
+                embedId: "TStskvFjvno"
+            },
+            {
+                title: "Understanding Ideal Gases and Laws",
+                category: "chemistry",
+                embedId: "BY9VBlV9yJw"
+            },
+
+            // === PHYSICS TRACK ===
             {
                 title: "Newton's 3 Laws of Motion Made Clear",
                 category: "physics",
                 embedId: "O5xeyoRL95U"
             },
             {
-                title: "Understanding Fractions & Layout Ratios Visually",
-                category: "mathematics",
-                embedId: "3m6vC9WvjGg"
+                title: "What is Kinetic and Potential Energy?",
+                category: "physics",
+                embedId: "2WS1sG9xaOk"
+            },
+            {
+                title: "The Physics of Light and Reflection Waves",
+                category: "physics",
+                embedId: "JXTSCZzN-gM"
+            },
+            {
+                title: "Quantum Physics for Beginners Explained Simply",
+                category: "physics",
+                embedId: "Usu9xZctlPM"
             }
         ];
 
@@ -365,12 +410,12 @@
         const videoGrid = document.getElementById('videoGrid');
         const noResults = document.getElementById('noResults');
 
-        // Render function to dynamically mount cards
+        // Render compilation handler function
         function renderVideos() {
             const query = searchInput.value.toLowerCase().trim();
             let visibleCount = 0;
 
-            // Clear previous cards, keeping only empty state
+            // Purge active nodes except error metrics template
             const cards = videoGrid.querySelectorAll('.video-card');
             cards.forEach(card => card.remove());
 
@@ -400,7 +445,7 @@
             noResults.style.display = visibleCount === 0 ? 'block' : 'none';
         }
 
-        // Pill Selection Filter Engine
+        // Pill Click Listener Registration Loop
         document.querySelectorAll('.filter-pills .pill').forEach(pill => {
             pill.addEventListener('click', (e) => {
                 document.querySelector('.filter-pills .pill.active').classList.remove('active');
@@ -410,10 +455,10 @@
             });
         });
 
-        // Live Search Input Tracker
+        // Search Input Watcher
         searchInput.addEventListener('input', renderVideos);
 
-        // Initial Layout Initialization Bootstrap
+        // Initial Engine Start
         window.addEventListener('DOMContentLoaded', renderVideos);
     </script>
 
