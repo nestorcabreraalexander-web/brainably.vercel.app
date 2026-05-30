@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainably Quiz Arena</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: #030712;
+            color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Lava Lamp Background */
+        .lava-lamp-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.4;
+            filter: blur(90px);
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            animation: float-around 25s infinite ease-in-out;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            top: -10%;
+            right: 10%;
+            background: linear-gradient(135deg, #1e40af, #a855f7);
+        }
+
+        .blob-2 {
+            width: 450px;
+            height: 450px;
+            bottom: -5%;
+            left: -5%;
+            background: linear-gradient(45deg, #0284c7, #06b6d4);
+            animation-delay: -7s;
+        }
+
+        @keyframes float-around {
+            0% { transform: translateY(0px) translateX(0px); }
+            50% { transform: translateY(-60px) translateX(30px); }
+            100% { transform: translateY(0px) translateX(0px); }
+        }
+
+        /* Navigation Header */
+        .app-nav {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%;
+            height: 65px;
+            z-index: 10;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #22d3ee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+        }
+
+        .back-home {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Central Container Arena */
+        .main-container {
+            max-width: 700px;
+            margin: auto;
+            padding: 40px 20px;
+            width: 100%;
+            z-index: 10;
+        }
+
+        /* Dynamic Glassmorphic Quiz Frame Card */
+        .quiz-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 15px;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #22d3ee;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .score-badge {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #c084fc;
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .question-text {
+            font-size: 1.35rem;
+            font-weight: 700;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+
+        /* Interactive Option Buttons Layout */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 16px 20px;
+            color: #e2e8f0;
+            font-size: 1rem;
+            font-family: inherit;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(4px);
+        }
+
+        /* Interactive Feedback Engine Styles */
+        .option-btn.correct {
+            background: rgba(34, 197, 94, 0.15) !important;
+            border-color: #22c55e !important;
+            color: #4ade80 !important;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.15);
+        }
+
+        .option-btn.incorrect {
+            background: rgba(239, 68, 68, 0.15) !important;
+            border-color: #ef4444 !important;
+            color: #f87171 !important;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.15);
+        }
+
+        /* Next Button Station Layout */
+        .action-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #06b6d4 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: none; /* Hidden until option clicked */
+            box-shadow: 0 8px 20px rgba(6, 182, 212, 0.2);
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(6, 182, 212, 0.3);
+        }
+
+        /* Results Screen Layout Panel */
+        .results-view {
+            text-align: center;
+            display: none;
+        }
+
+        .results-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #22d3ee, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .results-score {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-bottom: 35px;
+        }
+
+        .restart-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 14px 36px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .restart-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #22d3ee;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lava-lamp-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <nav class="app-nav">
+        <a href="index.html" class="logo">
+            <img src="image_21b2dc.jpg" alt="Logo" class="logo-img" onerror="this.src='image_21b2dc.png'">
+            Brainably Arena
+        </a>
+        <a href="index.html" class="back-home">&larr; Back to Home</a>
+    </nav>
+
+    <main class="main-container">
+        
+        <div class="quiz-card" id="quizArena">
+            <div class="quiz-header">
+                <span class="progress-text" id="progressTracker">Question 1 of 5</span>
+                <span class="score-badge" id="scoreTracker">Score: 000</span>
+            </div>
+            
+            <h2 class="question-text" id="questionField">Loading challenge prompt...</h2>
+            
+            <div class="options-list" id="optionsContainer">
+                </div>
+
+            <div class="action-container">
+                <button class="next-btn" id="nextButton" onclick="advanceQuestion()">Next Challenge &rarr;</button>
+            </div>
+        </div>
+
+        <div class="quiz-card results-view" id="resultsArena">
+            <div class="results-icon">🏆</div>
+            <h2 class="results-title">Brain Quest Completed!</h2>
+            <p class="results-score" id="finalScoreField">You scored 0 out of 0 questions correctly.</p>
+            <button class="restart-btn" onclick="resetQuizGame()">Play Again</button>
+        </div>
+
+    </main>
+
+    <script>
+        // 1. ADD NEW CORE STUDY TRIVIA QUESTIONS RIGHT TO THIS SELECTION ARRAY
+        const quizDatabase = [
+            {
+                question: "Which of Newton's Laws states that for every action, there is an equal and opposite reaction?",
+                options: ["First Law", "Second Law", "Third Law", "Law of Universal Gravitation"],
+                answerIndex: 2
+            },
+            {
+                question: "What is the primary function of electrons in forming a chemical covalent bond?",
+                options: ["Complete transfer of electrons", "Sharing of valence electrons", "Loss of core shell particles", "Creation of isotopic protons"],
+                answerIndex: 1
+            },
+            {
+                question: "In algebra, what value of x satisfies the baseline statement linear formula: 3x + 7 = 22?",
+                options: ["x = 3", "x = 5", "x = 4", "x = 6"],
+                answerIndex: 1
+            },
+            {
+                question: "Which element holds the atomic registration number 1 on the absolute Periodic Table framework?",
+                options: ["Helium", "Oxygen", "Lithium", "Hydrogen"],
+                answerIndex: 3
+            },
+            {
+                question: "What type of energy is stored directly inside an object due to its structural position or elevation height?",
+                options: ["Kinetic Energy", "Potential Energy", "Thermal Radiation", "Electrical Current Energy"],
+                answerIndex: 1
+            }
+        ];
+
+        let activeIndex = 0;
+        let cumulativeScore = 0;
+        let actionLocked = false;
+
+        const quizArena = document.getElementById('quizArena');
+        const resultsArena = document.getElementById('resultsArena');
+        const progressTracker = document.getElementById('progressTracker');
+        const scoreTracker = document.getElementById('scoreTracker');
+        const questionField = document.getElementById('questionField');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const nextButton = document.getElementById('nextButton');
+        const finalScoreField = document.getElementById('finalScoreField');
+
+        // Main deployment launcher setup to draw cards
+        function loadChallenge() {
+            actionLocked = false;
+            nextButton.style.display = 'none';
+            optionsContainer.innerHTML = '';
+
+            const currentData = quizDatabase[activeIndex];
+            
+            // Render text trackers
+            progressTracker.innerText = `Question ${activeIndex + 1} of ${quizDatabase.length}`;
+            questionField.innerText = currentData.question;
+
+            // Generate answer choice buttons
+            currentData.options.forEach((optionText, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.innerText = optionText;
+                button.onclick = () => verifyChoiceSelection(index, button);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // Processing selection analysis engine
+        function verifyChoiceSelection(chosenIndex, targetButton) {
+            if (actionLocked) return;
+            actionLocked = true;
+
+            const correctIndex = quizDatabase[activeIndex].answerIndex;
+            const choiceButtons = optionsContainer.querySelectorAll('.option-btn');
+
+            if (chosenIndex === correctIndex) {
+                targetButton.classList.add('correct');
+                cumulativeScore += 100;
+                scoreTracker.innerText = `Score: ${cumulativeScore}`;
+            } else {
+                targetButton.classList.add('incorrect');
+                // Highlight the correct solution safely so student learns
+                choiceButtons[correctIndex].classList.add('correct');
+            }
+
+            // Disable all options so they can't change their answer
+            choiceButtons.forEach(btn => btn.disabled = true);
+            nextButton.style.display = 'block';
+        }
+
+        // Action tracker to process game step incrementation loop
+        function advanceQuestion() {
+            activeIndex++;
+            if (activeIndex < quizDatabase.length) {
+                loadChallenge();
+            } else {
+                terminateQuizGame();
+            }
+        }
+
+        // End Game execution frame toggle state switch
+        function terminateQuizGame() {
+            quizArena.style.display = 'none';
+            resultsArena.style.display = 'block';
+            
+            const totalQuestions = quizDatabase.length;
+            const correctAnswers = cumulativeScore / 100;
+            finalScoreField.innerText = `You answered ${correctAnswers} out of ${totalQuestions} questions correctly. Total Score: ${cumulativeScore} points!`;
+        }
+
+        // Reboot loop structure layout script node
+        function resetQuizGame() {
+            activeIndex = 0;
+            cumulativeScore = 0;
+            scoreTracker.innerText = "Score: 000";
+            resultsArena.style.display = 'none';
+            quizArena.style.display = 'block';
+            loadChallenge();
+        }
+
+        // Engine Bootstrap Launch
+        window.addEventListener('DOMContentLoaded', loadChallenge);
+    </script>
+
+</body>
+</html>
