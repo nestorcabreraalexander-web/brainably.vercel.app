@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brainably – Free AI Homework Helper for Students</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght=400;600;700;800;900&family=Fraunces:ital,wght=0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+--brand:#0D9488;--brand-dark:#0F766E;--brand-light:#F0FDFA;
+--yellow:#FDE68A;--bg:#F8FAFC;--text:#0F172A;--muted:#64748B;
+--white:#fff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+nav{background:var(--white);padding:15px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.04);position:sticky;top:0;z-index:300}
+.logo{font-size:1.35rem;font-weight:900;color:var(--brand);display:flex;align-items:center;gap:6px;text-decoration:none}
+.school-tag{font-size:.72rem;font-weight:800;color:var(--muted);margin-left:3px}
+.hero{text-align:center;padding:80px 20px;background:linear-gradient(150deg,#F0FDFA 0%,#F8FAFC 55%,#FEF3C7 100%);flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.hero-badge{display:inline-block;background:var(--yellow);color:#92400E;font-size:.72rem;font-weight:800;padding:4px 13px;border-radius:50px;margin-bottom:14px;letter-spacing:.06em;text-transform:uppercase}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:700;line-height:1.15;max-width:700px;margin:0 auto 14px}
+.hero h1 em{font-style:italic;color:var(--brand)}
+.hero p{color:var(--muted);font-size:1.1rem;max-width:520px;margin:0 auto 26px;line-height:1.7}
+.instruction-bubble { background: white; padding: 15px 25px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); font-weight: 700; color: var(--brand-dark); border: 1px dashed var(--brand); }
+</style>
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="logo">
+      <svg width="24" height="24" viewBox="0 0 100 100" style="vertical-align:middle; margin-right:4px;">
+        <circle cx="50" cy="50" r="50" fill="#0D9488"/>
+        <path d="M50 20C38 20 28 26 24 35C19 42 19 50 22 57C18 61 17 68 20 75C23 83 30 88 40 89C44 90 47 89 49 87L49 52L50 52L50 20Z" fill="white" opacity=".95"/>
+        <circle cx="80" cy="22" r="8" fill="#F59E0B"/>
+      </svg>
+      Brainably <span class="school-tag">AI Tutor</span>
+    </a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-badge">🚀 Empowering Students</div>
+    <h1>Stuck on schoolwork?<br>Meet <em>Brainably</em>.</h1>
+    <p>Your brilliant AI companion that drops direct answers to break down complex homework problems step-by-step.</p>
+    <div class="instruction-bubble">👇 Click the chat circle in the bottom right corner to start!</div>
+  </section>
+
+  <script type="text/javascript">
+    (function(d, t) {
+        var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+        v.onload = function() {
+          window.voiceflow.chat.load({
+            verify: { projectID: '6a1a3c955bbf6597163e66bc' },
+            url: 'https://general-runtime.voiceflow.com',
+            version: {
+              url: 'https://runtime-api.voiceflow.com'
+            }
+          });
+        }
+        v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs'; v.type = 'text/javascript';
+        s.parentNode.insertBefore(v, s);
+    })(document, 'script');
+  </script>
+
+</body>
+</html>
