@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brainably – Premium AI Homework Helper for Students</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&family=Playfair+Display:ital,wght=0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand: #22d3ee;
+  --brand-dark: #0891b2;
+  --brand-light: rgba(34, 211, 238, 0.1);
+  --accent: #a855f7;
+  --bg-dark: #030712;
+  --card-bg: rgba(15, 23, 42, 0.6);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+}
+
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+html, body {
+  height: auto;
+  min-height: 100%;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+body { 
+  display: flex; 
+  flex-direction: column; 
+  position: relative;
+}
+
+/* Ambient Lava Lamp Background Elements */
+.lava-lamp-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.45;
+  filter: blur(90px);
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  animation: float-around 25s infinite ease-in-out;
+}
+
+.blob-1 {
+  width: 500px;
+  height: 500px;
+  top: -10%;
+  right: 10%;
+  background: linear-gradient(135deg, #1e40af, #a855f7);
+  animation-duration: 35s;
+}
+
+.blob-2 {
+  width: 450px;
+  height: 450px;
+  bottom: 20%;
+  left: -5%;
+  background: linear-gradient(45deg, #0284c7, #06b6d4);
+  animation-duration: 28s;
+  animation-delay: -7s;
+}
+
+@keyframes float-around {
+  0% { transform: translateY(0px) translateX(0px) scale(1); }
+  50% { transform: translateY(-80px) translateX(40px) scale(1.1); }
+  100% { transform: translateY(0px) translateX(0px) scale(1); }
+}
+
+/* High-Tech Translucent Top Header */
+nav {
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 18px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--brand);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  text-shadow: 0 0 15px rgba(34, 211, 238, 0.25);
+}
+
+.logo-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+}
+
+.school-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #22d3ee;
+  background: rgba(34, 211, 238, 0.15);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  padding: 2px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 100px 24px 60px;
+  max-width: 950px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  position: relative;
+  z-index: 10;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.6rem, 7.5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.hero h1 em { 
+  font-style: italic; 
+  color: transparent;
+  background: linear-gradient(to right, #22d3ee, #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.hero p {
+  color: var(--text-muted);
+  font-size: 1.3rem;
+  max-width: 620px;
+  line-height: 1.65;
+}
+
+.launch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #06b6d4 0%, #7c3aed 100%);
+  color: white;
+  text-decoration: none;
+  padding: 18px 44px;
+  font-weight: 700;
+  font-size: 1.15rem;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(6, 182, 212, 0.25);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.launch-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 45px rgba(6, 182, 212, 0.35);
+}
+
+/* Features Studio Section Wrapper */
+.features-container {
+  max-width: 1100px;
+  margin: 0 auto 100px;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  position: relative;
+  z-index: 10;
+}
+
+.feature-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 35px;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(34, 211, 238, 0.3);
+}
+
+.card-icon {
+  font-size: 2rem;
+  background: rgba(255, 255, 255, 0.04);
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-card h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.feature-card p {
+  color: var(--text-muted);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.feature-link {
+  color: var(--brand);
+  text-decoration: none;
+  font-weight: 700;
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.feature-link:hover {
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  nav { padding: 15px 20px; }
+  .features-container { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+  <div class="lava-lamp-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <nav>
+    <a href="#" class="logo">
+      <img src="image_21b2dc.jpg" alt="Brainably Logo" class="logo-img" onerror="this.src='image_21b2dc.png'">
+      Brainably <span class="school-tag">AI Tutor</span>
+    </a>
+  </nav>
+
+  <section class="hero">
+    <h1>Stuck on schoolwork?<br>Meet <em>Brainably</em>.</h1>
+    <p>Your premium, step-by-step AI study companion designed to unpack complex subjects cleanly and completely free.</p>
+    <a href="app.html" class="launch-btn">✨ Enter Study Room &rarr;</a>
+  </section>
+
+  <section class="features-container">
+    
+    <div class="feature-card">
+      <div class="card-icon">📺</div>
+      <h3>Video Academy</h3>
+      <p>Access a curated library of high-quality, bite-sized educational videos designed to make difficult topics simple to understand.</p>
+      <a href="library.html" class="feature-link">Explore Library &rarr;</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="card-icon">🎮</div>
+      <h3>Brain Quest Quiz</h3>
+      <p>Test your knowledge with gamified quizzes! Earn scores, challenge yourself, and master your subjects through interactive play.</p>
+      <a href="#" class="feature-link">Play Quiz &rarr;</a>
+    </div>
+
+  </section>
+
+</body>
+</html>
