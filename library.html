@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainably Video Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: #030712;
+            color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Lava Lamp Background */
+        .lava-lamp-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.4;
+            filter: blur(90px);
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            animation: float-around 25s infinite ease-in-out;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            top: -10%;
+            right: 10%;
+            background: linear-gradient(135deg, #1e40af, #a855f7);
+        }
+
+        .blob-2 {
+            width: 450px;
+            height: 450px;
+            bottom: -5%;
+            left: -5%;
+            background: linear-gradient(45deg, #0284c7, #06b6d4);
+            animation-delay: -7s;
+        }
+
+        @keyframes float-around {
+            0% { transform: translateY(0px) translateX(0px); }
+            50% { transform: translateY(-60px) translateX(30px); }
+            100% { transform: translateY(0px) translateX(0px); }
+        }
+
+        /* Navigation Bar */
+        .app-nav {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%;
+            height: 65px;
+            z-index: 10;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #22d3ee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+        }
+
+        .back-home {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Main Grid Area */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #22d3ee, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .page-subtitle {
+            color: #94a3b8;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* Premium Video Card design */
+        .video-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(34, 211, 238, 0.4);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+
+        .thumbnail-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #020617;
+        }
+
+        .thumbnail-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-info {
+            padding: 20px;
+        }
+
+        .video-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #22d3ee;
+            background: rgba(34, 211, 238, 0.1);
+            padding: 4px 10px;
+            border-radius: 50px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .video-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lava-lamp-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <nav class="app-nav">
+        <a href="index.html" class="logo">
+            <img src="image_21b2dc.jpg" alt="Logo" class="logo-img" onerror="this.src='image_21b2dc.png'">
+            Brainably Academy
+        </a>
+        <a href="index.html" class="back-home">&larr; Back to Home</a>
+    </nav>
+
+    <main class="main-container">
+        <h1 class="page-title">Educational Video Academy</h1>
+        <p class="page-subtitle">Master complex concepts visually with high-quality core tutorials.</p>
+
+        <div class="video-grid">
+            
+            <div class="video-card">
+                <div class="thumbnail-wrapper">
+                    <iframe src="https://www.youtube.com/embed/ZdphZ7_rD9c" allowfullscreen></iframe>
+                </div>
+                <div class="video-info">
+                    <span class="video-tag">Mathematics</span>
+                    <h3 class="video-title">How to Master Algebra Basics Fast</h3>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="thumbnail-wrapper">
+                    <iframe src="https://www.youtube.com/embed/b87S_V7H3M0" allowfullscreen></iframe>
+                </div>
+                <div class="video-info">
+                    <span class="video-tag">Chemistry</span>
+                    <h3 class="video-title">The Periodic Table Explained Completely</h3>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="thumbnail-wrapper">
+                    <iframe src="https://www.youtube.com/embed/O5xeyoRL95U" allowfullscreen></iframe>
+                </div>
+                <div class="video-info">
+                    <span class="video-tag">Physics</span>
+                    <h3 class="video-title">Newton's 3 Laws of Motion Made Clear</h3>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
