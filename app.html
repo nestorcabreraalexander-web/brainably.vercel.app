@@ -11,82 +11,166 @@
             padding: 0;
             box-sizing: border-box;
         }
+        
+        /* Dark high-tech background matching your logo */
         html, body {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            background-color: #030712;
             font-family: 'Plus Jakarta Sans', sans-serif;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            position: relative;
         }
 
-        /* Premium Center Layout Nav Bar displaying your custom logo */
+        /* Ambient Glowing Lava Lamp Blobs */
+        .lava-lamp-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.6;
+            filter: blur(80px);
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #06b6d4, #a855f7);
+            animation: float-around 25s infinite ease-in-out;
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            top: -10%;
+            left: 10%;
+            background: linear-gradient(135deg, #1e40af, #a855f7);
+            animation-duration: 30s;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            bottom: -10%;
+            right: 5%;
+            background: linear-gradient(45deg, #0284c7, #6366f1);
+            animation-duration: 25s;
+            animation-delay: -5s;
+        }
+
+        .blob-3 {
+            width: 300px;
+            height: 300px;
+            top: 40%;
+            left: 50%;
+            background: linear-gradient(225deg, #d946ef, #1d4ed8);
+            animation-duration: 20s;
+            animation-delay: -10s;
+        }
+
+        @keyframes float-around {
+            0% { transform: translateY(0px) translateX(0px) scale(1); }
+            33% { transform: translateY(-100px) translateX(50px) scale(1.1); }
+            66% { transform: translateY(50px) translateX(-80px) scale(0.9); }
+            100% { transform: translateY(0px) translateX(0px) scale(1); }
+        }
+
+        /* High-Tech Translucent Navigation Header */
         .app-nav {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             padding: 15px 30px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             width: 100%;
             height: 65px;
+            z-index: 10;
         }
+        
         .logo {
             font-size: 1.4rem;
             font-weight: 800;
-            color: #0d9488;
+            color: #22d3ee;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             text-decoration: none;
-        }
-        .back-home {
-            font-size: 0.9rem;
-            color: #475569;
-            text-decoration: none;
-            font-weight: 600;
-            padding: 6px 14px;
-            border-radius: 8px;
-            background: #e2e8f0;
+            text-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
         }
 
-        /* Main Area that centers the chat interface */
+        .logo-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+        }
+
+        .back-home {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+        }
+
+        .back-home:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #f8fafc;
+        }
+
+        /* Main Workspace Section */
         .workspace {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 24px;
             height: calc(100vh - 65px);
+            z-index: 10;
         }
 
-        /* Beautiful Centered Chat Wrapper Card */
+        /* Premium Center Layout Panel Card */
         #vflow-container {
             width: 100%;
-            max-width: 800px;
+            max-width: 850px;
             height: 100%;
-            max-height: 750px;
-            background: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.06);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            max-height: 780px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(6, 182, 212, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             overflow: hidden;
         }
     </style>
 </head>
 <body>
 
+    <div class="lava-lamp-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
     <nav class="app-nav">
         <a href="index.html" class="logo">
-            <svg width="26" height="26" viewBox="0 0 100 100" style="vertical-align:middle;">
-                <circle cx="50" cy="50" r="50" fill="#0d9488"/>
-                <path d="M50 22C36 22 26 29 22 39C17 47 17 56 20 63C16 68 15 75 18 83C21 91 29 96 39 97L49 55L50 22Z" fill="white" opacity=".95"/>
-            </svg>
+            <img src="image_21b2dc.jpg" alt="Logo" class="logo-img">
             Brainably Workspace
         </a>
-        <a href="index.html" class="back-home">&larr; Home</a>
+        <a href="index.html" class="back-home">&larr; Exit Room</a>
     </nav>
 
     <div class="workspace">
