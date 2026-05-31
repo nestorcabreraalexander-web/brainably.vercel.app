@@ -221,7 +221,7 @@
         .streak-label { font-size: 0.85rem; text-transform: uppercase; font-weight: 700; color: var(--text-main); letter-spacing: 0.08em; margin-top: 5px; }
         .streak-bonus-text { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; }
 
-        /* 📍 FEATURE 1: DISTRICT LOCALIZATION ELEMENT CARD */
+        /* DISTRICT LOCALIZATION ELEMENT CARD */
         .district-sync-section {
             max-width: 1200px;
             margin: 20px auto;
@@ -328,7 +328,7 @@
         .fill-physics { background: linear-gradient(90deg, #06b6d4, #22d3ee); }
         .fill-chemistry { background: linear-gradient(90deg, #10b981, #34d399); }
 
-        /* 📁 FEATURE 2 & 3: UTILITY ACTIONS & TEACHER PORTAL MATRIX */
+        /* UTILITY ACTIONS & TEACHER PORTAL MATRIX */
         .utility-deck {
             max-width: 1200px;
             margin: 20px auto 60px auto;
@@ -400,7 +400,7 @@
         <div class="brand" id="navBrandText">Brainably Core Hub</div>
         
         <div class="control-station">
-            <select class="lang-picker" id="languageSelector" onchange="executeLanguageTranslationSwitch()">
+            <select class="lang-picker" id="languageSelector" onchange="playBrainablySound('click'); executeLanguageTranslationSwitch();">
                 <option value="en">🇺🇸 English</option>
                 <option value="es">🇪🇸 Español</option>
                 <option value="fr">🇫🇷 Français</option>
@@ -409,13 +409,13 @@
                 <option value="pt">🇵🇹 Português</option>
             </select>
 
-            <button class="theme-toggle-btn" onclick="toggleInterfaceColorTheme()" id="themeToggleIcon">🌙</button>
+            <button class="theme-toggle-btn" onclick="toggleInterfaceColorTheme();" id="themeToggleIcon">🌙</button>
 
             <div class="theme-selector-box">
                 <span class="theme-label">Vibe</span>
-                <div class="cswatch swatch-purple active" id="swatch-p" onclick="switchSystemTheme('purple')"></div>
-                <div class="cswatch swatch-cyan" id="swatch-c" onclick="switchSystemTheme('cyan')"></div>
-                <div class="cswatch swatch-green" id="swatch-g" onclick="switchSystemTheme('green')"></div>
+                <div class="cswatch swatch-purple active" id="swatch-p" onclick="switchSystemTheme('purple'); playBrainablySound('spark');"></div>
+                <div class="cswatch swatch-cyan" id="swatch-c" onclick="switchSystemTheme('cyan'); playBrainablySound('spark');"></div>
+                <div class="cswatch swatch-green" id="swatch-g" onclick="switchSystemTheme('green'); playBrainablySound('spark');"></div>
             </div>
         </div>
     </nav>
@@ -426,7 +426,7 @@
             <p id="heroParagraph">Select an environment below to begin your study acceleration pipeline. Your progress, history logs, and gamified streak achievements are stored automatically right inside your terminal profile matrix.</p>
         </div>
 
-        <div class="streak-card" onclick="triggerManualConfettiCelebration()">
+        <div class="streak-card" onclick="triggerManualConfettiCelebration(); playBrainablySound('levelUp');">
             <div class="fire-icon">🔥</div>
             <div class="streak-number" id="streakDisplay">0</div>
             <div class="streak-label" id="streakLabel">Day Study Streak</div>
@@ -445,7 +445,7 @@
     </section>
 
     <main class="dashboard-grid">
-        <a href="app.html" class="room-card study-room" onclick="incrementSkillMetric('math', 5)">
+        <a href="app.html" class="room-card study-room" onclick="playBrainablySound('click'); incrementSkillMetric('math', 5)">
             <div class="room-icon">🧠</div>
             <div class="room-meta">
                 <h2 id="room1Title">AI Deep Learning Room</h2>
@@ -453,7 +453,7 @@
             </div>
         </a>
 
-        <a href="library.html" class="room-card academy" onclick="incrementSkillMetric('physics', 8)">
+        <a href="library.html" class="room-card academy" onclick="playBrainablySound('click'); incrementSkillMetric('physics', 8)">
             <div class="room-icon">🚀</div>
             <div class="room-meta">
                 <h2 id="room2Title">Video Library & Explainer</h2>
@@ -461,7 +461,7 @@
             </div>
         </a>
 
-        <a href="quiz.html" class="room-card quest" onclick="incrementSkillMetric('chemistry', 15)">
+        <a href="quiz.html" class="room-card quest" onclick="playBrainablySound('click'); incrementSkillMetric('chemistry', 15)">
             <div class="room-icon">🎯</div>
             <div class="room-meta">
                 <h2 id="room3Title">Brain Quest Challenge</h2>
@@ -501,7 +501,7 @@
         <div class="util-card">
             <h2>📦 Local Data Exporter</h2>
             <p>Compile and generate a local Markdown review sheet containing your current study sessions logs and competency vectors directly from browser memory.</p>
-            <button class="util-btn" onclick="exportStudyGuideLog()">Download Summary Pack (.txt)</button>
+            <button class="util-btn" onclick="playBrainablySound('spark'); exportStudyGuideLog();">Download Summary Pack (.txt)</button>
         </div>
 
         <div class="util-card teacher-box">
@@ -513,6 +513,50 @@
     </section>
 
     <script>
+        // ==========================================================================
+        // 🔊 AUDIO HARDWARE CHIPTUNE SYNTHESIZER ENGINE (Pure Code Audio)
+        // ==========================================================================
+        function playBrainablySound(effectType) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) return;
+
+            const audioCtx = new AudioContextClass();
+
+            if (effectType === 'levelUp') {
+                // Ascending Mario-style arcade chime
+                playTone(audioCtx, 523.25, 0.08, 0);       // Note C5
+                playTone(audioCtx, 659.25, 0.08, 0.06);    // Note E5
+                playTone(audioCtx, 783.99, 0.08, 0.12);    // Note G5
+                playTone(audioCtx, 1046.50, 0.2, 0.18);    // Note C6
+            } 
+            else if (effectType === 'click') {
+                // Subtle, crisp UI selection click
+                playTone(audioCtx, 880, 0.03, 0);          // Note A5
+            }
+            else if (effectType === 'spark') {
+                // Quick high-pitched energetic magic spark
+                playTone(audioCtx, 1200, 0.04, 0);
+                playTone(audioCtx, 1500, 0.04, 0.03);
+            }
+        }
+
+        function playTone(context, frequency, duration, delay) {
+            const oscillator = context.createOscillator();
+            const gainNode = context.createGain();
+
+            oscillator.type = 'triangle';
+            oscillator.frequency.setValueAtTime(frequency, context.currentTime + delay);
+
+            gainNode.gain.setValueAtTime(0.12, context.currentTime + delay);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + delay + duration);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(context.destination);
+
+            oscillator.start(context.currentTime + delay);
+            oscillator.stop(context.currentTime + delay + duration);
+        }
+
         // ==========================================================================
         // 🌐 TRANSLATION DICTIONARY MATRIX
         // ==========================================================================
@@ -559,6 +603,7 @@
         // 🌓 GLOBAL LIGHT / DARK INTERFACE CONTROLLER
         // ==========================================================================
         function toggleInterfaceColorTheme() {
+            playBrainablySound('click');
             const activeTheme = document.documentElement.getAttribute('data-theme');
             const targetTheme = (activeTheme === 'light') ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', targetTheme);
@@ -586,7 +631,7 @@
         }
 
         // ==========================================================================
-        // 📦 FEATURE 2 FUNCTION: CLIENT-SIDE LOCAL FILES DOWNLOAD ENGINE
+        // CLIENT-SIDE LOCAL FILES DOWNLOAD ENGINE
         // ==========================================================================
         function exportStudyGuideLog() {
             const m = localStorage.getItem('brainably_metric_math') || '25';
@@ -606,9 +651,10 @@
         }
 
         // ==========================================================================
-        // 👨‍🏫 FEATURE 3 FUNCTION: NO-OVERHEAD TEACHER PROMPTING PORTAL
+        // NO-OVERHEAD TEACHER PROMPTING PORTAL
         // ==========================================================================
         async function toggleTeacherSandboxMode() {
+            playBrainablySound('click');
             const consoleArea = document.getElementById('teacherConsole');
             const actionBtn = document.getElementById('teacherToggleBtn');
 
@@ -648,6 +694,7 @@
                     if(resData.choices && resData.choices[0]) {
                         consoleArea.value = resData.choices[0].message.content;
                         actionBtn.innerText = '✓ Plan Created! Copy Text Above';
+                        playBrainablySound('levelUp');
                     }
                 } catch(e) {
                     consoleArea.value = "Network connectivity timeout fetching telemetry configurations.";
@@ -687,7 +734,7 @@
                 calculatedStreak = 1;
                 localStorage.setItem('brainably_streak_counter', 1);
                 localStorage.setItem('brainably_last_active_date', todayKeyString);
-                setTimeout(() => launchConfettiExplosionEngine(), 800);
+                setTimeout(() => { launchConfettiExplosionEngine(); playBrainablySound('levelUp'); }, 800);
             } else if (lastStudyDayStamp !== todayKeyString) {
                 const previousDayObj = new Date();
                 previousDayObj.setDate(previousDayObj.getDate() - 1);
@@ -697,7 +744,7 @@
                     calculatedStreak += 1;
                     localStorage.setItem('brainably_streak_counter', calculatedStreak);
                     localStorage.setItem('brainably_last_active_date', todayKeyString);
-                    setTimeout(() => launchConfettiExplosionEngine(), 800);
+                    setTimeout(() => { launchConfettiExplosionEngine(); playBrainablySound('levelUp'); }, 800);
                 } else {
                     calculatedStreak = 1;
                     localStorage.setItem('brainably_streak_counter', 1);
