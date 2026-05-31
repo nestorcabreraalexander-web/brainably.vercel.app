@@ -124,7 +124,6 @@
             backdrop-filter: blur(10px);
         }
 
-        /* High-Tech Persona Switcher Bar */
         .persona-switcher {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -152,16 +151,10 @@
             gap: 6px;
         }
 
-        .persona-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.03);
-            color: #fff;
-        }
-
         .persona-btn.active {
             background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(124, 58, 237, 0.2));
             border: 1px solid rgba(34, 211, 238, 0.4);
             color: #22d3ee;
-            box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
         }
 
         .messages-box {
@@ -195,7 +188,6 @@
             color: #fff;
             align-self: flex-end;
             border-bottom-right-radius: 4px;
-            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
         }
 
         .message.ai {
@@ -204,6 +196,13 @@
             color: #f8fafc;
             align-self: flex-start;
             border-bottom-left-radius: 4px;
+        }
+
+        /* Action bar for Inputs and Export Button */
+        .chat-controls-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .input-area {
@@ -235,6 +234,29 @@
             cursor: pointer;
         }
 
+        /* Glowing PDF Study Guide Button */
+        .export-btn {
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px dashed rgba(34, 211, 238, 0.4);
+            color: #22d3ee;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .export-btn:hover {
+            background: rgba(34, 211, 238, 0.2);
+            border-style: solid;
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.15);
+        }
+
         /* High-Tech Vibe Timer Card */
         .timer-container {
             flex: 0.7;
@@ -248,7 +270,6 @@
             justify-content: center;
             backdrop-filter: blur(25px);
             position: relative;
-            transition: all 0.5s ease;
         }
 
         .timer-container.study-vibe {
@@ -289,31 +310,17 @@
             font-weight: 700;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.2s ease;
         }
 
-        .vibe-btn.active-study {
-            background: #a855f7;
-            color: white;
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
-        }
-
-        .vibe-btn.active-break {
-            background: #22d3ee;
-            color: #030712;
-            box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
-        }
+        .vibe-btn.active-study { background: #a855f7; color: white; }
+        .vibe-btn.active-break { background: #22d3ee; color: #030712; }
 
         .time-display {
             font-size: 4.5rem;
             font-weight: 800;
             letter-spacing: -0.02em;
             margin-bottom: 30px;
-            font-variant-numeric: tabular-nums;
-            background: linear-gradient(to right, #fff, #e2e8f0);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: #fff;
         }
 
         .timer-controls {
@@ -329,15 +336,11 @@
             border-radius: 14px;
             border: none;
             font-weight: 700;
-            font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.2s ease;
         }
 
         .btn-start { background: #f8fafc; color: #030712; }
-        .btn-start:hover { transform: translateY(-2px); }
         .btn-reset { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); color: #e2e8f0; }
-        .btn-reset:hover { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #f87171; }
 
         /* API Settings Panel Drawer */
         .settings-panel {
@@ -357,13 +360,30 @@
 
         .settings-panel h3 { font-size: 1.1rem; margin-bottom: 10px; color: #22d3ee; }
         .settings-panel p { font-size: 0.82rem; color: #94a3b8; margin-bottom: 15px; line-height: 1.4; }
-        .settings-panel input { width: 100%; padding: 12px; background: #030712; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #fff; font-size: 0.88rem; margin-bottom: 12px; outline: none; }
+        .settings-panel input { width: 100%; padding: 12px; background: #030712; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #fff; margin-bottom: 12px; outline: none; }
         .save-key-btn { width: 100%; background: #22d3ee; color: #030712; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+
+        /* Hidden print window workspace container */
+        #printTemplateFrame { display: none; }
+
+        /* ==========================================================================
+           ADVANCED SYSTEM PRINT OVERRIDES (Triggers clean PDF compiles automatically)
+           ========================================================================== */
+        @media print {
+            body * { display: none !important; }
+            #printTemplateFrame { display: block !important; background: #fff !important; color: #000 !important; padding: 30px !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important; }
+            .print-header { border-bottom: 3px double #000; padding-bottom: 15px; margin-bottom: 25px; text-align: center; }
+            .print-header h1 { font-size: 28px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+            .print-header p { font-size: 12px; color: #444; font-style: italic; }
+            .print-grid { display: block; }
+            .print-card { page-break-inside: avoid; border: 1px solid #ddd; border-left: 5px solid #000; padding: 15px; margin-bottom: 18px; background: #fdfdfd; }
+            .print-card-user { font-weight: 700; font-size: 13px; color: #111; margin-bottom: 4px; text-transform: uppercase; }
+            .print-card-ai { font-size: 13px; color: #222; line-height: 1.6; white-space: pre-wrap; }
+        }
 
         @media (max-width: 900px) {
             .workspace { flex-direction: column; overflow-y: auto; }
             .chat-container { min-height: 500px; }
-            .timer-container { padding: 40px 20px; }
         }
     </style>
 </head>
@@ -391,7 +411,6 @@
     <main class="workspace">
         
         <section class="chat-container">
-            
             <div class="persona-switcher">
                 <button class="persona-btn active" id="p-eli5" onclick="changePersona('eli5')">🚀 ELI5 Mode</button>
                 <button class="persona-btn" id="p-socratic" onclick="changePersona('socratic')">🧠 Socratic Coach</button>
@@ -399,12 +418,18 @@
             </div>
 
             <div class="messages-box" id="chatBox">
-                <div class="message ai" id="welcomeMsg">Welcome back! I am currently running in 🚀 ELI5 Mode. I'll break down complicated ideas using simple analogies and fun examples!</div>
+                <div class="message ai">Welcome back! I am currently running in 🚀 ELI5 Mode. I'll break down complicated ideas using simple analogies and fun examples!</div>
             </div>
 
-            <div class="input-area">
-                <input type="text" id="userInput" placeholder="Ask a question or paste complex text details..." onkeydown="if(event.key === 'Enter') sendToAi()">
-                <button class="send-btn" onclick="sendToAi()">Ask AI</button>
+            <div class="chat-controls-wrapper">
+                <div class="input-area">
+                    <input type="text" id="userInput" placeholder="Ask a question or paste complex text details..." onkeydown="if(event.key === 'Enter') sendToAi()">
+                    <button class="send-btn" onclick="sendToAi()">Ask AI</button>
+                </div>
+                
+                <button class="export-btn" onclick="generateCheatSheetPdf()">
+                    ⚡ Export Study Guide Cheat Sheet (PDF)
+                </button>
             </div>
         </section>
 
@@ -426,8 +451,66 @@
 
     </main>
 
+    <div id="printTemplateFrame">
+        <div class="print-header">
+            <h1>Brainably High-Yield Study Guide</h1>
+            <p>Automated Summary Sheets Generated via Brainably AI Ecosystem Room</p>
+        </div>
+        <div class="print-grid" id="printOutputGrid">
+            </div>
+    </div>
+
     <script>
-        // CORE PERSONA DATABASE ROUTING MATRIX
+        // PDF CHEAT SHEET GENERATION CONTROLLER 
+        function generateCheatSheetPdf() {
+            const chatBoxMessages = document.getElementById('chatBox').children;
+            const printOutputGrid = document.getElementById('printOutputGrid');
+            
+            // Clear out any old printed elements
+            printOutputGrid.innerHTML = '';
+            
+            let elementsAdded = 0;
+
+            // Loop through active screen messages and restructure them for print layout
+            for (let i = 0; i < chatBoxMessages.length; i++) {
+                const currentMsg = chatBoxMessages[i];
+                
+                // Skip placeholder loader text nodes
+                if (currentMsg.innerText === 'Thinking...') continue;
+
+                // Determine conversation context roles
+                const isUser = currentMsg.classList.contains('user');
+                const speakerLabel = isUser ? "💡 Question / Topic Studied:" : "🧠 AI Breakdown Summary:";
+
+                // Construct clean printable item block cards
+                const printCard = document.createElement('div');
+                printCard.className = 'print-card';
+
+                const roleHeader = document.createElement('div');
+                roleHeader.className = 'print-card-user';
+                roleHeader.innerText = speakerLabel;
+
+                const contentBody = document.createElement('div');
+                contentBody.className = 'print-card-ai';
+                contentBody.innerText = currentMsg.innerText;
+
+                printCard.appendChild(roleHeader);
+                printCard.appendChild(contentBody);
+                printOutputGrid.appendChild(printCard);
+                
+                elementsAdded++;
+            }
+
+            if (elementsAdded <= 1) {
+                alert("Your workspace chat history is currently empty! Ask Brainably a few questions first to compile a full guide sheet.");
+                return;
+            }
+
+            // Trigger system prompt print layout overlay canvas
+            window.print();
+        }
+
+        // PERSONA DATABASE ROUTING MATRIX
         let currentPersona = 'eli5';
         const personas = {
             eli5: {
@@ -446,16 +529,12 @@
 
         function changePersona(type) {
             currentPersona = type;
-            
-            // Toggle visual button styling states
             document.querySelectorAll('.persona-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(`p-${type}`).classList.add('active');
-
-            // Log personality shift alert inside chat matrix
             appendBubble(personas[type].welcome, 'ai');
         }
 
-        // Built-In Web Audio Core Synthesizer Node Engine
+        // Audio generation matrix fallback
         function playSuccessChime() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -473,7 +552,7 @@
             } catch(e) { console.log('Audio blocked.'); }
         }
 
-        // TIMER DATA STORAGE LOGIC
+        // TIMER STORAGE LOGIC
         let countdownTimer = null;
         let isTimerRunning = false;
         let timerType = 'study';
@@ -601,7 +680,6 @@
                     body: JSON.stringify({
                         model: "llama-3.1-8b-instant", 
                         messages: [
-                            // DYNAMIC CHAT SWITCHING VIA INJECTED SELECTED OBJECT PROPERTIES
                             { role: "system", content: personas[currentPersona].systemPrompt },
                             { role: "user", content: text }
                         ],
