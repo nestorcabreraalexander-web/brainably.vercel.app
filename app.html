@@ -205,7 +205,7 @@
             width: 320px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.5);
             z-index: 100;
-            display: none; /* Controlled toggle state */
+            display: none;
         }
 
         .settings-panel h3 {
@@ -287,12 +287,10 @@
         const settingsDrawer = document.getElementById('settingsDrawer');
         const apiKeyInput = document.getElementById('apiKeyInput');
 
-        // Toggle state window helper
         function toggleSettings() {
             settingsDrawer.style.display = settingsDrawer.style.display === 'block' ? 'none' : 'block';
         }
 
-        // 1. SAVE TO THE BROWSER MEMORY (Runs once)
         function saveApiKey() {
             const key = apiKeyInput.value.trim();
             if(key) {
@@ -302,7 +300,6 @@
             }
         }
 
-        // Auto-load key into the visual box if it exists
         window.addEventListener('DOMContentLoaded', () => {
             const savedKey = localStorage.getItem('brainably_groq_key');
             if(savedKey) {
@@ -310,12 +307,11 @@
             }
         });
 
-        // 2. CONNECT TO DEPLOYED OPEN-SOURCE ENGINE
+        // UPDATED STABLE ENGINE CONNECTION WITH SYSTEM FEEDBACK ERRORS
         async function sendToAi() {
             const text = userInput.value.trim();
             if(!text) return;
 
-            // Fetch stored key on the fly automatically
             const apiKey = localStorage.getItem('brainably_groq_key');
             if(!apiKey) {
                 alert('Please click on "⚙️ AI Settings" at the top and paste your free Groq Key first!');
@@ -323,43 +319,54 @@
                 return;
             }
 
-            // Append user text node bubble immediately
             appendBubble(text, 'user');
             userInput.value = '';
 
-            // Add an interim loading bubble placeholder
             const loadingBubble = appendBubble('Thinking...', 'ai');
 
             try {
-                // Post dynamic API fetch directly payload structure
                 const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${apiKey}`,
+                        'Authorization': `Bearer ${apiKey.trim()}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        model: "llama3-8b-8192", // Light, ultra-fast free tier open architecture model
+                        model: "llama-3.1-8b-instant", 
                         messages: [
                             { role: "system", content: "You are Brainably, a premium, helpful, step-by-step AI homework tutor designed to clear up student confusion." },
                             { role: "user", content: text }
-                        ]
+                        ],
+                        temperature: 0.7
                     })
                 });
 
-                const data = await response.json();
-                loadingBubble.remove(); // Drop text placeholder
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    console.error('Groq API Error Details:', errorData);
+                    loadingBubble.remove();
+                    
+                    if (response.status === 401) {
+                        appendBubble('❌ Authentication Error: Your Groq API key appears invalid. Click "⚙️ AI Settings", clear the box completely, paste your key fresh from the Groq console, and save again.', 'ai');
+                    } else {
+                        appendBubble(`❌ Server returned error code ${response.status}. Check your browser developer console for detailed logs.`, 'ai');
+                    }
+                    return;
+                }
 
-                if(data.choices && data.choices[0].message) {
+                const data = await response.json();
+                loadingBubble.remove();
+
+                if(data.choices && data.choices[0] && data.choices[0].message) {
                     appendBubble(data.choices[0].message.content, 'ai');
                 } else {
-                    appendBubble('An processing issue occurred. Make sure your API setup configuration token is correct.', 'ai');
+                    appendBubble('An processing issue occurred. Received an unexpected data structure from the server.', 'ai');
                 }
 
             } catch (error) {
                 loadingBubble.remove();
-                appendBubble('Connection failed to access backend services. Check internet configuration.', 'ai');
-                console.error(error);
+                appendBubble('Connection failed to access backend services. This might be a browser CORS restriction or network dropout.', 'ai');
+                console.error('Network/CORS Error:', error);
             }
         }
 
