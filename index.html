@@ -3,25 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brainably - Student Dashboard</title>
+    <title>Brainably - Core Hub Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* DESIGN SYSTEM CORE CONTROLS */
+        :root {
+            --accent-glow-primary: #a855f7;
+            --accent-glow-secondary: #06b6d4;
+            
+            /* Dark Mode Core Matrix */
+            --bg-base: #030712;
+            --bg-surface: rgba(15, 23, 42, 0.4);
+            --bg-card: rgba(15, 23, 42, 0.35);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-bright: #ffffff;
+            --navbar-bg: rgba(15, 23, 42, 0.4);
+        }
+
+        /* Light Mode Core Matrix Override */
+        [data-theme="light"] {
+            --bg-base: #f8fafc;
+            --bg-surface: rgba(255, 255, 255, 0.7);
+            --bg-card: rgba(255, 255, 255, 0.8);
+            --border-color: rgba(15, 23, 42, 0.08);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --text-bright: #020617;
+            --navbar-bg: rgba(241, 245, 249, 0.7);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
         body {
-            background-color: #030712;
-            color: #f8fafc;
+            background-color: var(--bg-base);
+            color: var(--text-main);
             font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Fullscreen Confetti Layer Canvas */
+        /* Confetti Pipeline Canvas */
         #confettiCanvas {
             position: fixed;
             top: 0;
@@ -42,14 +71,15 @@
             z-index: 1;
             overflow: hidden;
             pointer-events: none;
-            opacity: 0.3;
+            opacity: 0.25;
             filter: blur(130px);
         }
+        [data-theme="light"] .ambient-glow { opacity: 0.15; filter: blur(160px); }
 
         .blob {
             position: absolute;
             border-radius: 50%;
-            background: linear-gradient(135deg, #a855f7, #06b6d4);
+            background: linear-gradient(135deg, var(--accent-glow-primary), var(--accent-glow-secondary));
             width: 600px;
             height: 600px;
             top: -20%;
@@ -58,15 +88,15 @@
 
         /* Top Navigation Header Bar */
         .navbar {
-            background: rgba(15, 23, 42, 0.4);
+            background: var(--navbar-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid var(--border-color);
             padding: 15px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px;
+            height: 75px;
             z-index: 10;
             position: relative;
         }
@@ -78,7 +108,67 @@
             letter-spacing: -0.03em;
         }
 
-        /* GAMIFIED HERO BANNER WITH INSTANT FIRE CODE COUNTERS */
+        /* UTILITIES CONTROL STATION MATRIX */
+        .control-station {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* 🌐 6-LANGUAGE Dropdown Matrix Element */
+        .lang-picker {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 14px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            outline: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* 🌓 Light/Dark Mode Mode Selection Toggle Circular Button */
+        .theme-toggle-btn {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        .theme-toggle-btn:hover { border-color: var(--accent-glow-secondary); }
+
+        /* Color Scheme Vibe Controls */
+        .theme-selector-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 50px;
+        }
+        .theme-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .cswatch {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .cswatch.active { border-color: var(--text-bright); }
+        .swatch-purple { background: #a855f7; }
+        .swatch-cyan { background: #06b6d4; }
+        .swatch-green { background: #10b981; }
+
+        /* GAMIFIED HERO BANNER */
         .welcome-hero {
             max-width: 1200px;
             margin: 40px auto 20px auto;
@@ -91,8 +181,8 @@
         }
 
         .hero-main {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(15, 23, 42, 0.5));
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
             padding: 35px;
             border-radius: 24px;
             backdrop-filter: blur(10px);
@@ -102,21 +192,17 @@
             font-size: 2.4rem;
             font-weight: 800;
             margin-bottom: 10px;
-            background: linear-gradient(to right, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: var(--text-bright);
         }
 
         .hero-main p {
-            color: #94a3b8;
+            color: var(--text-muted);
             font-size: 1.05rem;
             line-height: 1.5;
         }
 
-        /* CHROME GLASS STREAK INTERACTIVE DISPLAY NODE */
         .streak-card {
-            background: rgba(15, 23, 42, 0.6);
+            background: var(--bg-card);
             border: 1px solid rgba(249, 115, 22, 0.25);
             padding: 30px;
             border-radius: 24px;
@@ -126,54 +212,19 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            box-shadow: 0 0 30px rgba(249, 115, 22, 0.08);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.05);
             cursor: pointer;
         }
 
-        .streak-card:hover {
-            transform: scale(1.03);
-            border-color: rgba(249, 115, 22, 0.5);
-            box-shadow: 0 0 40px rgba(249, 115, 22, 0.15);
-        }
+        .fire-icon { font-size: 3.5rem; margin-bottom: 5px; }
+        .streak-number { font-size: 2.8rem; font-weight: 800; color: #f97316; line-height: 1; }
+        .streak-label { font-size: 0.85rem; text-transform: uppercase; font-weight: 700; color: var(--text-main); letter-spacing: 0.08em; margin-top: 5px; }
+        .streak-bonus-text { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; }
 
-        .fire-icon {
-            font-size: 3.5rem;
-            margin-bottom: 5px;
-            animation: pulseFire 2s infinite ease-in-out;
-        }
-
-        @keyframes pulseFire {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(249,115,22,0)); }
-            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(249,115,22,0.6)); }
-        }
-
-        .streak-number {
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: #f97316;
-            line-height: 1;
-        }
-
-        .streak-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            font-weight: 700;
-            color: #cbd5e1;
-            letter-spacing: 0.08em;
-            margin-top: 5px;
-        }
-
-        .streak-bonus-text {
-            font-size: 0.78rem;
-            color: #94a3b8;
-            margin-top: 8px;
-        }
-
-        /* GRID NAVIGATION PLATFORM */
+        /* GRID PLATFORM LINK CHANNELS */
         .dashboard-grid {
             max-width: 1200px;
-            margin: 15px auto 60px auto;
+            margin: 15px auto;
             padding: 0 20px;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -183,50 +234,81 @@
         }
 
         .room-card {
-            background: rgba(15, 23, 42, 0.35);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
             border-radius: 24px;
             padding: 30px;
             backdrop-filter: blur(10px);
-            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 240px;
+            height: 220px;
             text-decoration: none;
             color: inherit;
         }
 
-        .room-card:hover {
-            transform: translateY(-6px);
-            background: rgba(15, 23, 42, 0.5);
-        }
-
-        .room-card.study-room:hover { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 15px 35px rgba(168, 85, 247, 0.1); }
-        .room-card.academy:hover { border-color: rgba(34, 211, 238, 0.4); box-shadow: 0 15px 35px rgba(34, 211, 238, 0.1); }
-        .room-card.quest:hover { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 15px 35px rgba(16, 185, 129, 0.1); }
-
-        .room-icon {
-            font-size: 2rem;
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
+        .room-card:hover { transform: translateY(-4px); background: var(--bg-surface); }
+        .room-icon { font-size: 2rem; width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
+        
         .study-room .room-icon { background: rgba(168, 85, 247, 0.1); color: #c084fc; }
         .academy .room-icon { background: rgba(34, 211, 238, 0.1); color: #22d3ee; }
         .quest .room-icon { background: rgba(16, 185, 129, 0.1); color: #34d399; }
 
-        .room-meta h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; color: #fff; }
-        .room-meta p { font-size: 0.92rem; color: #94a3b8; line-height: 1.4; }
+        .room-meta h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; color: var(--text-bright); }
+        .room-meta p { font-size: 0.92rem; color: var(--text-muted); line-height: 1.4; }
+
+        /* ANALYTICS PLOT VECTORS LAYOUT PANEL */
+        .analytics-section {
+            max-width: 1200px;
+            margin: 40px auto 60px auto;
+            padding: 0 20px;
+            z-index: 10;
+            position: relative;
+        }
+        .analytics-title { font-size: 1.4rem; font-weight: 800; color: var(--text-bright); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
+        .skill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+        .sk-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .sk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .sk-name { font-size: 0.95rem; font-weight: 700; color: var(--text-main); }
+        .sk-pct { font-size: 0.9rem; font-weight: 800; color: #22d3ee; }
+        
+        .pb {
+            width: 100%;
+            height: 8px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 50px;
+            overflow: hidden;
+            position: relative;
+        }
+        [data-theme="dark"] .pb { background: rgba(255,255,255,0.05); }
+
+        .pf {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            border-radius: 50px;
+            width: 0%;
+            transition: width 1.2s cubic-bezier(0.1, 1, 0.1, 1);
+        }
+        .fill-math { background: linear-gradient(90deg, #a855f7, #c084fc); }
+        .fill-physics { background: linear-gradient(90deg, #06b6d4, #22d3ee); }
+        .fill-chemistry { background: linear-gradient(90deg, #10b981, #34d399); }
 
         @media (max-width: 900px) {
             .welcome-hero { grid-template-columns: 1fr; }
-            .navbar { padding: 15px 20px; }
+            .navbar { padding: 15px 20px; height: auto; flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
@@ -239,103 +321,277 @@
     </div>
 
     <nav class="navbar">
-        <div class="brand">Brainably Core Hub</div>
-        <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">System Stable ✓</div>
+        <div class="brand" id="navBrandText">Brainably Core Hub</div>
+        
+        <div class="control-station">
+            
+            <select class="lang-picker" id="languageSelector" onchange="executeLanguageTranslationSwitch()">
+                <option value="en">🇺🇸 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="pt">🇵🇹 Português</option>
+            </select>
+
+            <button class="theme-toggle-btn" onclick="toggleInterfaceColorTheme()" id="themeToggleIcon">🌙</button>
+
+            <div class="theme-selector-box">
+                <span class="theme-label">Vibe</span>
+                <div class="cswatch swatch-purple active" id="swatch-p" onclick="switchSystemTheme('purple')"></div>
+                <div class="cswatch swatch-cyan" id="swatch-c" onclick="switchSystemTheme('cyan')"></div>
+                <div class="cswatch swatch-green" id="swatch-g" onclick="switchSystemTheme('green')"></div>
+            </div>
+        </div>
     </nav>
 
     <header class="welcome-hero">
         <div class="hero-main">
-            <h1>Welcome to your AI Academy</h1>
-            <p>Select an environment below to begin your study acceleration pipeline. Your progress, history logs, and gamified streak achievements are stored automatically right inside your terminal profile matrix.</p>
+            <h1 id="heroTitle">Welcome to your AI Academy</h1>
+            <p id="heroParagraph">Select an environment below to begin your study acceleration pipeline. Your progress, history logs, and gamified streak achievements are stored automatically right inside your terminal profile matrix.</p>
         </div>
 
         <div class="streak-card" onclick="triggerManualConfettiCelebration()">
             <div class="fire-icon">🔥</div>
             <div class="streak-number" id="streakDisplay">0</div>
-            <div class="streak-label">Day Study Streak</div>
+            <div class="streak-label" id="streakLabel">Day Study Streak</div>
             <div class="streak-bonus-text" id="streakQuote">Click for spark burst!</div>
         </div>
     </header>
 
     <main class="dashboard-grid">
-
-        <a href="app.html" class="room-card study-room">
+        <a href="app.html" class="room-card study-room" onclick="incrementSkillMetric('math', 5)">
             <div class="room-icon">🧠</div>
             <div class="room-meta">
-                <h2>AI Deep Learning Room</h2>
-                <p>Toggle multi-mode AI personas, configure session clocks, and auto-export clean summaries instantly.</p>
+                <h2 id="room1Title">AI Deep Learning Room</h2>
+                <p id="room1Desc">Toggle multi-mode AI personas, configure session clocks, and auto-export clean summaries instantly.</p>
             </div>
         </a>
 
-        <a href="library.html" class="room-card academy">
+        <a href="library.html" class="room-card academy" onclick="incrementSkillMetric('physics', 8)">
             <div class="room-icon">🚀</div>
             <div class="room-meta">
-                <h2>Video Library & Explainer</h2>
-                <p>Search educational video media archives and spin up dedicated AI reference breakdowns instantly.</p>
+                <h2 id="room2Title">Video Library & Explainer</h2>
+                <p id="room2Desc">Search educational video media archives and spin up dedicated AI reference breakdowns instantly.</p>
             </div>
         </a>
 
-        <a href="quiz.html" class="room-card quest">
+        <a href="quiz.html" class="room-card quest" onclick="incrementSkillMetric('chemistry', 15)">
             <div class="room-icon">🎯</div>
             <div class="room-meta">
-                <h2>Brain Quest Challenge</h2>
-                <p>Test your operational memory retention capabilities with step-by-step diagnostic scoring models.</p>
+                <h2 id="room3Title">Brain Quest Challenge</h2>
+                <p id="room3Desc">Test your operational memory retention capabilities with step-by-step diagnostic scoring models.</p>
             </div>
         </a>
-
     </main>
 
+    <section class="analytics-section">
+        <div class="analytics-title" id="analyticsHeader">📊 Subject Competency Vectors</div>
+        <div class="skill-grid">
+            
+            <div class="sk-card">
+                <div class="sk-header">
+                    <span class="sk-name" id="track1Label">Mathematics Logic Matrix</span>
+                    <span class="sk-pct" id="math-pct">0%</span>
+                </div>
+                <div class="pb"><div class="pf fill-math" id="math-fill"></div></div>
+            </div>
+
+            <div class="sk-card">
+                <div class="sk-header">
+                    <span class="sk-name" id="track2Label">Quantum & Kinematic Physics</span>
+                    <span class="sk-pct" id="physics-pct">0%</span>
+                </div>
+                <div class="pb"><div class="pf fill-physics" id="physics-fill"></div></div>
+            </div>
+
+            <div class="sk-card">
+                <div class="sk-header">
+                    <span class="sk-name" id="track3Label">Molecular Chemistry Stoichiometry</span>
+                    <span class="sk-pct" id="chemistry-pct">0%</span>
+                </div>
+                <div class="pb"><div class="pf fill-chemistry" id="chemistry-fill"></div></div>
+            </div>
+
+        </div>
+    </section>
+
     <script>
-        // CORE PERSISTENT STUDY STREAK ENGINE 
+        // ==========================================================================
+        // 🌐 6-LANGUAGE ARCHITECTURAL TRANSLATION LIBRARY MATRIX
+        // ==========================================================================
+        const translationDictionary = {
+            en: {
+                brand: "Brainably Core Hub",
+                title: "Welcome to your AI Academy",
+                para: "Select an environment below to begin your study acceleration pipeline. Your progress, history logs, and gamified streak achievements are stored automatically right inside your terminal profile matrix.",
+                streak: "Day Study Streak",
+                r1T: "AI Deep Learning Room", r1D: "Toggle multi-mode AI personas, configure session clocks, and auto-export clean summaries instantly.",
+                r2T: "Video Library & Explainer", r2D: "Search educational video media archives and spin up dedicated AI reference breakdowns instantly.",
+                r3T: "Brain Quest Challenge", r3D: "Test your operational memory retention capabilities with step-by-step diagnostic scoring models.",
+                anH: "📊 Subject Competency Vectors", t1L: "Mathematics Logic Matrix", t2L: "Quantum & Kinematic Physics", t3L: "Molecular Chemistry Stoichiometry"
+            },
+            es: {
+                brand: "Centro Core Brainably",
+                title: "Bienvenido a tu Academia de IA",
+                para: "Selecciona un entorno a continuación para comenzar tu canalización de aceleración de estudio. Tu progreso y logros se guardan automáticamente.",
+                streak: "Días de Racha de Estudio",
+                r1T: "Sala de Aprendizaje Profundo IA", r1D: "Cambia personajes de IA, configura relojes de sesión y exporta resúmenes limpios al instante.",
+                r2T: "Biblioteca de Videos e IA", r2D: "Busca archivos multimedia educativos y genera análisis de referencia de IA dedicados al instante.",
+                r3T: "Desafío de Búsqueda Mental", r3D: "Pon a prueba tus capacidades de retención de memoria con modelos de puntuación de diagnóstico paso a paso.",
+                anH: "📊 Vectores de Competencia de Asignaturas", t1L: "Matriz Lógica de Matemáticas", t2L: "Física Cuántica y Cinemática", t3L: "Estequiometría de Química Molecular"
+            },
+            fr: {
+                brand: "Hub Central Brainably",
+                title: "Bienvenue dans votre Académie IA",
+                para: "Sélectionnez un environnement ci-dessous pour démarrer votre pipeline d'accélération d'études. Vos progrès sont stockés automatiquement.",
+                streak: "Jours de Série d'Études",
+                r1T: "Salle d'Apprentissage Profond IA", r1D: "Basculez entre les personas IA, configurez les horloges de session et exportez des résumés.",
+                r2T: "Bibliothèque Vidéo & Explicateurs", r2D: "Recherchez des archives vidéo éducatives et lancez des analyses de référence IA instantanément.",
+                r3T: "Défi Quête Cérébrale", r3D: "Testez vos capacités de rétention de mémoire avec des modèles de notation diagnostique étape par étape.",
+                anH: "📊 Vecteurs de Compétences Par Matière", t1L: "Matrice Logique Mathématique", t2L: "Physique Quantique & Cinématique", t3L: "Stœchiométrie de la Chimie Moléculaire"
+            },
+            de: {
+                brand: "Brainably Core Hub",
+                title: "Willkommen in Ihrer KI-Akademie",
+                para: "Wählen Sie unten eine Umgebung aus, um Ihre Lernbeschleunigung zu starten. Ihr Fortschritt wird automatisch gespeichert.",
+                streak: "Tage Lernsträhne",
+                r1T: "KI Deep Learning Raum", r1D: "Wechseln Sie KI-Personas, konfigurieren Sie Sitzungsuhren und exportieren Sie Zusammenfassungen.",
+                r2T: "Videobibliothek & KI-Erklärer", r2D: "Durchsuchen Sie Bildungsmedienarchive und erstellen Sie sofort dedizierte KI-Referenzanalysen.",
+                r3T: "Brain Quest Herausforderung", r3D: "Testen Sie Ihr Gedächtnis mit schrittweisen diagnostischen Bewertungsmodellen.",
+                anH: "📊 Fachkompetenz-Vektoren", t1L: "Mathematische Logikmatrix", t2L: "Quanten- & Kinematische Physik", t3L: "Molekulare Chemie-Stöchiometrie"
+            },
+            it: {
+                brand: "Hub Centrale Brainably",
+                title: "Benvenuto nella tua Accademia IA",
+                para: "Seleziona un ambiente qui sotto per iniziare la tua pipeline di accelerazione dello studio. I tuoi progressi vengono salvati.",
+                streak: "Giorni di Striscia di Studio",
+                r1T: "Sala di Apprendimento Profondo IA", r1D: "Attiva i profili IA, configura i timer di sessione ed esporta riassunti puliti istantaneamente.",
+                r2T: "Libreria Video e Spiegazioni IA", r2D: "Cerca negli archivi video didattici e avvia istantaneamente analisi di riferimento IA dedicate.",
+                r3T: "Sfida della Ricerca Mentale", r3D: "Metti alla prova la tua memoria operativa con modelli di punteggio diagnostico passo-passo.",
+                anH: "📊 Vettori di Competenza per Materia", t1L: "Matrice di Logica Matematica", t2L: "Fisica Quantistica e Cinematica", t3L: "Stechiometria della Chimica Molecolare"
+            },
+            pt: {
+                brand: "Hub Central Brainably",
+                title: "Bem-vindo à sua Academia de IA",
+                para: "Selecione um ambiente abaixo para iniciar seu pipeline de aceleração de estudos. Seu progresso é salvo automaticamente.",
+                streak: "Dias de Sequência de Estudos",
+                r1T: "Sala de Aprendizado Profundo IA", r1D: "Alterne personas de IA, configure cronômetros de sessão e exporte resumos limpos instantaneamente.",
+                r2T: "Biblioteca de Vídeos e Explicações", r2D: "Pesquise arquivos de mídia educacional e crie análises de referência de IA dedicadas instantaneamente.",
+                r3T: "Desafio da Busca Cerebral", r3D: "Teste suas capacidades de retenção de memória com modelos de pontuação diagnóstica passo a passo.",
+                anH: "📊 Vetores de Competência por Matéria", t1L: "Matriz de Lógica Matemática", t2L: "Física Quântica e Cinemática", t3L: "Estequiometria de Química Molecular"
+            }
+        };
+
+        function executeLanguageTranslationSwitch() {
+            const selectedLang = document.getElementById('languageSelector').value;
+            const textSet = translationDictionary[selectedLang] || translationDictionary['en'];
+
+            document.getElementById('navBrandText').innerText = textSet.brand;
+            document.getElementById('heroTitle').innerText = textSet.title;
+            document.getElementById('heroParagraph').innerText = textSet.para;
+            document.getElementById('streakLabel').innerText = textSet.streak;
+            document.getElementById('room1Title').innerText = textSet.r1T;
+            document.getElementById('room1Desc').innerText = textSet.r1D;
+            document.getElementById('room2Title').innerText = textSet.r2T;
+            document.getElementById('room2Desc').innerText = textSet.r2D;
+            document.getElementById('room3Title').innerText = textSet.r3T;
+            document.getElementById('room3Desc').innerText = textSet.r3D;
+            document.getElementById('analyticsHeader').innerText = textSet.anH;
+            document.getElementById('track1Label').innerText = textSet.t1L;
+            document.getElementById('track2Label').innerText = textSet.t2L;
+            document.getElementById('track3Label').innerText = textSet.t3L;
+
+            localStorage.setItem('brainably_active_language', selectedLang);
+        }
+
+        // ==========================================================================
+        // 🌓 GLOBAL LIGHT / DARK INTERFACE CONTROLLER
+        // ==========================================================================
+        function toggleInterfaceColorTheme() {
+            const activeTheme = document.documentElement.getAttribute('data-theme');
+            const targetTheme = (activeTheme === 'light') ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', targetTheme);
+            document.getElementById('themeToggleIcon').innerText = (targetTheme === 'light') ? '☀️' : '🌙';
+            localStorage.setItem('brainably_interface_mode', targetTheme);
+        }
+
+        // ==========================================================================
+        // VIBE ACCENT GLOW CONTROLLER
+        // ==========================================================================
+        function switchSystemTheme(themeColor) {
+            const rootElement = document.documentElement;
+            document.querySelectorAll('.cswatch').forEach(swatch => swatch.classList.remove('active'));
+
+            if (themeColor === 'purple') {
+                rootElement.style.setProperty('--accent-glow-primary', '#a855f7');
+                rootElement.style.setProperty('--accent-glow-secondary', '#06b6d4');
+                document.getElementById('swatch-p').classList.add('active');
+            } else if (themeColor === 'cyan') {
+                rootElement.style.setProperty('--accent-glow-primary', '#0284c7');
+                rootElement.style.setProperty('--accent-glow-secondary', '#22d3ee');
+                document.getElementById('swatch-c').classList.add('active');
+            } else if (themeColor === 'green') {
+                rootElement.style.setProperty('--accent-glow-primary', '#059669');
+                rootElement.style.setProperty('--accent-glow-secondary', '#34d399');
+                document.getElementById('swatch-g').classList.add('active');
+            }
+            localStorage.setItem('brainably_active_theme', themeColor);
+        }
+
+        // ==========================================================================
+        // CORE TRACKING DATA ENGINES
+        // ==========================================================================
+        function loadSkillAnalyticsDashboard() {
+            const categories = ['math', 'physics', 'chemistry'];
+            categories.forEach(subj => {
+                let currentVal = parseInt(localStorage.getItem(`brainably_metric_${subj}`) || '25');
+                if (currentVal > 100) currentVal = 100;
+                document.getElementById(`${subj}-pct`).innerText = `${currentVal}%`;
+                document.getElementById(`${subj}-fill`).style.width = `${currentVal}%`;
+            });
+        }
+
+        function incrementSkillMetric(subjectKey, amount) {
+            let currentVal = parseInt(localStorage.getItem(`brainably_metric_${subjectKey}`) || '25');
+            currentVal += amount;
+            if (currentVal > 100) currentVal = 100;
+            localStorage.setItem(`brainably_metric_${subjectKey}`, currentVal);
+        }
+
         function evaluateUserStudyStreakLog() {
             const currentTimestamp = new Date();
-            const year = currentTimestamp.getFullYear();
-            const month = currentTimestamp.getMonth();
-            const date = currentTimestamp.getDate();
-            // Create a normalized string identifier unique to today
-            const todayKeyString = `${year}-${month}-${date}`;
+            const todayKeyString = `${currentTimestamp.getFullYear()}-${currentTimestamp.getMonth()}-${currentTimestamp.getDate()}`;
 
             const savedStreakCount = localStorage.getItem('brainably_streak_counter') || 0;
             const lastStudyDayStamp = localStorage.getItem('brainably_last_active_date');
-
             let calculatedStreak = parseInt(savedStreakCount);
 
             if (!lastStudyDayStamp) {
-                // First launch initialize base entry parameters
                 calculatedStreak = 1;
                 localStorage.setItem('brainably_streak_counter', 1);
                 localStorage.setItem('brainably_last_active_date', todayKeyString);
                 setTimeout(() => launchConfettiExplosionEngine(), 800);
             } else if (lastStudyDayStamp !== todayKeyString) {
-                // Logic check to verify if previous activation occurred precisely yesterday
                 const previousDayObj = new Date();
                 previousDayObj.setDate(previousDayObj.getDate() - 1);
                 const yesterdayKeyString = `${previousDayObj.getFullYear()}-${previousDayObj.getMonth()}-${previousDayObj.getDate()}`;
 
                 if (lastStudyDayStamp === yesterdayKeyString) {
-                    // Streak preserved! Continuous daily activation cycle confirmed.
                     calculatedStreak += 1;
                     localStorage.setItem('brainably_streak_counter', calculatedStreak);
                     localStorage.setItem('brainably_last_active_date', todayKeyString);
                     setTimeout(() => launchConfettiExplosionEngine(), 800);
                 } else {
-                    // Broken chain timeline event tracked. System defaults back to initialization parameters.
                     calculatedStreak = 1;
                     localStorage.setItem('brainably_streak_counter', 1);
                     localStorage.setItem('brainably_last_active_date', todayKeyString);
                 }
             }
 
-            // Sync structural metrics with DOM frame text nodes
             document.getElementById('streakDisplay').innerText = calculatedStreak;
-            
-            // Injected dynamic motivation subtexts matching achievement counts
-            const motivationalQuotes = [
-                "The journey begins! ⚡",
-                "Two days locked down! Keep pushing! 🚀",
-                "Three day milestone! You are unstoppable! 🔥",
-                "Absolute academic dominance! 👑"
-            ];
+            const motivationalQuotes = ["The journey begins! ⚡", "Two days locked down! Keep pushing! 🚀", "Three day milestone! You are unstoppable! 🔥", "Absolute academic dominance! 👑"];
             const quoteIndex = Math.min(calculatedStreak - 1, motivationalQuotes.length - 1);
             document.getElementById('streakQuote').innerText = motivationalQuotes[quoteIndex];
         }
@@ -344,9 +600,7 @@
             launchConfettiExplosionEngine();
         }
 
-        // ==========================================================================
-        // HIGH PERFORMANCE HARDWARE-ACCELERATED PHYSICS CONFETTI ENGINE
-        // ==========================================================================
+        // VECTOR PARTICLE CONFETTI ENGINE
         let confettiArray = [];
         const canvasElement = document.getElementById("confettiCanvas");
         const canvasContext = canvasElement.getContext("2d");
@@ -360,30 +614,23 @@
         class ConfettiParticleNode {
             constructor() {
                 this.x = window.innerWidth / 2;
-                this.y = window.innerHeight + 20; // Fire up from bottom center
+                this.y = window.innerHeight + 20;
                 this.radius = Math.random() * 5 + 4;
-                // Launch vector parameters with custom scatter variations
                 this.speedX = (Math.random() - 0.5) * 16;
                 this.speedY = -(Math.random() * 12 + 12);
                 this.gravity = 0.38;
                 this.friction = 0.99;
-                
-                const vibrantColors = ["#22d3ee", "#a855f7", "#34d399", "#f43f5e", "#fbbf24", "#e11d48"];
+                const vibrantColors = ["#22d3ee", "#a855f7", "#34d399", "#f43f5e", "#fbbf24"];
                 this.particleColor = vibrantColors[Math.floor(Math.random() * vibrantColors.length)];
                 this.particleOpacity = 1;
             }
-
             updatePhysicsState() {
                 this.speedX *= this.friction;
                 this.speedY += this.gravity;
                 this.x += this.speedX;
                 this.y += this.speedY;
-                
-                if (this.speedY > 0) {
-                    this.particleOpacity -= 0.015; // Smooth fade away once arc peaks
-                }
+                if (this.speedY > 0) this.particleOpacity -= 0.015;
             }
-
             drawVectorUnit(ctx) {
                 ctx.save();
                 ctx.globalAlpha = this.particleOpacity;
@@ -397,40 +644,38 @@
 
         function launchConfettiExplosionEngine() {
             resizeConfettiCanvasView();
-            // Inject 120 vector items inside tracking arrays
-            for (let i = 0; i < 120; i++) {
-                confettiArray.push(new ConfettiParticleNode());
-            }
-            
-            // Lock recursion loop gates
-            if (confettiArray.length === 120) {
-                executeFrameTelemetryLoop();
-            }
+            for (let i = 0; i < 120; i++) confettiArray.push(new ConfettiParticleNode());
+            if (confettiArray.length === 120) executeFrameTelemetryLoop();
         }
 
         function executeFrameTelemetryLoop() {
             canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
-            
             for (let i = confettiArray.length - 1; i >= 0; i--) {
-                const particle = confettiArray[i];
-                particle.updatePhysicsState();
-                particle.drawVectorUnit(canvasContext);
-
-                // Garbage collection to optimize frames
-                if (particle.particleOpacity <= 0 || particle.y > window.innerHeight + 30) {
-                    confettiArray.splice(i, 1);
-                }
+                const p = confettiArray[i];
+                p.updatePhysicsState();
+                p.drawVectorUnit(canvasContext);
+                if (p.particleOpacity <= 0 || p.y > window.innerHeight + 30) confettiArray.splice(i, 1);
             }
-
-            if (confettiArray.length > 0) {
-                requestAnimationFrame(executeFrameTelemetryLoop);
-            } else {
-                canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
-            }
+            if (confettiArray.length > 0) requestAnimationFrame(executeFrameTelemetryLoop);
         }
 
-        // Initialize state verification operations on load events
-        window.addEventListener('DOMContentLoaded', evaluateUserStudyStreakLog);
+        // SYSTEM LOAD PIPELINES
+        window.addEventListener('DOMContentLoaded', () => {
+            evaluateUserStudyStreakLog();
+            loadSkillAnalyticsDashboard();
+            
+            // Re-apply saved configurations on reload cycles
+            const savedTheme = localStorage.getItem('brainably_active_theme');
+            if(savedTheme) switchSystemTheme(savedTheme);
+
+            const savedMode = localStorage.getItem('brainably_interface_mode') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedMode);
+            document.getElementById('themeToggleIcon').innerText = (savedMode === 'light') ? '☀️' : '🌙';
+
+            const savedLang = localStorage.getItem('brainably_active_language') || 'en';
+            document.getElementById('languageSelector').value = savedLang;
+            executeLanguageTranslationSwitch();
+        });
     </script>
 </body>
 </html>
