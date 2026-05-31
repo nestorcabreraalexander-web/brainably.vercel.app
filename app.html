@@ -366,9 +366,7 @@
         /* Hidden print window workspace container */
         #printTemplateFrame { display: none; }
 
-        /* ==========================================================================
-           ADVANCED SYSTEM PRINT OVERRIDES (Triggers clean PDF compiles automatically)
-           ========================================================================== */
+        /* ADVANCED SYSTEM PRINT OVERRIDES */
         @media print {
             body * { display: none !important; }
             #printTemplateFrame { display: block !important; background: #fff !important; color: #000 !important; padding: 30px !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important; }
@@ -456,8 +454,7 @@
             <h1>Brainably High-Yield Study Guide</h1>
             <p>Automated Summary Sheets Generated via Brainably AI Ecosystem Room</p>
         </div>
-        <div class="print-grid" id="printOutputGrid">
-            </div>
+        <div class="print-grid" id="printOutputGrid"></div>
     </div>
 
     <script>
@@ -466,23 +463,16 @@
             const chatBoxMessages = document.getElementById('chatBox').children;
             const printOutputGrid = document.getElementById('printOutputGrid');
             
-            // Clear out any old printed elements
             printOutputGrid.innerHTML = '';
-            
             let elementsAdded = 0;
 
-            // Loop through active screen messages and restructure them for print layout
             for (let i = 0; i < chatBoxMessages.length; i++) {
                 const currentMsg = chatBoxMessages[i];
-                
-                // Skip placeholder loader text nodes
                 if (currentMsg.innerText === 'Thinking...') continue;
 
-                // Determine conversation context roles
                 const isUser = currentMsg.classList.contains('user');
                 const speakerLabel = isUser ? "💡 Question / Topic Studied:" : "🧠 AI Breakdown Summary:";
 
-                // Construct clean printable item block cards
                 const printCard = document.createElement('div');
                 printCard.className = 'print-card';
 
@@ -506,7 +496,6 @@
                 return;
             }
 
-            // Trigger system prompt print layout overlay canvas
             window.print();
         }
 
@@ -534,7 +523,6 @@
             appendBubble(personas[type].welcome, 'ai');
         }
 
-        // Audio generation matrix fallback
         function playSuccessChime() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -552,7 +540,7 @@
             } catch(e) { console.log('Audio blocked.'); }
         }
 
-        // TIMER STORAGE LOGIC
+        // TIMER LOGIC
         let countdownTimer = null;
         let isTimerRunning = false;
         let timerType = 'study';
@@ -630,7 +618,7 @@
             }
         }
 
-        // BACKEND CHAT HANDLER INTERFACES
+        // BACKEND CHAT HANDLER
         const chatBox = document.getElementById('chatBox');
         const userInput = document.getElementById('userInput');
         const settingsDrawer = document.getElementById('settingsDrawer');
@@ -669,6 +657,13 @@
             appendBubble(text, 'user');
             userInput.value = '';
             const loadingBubble = appendBubble('Thinking...', 'ai');
+
+            // 📊 AUTOMATED SKILL PROGRESS ENGINE
+            try {
+                let currentMathSkill = parseInt(localStorage.getItem('brainably_metric_math') || '25');
+                currentMathSkill = Math.min(currentMathSkill + 5, 100);
+                localStorage.setItem('brainably_metric_math', currentMathSkill);
+            } catch(e) { console.log("Analytics storage sync paused."); }
 
             try {
                 const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
