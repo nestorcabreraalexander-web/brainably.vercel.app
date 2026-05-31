@@ -61,7 +61,7 @@
             position: relative;
         }
 
-        .logo {
+        .brand {
             font-size: 1.3rem;
             font-weight: 800;
             color: #22d3ee;
@@ -86,7 +86,7 @@
             border-color: #22d3ee;
         }
 
-        /* Dashboard Interface Frame */
+        /* Main Workspace Frame */
         .main-content {
             max-width: 1200px;
             width: 100%;
@@ -115,16 +115,17 @@
             font-size: 1rem;
         }
 
-        /* Live Search Search Box */
-        .search-wrapper {
-            margin-bottom: 40px;
-            max-width: 500px;
+        /* Live Search Controls and Action Bar */
+        .search-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            max-width: 700px;
             width: 100%;
-            position: relative;
         }
 
         .search-input {
-            width: 100%;
+            flex: 1;
             padding: 16px 20px;
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -141,6 +142,47 @@
             border-color: #22d3ee;
         }
 
+        .search-action-btn {
+            background: linear-gradient(135deg, #06b6d4, #7c3aed);
+            color: white;
+            border: none;
+            padding: 0 24px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* Infinite Quick Link Topic Chips */
+        .topic-pill-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+        }
+        .topic-pill-container::-webkit-scrollbar { height: 4px; }
+        .topic-pill-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 10px; }
+
+        .pill-chip {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #cbd5e1;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .pill-chip:hover {
+            background: rgba(34, 211, 238, 0.1);
+            border-color: #22d3ee;
+            color: #22d3ee;
+        }
+
         /* Interactive Video Grid System */
         .video-grid {
             display: grid;
@@ -154,15 +196,14 @@
             border-radius: 20px;
             overflow: hidden;
             backdrop-filter: blur(10px);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s ease;
             display: flex;
             flex-direction: column;
+            animation: fadeInCard 0.4s ease forwards;
         }
 
-        .video-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(34, 211, 238, 0.3);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        @keyframes fadeInCard {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .video-thumbnail {
@@ -185,9 +226,7 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-
-        .badge.math { background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; color: #c084fc; }
-        .badge.science { background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: #22d3ee; }
+        .badge.dynamic-tag { background: rgba(6, 182, 212, 0.15); border: 1px solid #06b6d4; color: #22d3ee; }
 
         .video-info {
             padding: 20px;
@@ -227,21 +266,14 @@
             color: #030712;
             border: none;
         }
-
-        .btn-watch:hover {
-            background: #e2e8f0;
-        }
+        .btn-watch:hover { background: #e2e8f0; }
 
         .btn-explain {
             background: rgba(34, 211, 238, 0.1);
             border: 1px dashed rgba(34, 211, 238, 0.3);
             color: #22d3ee;
         }
-
-        .btn-explain:hover {
-            background: rgba(34, 211, 238, 0.2);
-            border-style: solid;
-        }
+        .btn-explain:hover { background: rgba(34, 211, 238, 0.2); border-style: solid; }
 
         /* SLIDING GLASSMORPHIC MODAL DRAWER */
         .explain-modal {
@@ -262,9 +294,7 @@
             box-shadow: -20px 0 50px rgba(0,0,0,0.6);
         }
 
-        .explain-modal.open {
-            right: 0;
-        }
+        .explain-modal.open { right: 0; }
 
         .modal-close-btn {
             align-self: flex-start;
@@ -277,7 +307,6 @@
             font-weight: 600;
             margin-bottom: 25px;
         }
-
         .modal-close-btn:hover { color: #f8fafc; background: rgba(239, 68, 68, 0.15); border-color: #ef4444; }
 
         .modal-title { font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 5px; line-height: 1.3; }
@@ -296,9 +325,6 @@
             white-space: pre-wrap;
         }
 
-        .summary-container::-webkit-scrollbar { width: 4px; }
-        .summary-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -315,6 +341,7 @@
 
         @media (max-width: 550px) {
             .explain-modal { width: 100%; }
+            .search-row { flex-direction: column; }
         }
     </style>
 </head>
@@ -325,7 +352,7 @@
     </div>
 
     <nav class="app-nav">
-        <a href="index.html" class="logo">Brainably Academy</a>
+        <a href="index.html" class="brand">Brainably Academy</a>
         <a href="index.html" class="nav-btn">&larr; Dashboard</a>
     </nav>
 
@@ -333,78 +360,85 @@
 
     <div class="explain-modal" id="explainModal">
         <button class="modal-close-btn" onclick="closeExplainerDrawer()">✕ Close Sheet</button>
-        <div class="modal-subtitle" id="modalTopicBadge">Physics Block</div>
+        <div class="modal-subtitle" id="modalTopicBadge">Core Resource Matrix</div>
         <div class="modal-title" id="modalVideoTitle">Video Topic Explainer</div>
         <div class="summary-container" id="summaryOutput">Click explain to generate dynamic core breakdowns...</div>
     </div>
 
     <main class="main-content">
         <div class="header-section">
-            <h1>Video Library & Resource Deck</h1>
-            <p>Search premium video tracks or activate AI summaries instantly.</p>
+            <h1>Infinite Video Resource Engine</h1>
+            <p>Type absolutely any subject, equation, or historical event to spawn structured visual resources.</p>
         </div>
 
-        <div class="search-wrapper">
-            <input type="text" class="search-input" id="librarySearch" placeholder="Search topics (e.g., Quadratic, Newton, Chemical)..." onkeyup="filterAcademyCards()">
+        <div class="search-row">
+            <input type="text" class="search-input" id="librarySearch" placeholder="Search anything (e.g., Mitosis, Kinematics, Calculus Limits)..." onkeydown="if(event.key === 'Enter') handleInfiniteSearchGeneration()">
+            <button class="search-action-btn" onclick="handleInfiniteSearchGeneration()">Generate Deck</button>
+        </div>
+
+        <div class="topic-pill-container">
+            <span class="pill-chip" onclick="quickFillSearch('Quadratic Equations & Factoring')">Algebra II</span>
+            <span class="pill-chip" onclick="quickFillSearch('Calculus Derivatives Chain Rule')">Calculus</span>
+            <span class="pill-chip" onclick="quickFillSearch('Newton\'s Laws of Kinematic Physics')">Mechanics Physics</span>
+            <span class="pill-chip" onclick="quickFillSearch('Stoichiometry & Balancing Chemical Reactions')">Stoichiometry</span>
+            <span class="pill-chip" onclick="quickFillSearch('DNA Replication and RNA Transcription')">Molecular Biology</span>
+            <span class="pill-chip" onclick="quickFillSearch('Causes of the French Revolution Summary')">World History</span>
         </div>
 
         <div class="video-grid" id="videoGrid">
-            
-            <div class="video-card" data-title="quadratic formula solving equation factoring step by step" data-subject="Math">
-                <div class="video-thumbnail" style="background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=500&auto=format&fit=crop&q=60');">
-                    <span class="badge math">Mathematics</span>
-                </div>
-                <div class="video-info">
-                    <div class="video-title">Mastering the Quadratic Formula & Factoring Equations</div>
-                    <div class="video-actions">
-                        <a href="https://www.youtube.com/results?search_query=quadratic+formula" target="_blank" class="action-btn btn-watch">Watch Track</a>
-                        <button class="action-btn btn-explain" onclick="triggerAiExplainer('Mastering the Quadratic Formula', 'physics')">🤖 AI Explain</button>
-                    </div>
-                </div>
             </div>
-
-            <div class="video-card" data-title="newtons laws of motion physics force acceleration kinematics" data-subject="Science">
-                <div class="video-thumbnail" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&auto=format&fit=crop&q=60');">
-                    <span class="badge science">Physics</span>
-                </div>
-                <div class="video-info">
-                    <div class="video-title">Newton's 3 Laws of Motion: Deep Structural Review</div>
-                    <div class="video-actions">
-                        <a href="https://www.youtube.com/results?search_query=newtons+laws+of+motion" target="_blank" class="action-btn btn-watch">Watch Track</a>
-                        <button class="action-btn btn-explain" onclick="triggerAiExplainer('Newtons 3 Laws of Motion', 'physics')">🤖 AI Explain</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="video-card" data-title="chemical balancing reaction equations stoichiometry chemistry" data-subject="Science">
-                <div class="video-thumbnail" style="background-image: url('https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?w=500&auto=format&fit=crop&q=60');">
-                    <span class="badge science">Chemistry</span>
-                </div>
-                <div class="video-info">
-                    <div class="video-title">Balancing Complex Chemical Reactions Effortlessly</div>
-                    <div class="video-actions">
-                        <a href="https://www.youtube.com/results?search_query=balancing+chemical+equations" target="_blank" class="action-btn btn-watch">Watch Track</a>
-                        <button class="action-btn btn-explain" onclick="triggerAiExplainer('Balancing Chemical Equations and Stoichiometry', 'chemistry')">🤖 AI Explain</button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
     </main>
 
     <script>
-        function filterAcademyCards() {
-            const query = document.getElementById('librarySearch').value.toLowerCase();
-            const cards = document.getElementsByClassName('video-card');
+        // Preset stock thumbnail pools to mimic structured visual streams cleanly
+        const stockThumbnails = [
+            'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=500&auto=format&fit=crop&q=60',
+            'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&auto=format&fit=crop&q=60',
+            'https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?w=500&auto=format&fit=crop&q=60',
+            'https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=500&auto=format&fit=crop&q=60'
+        ];
 
-            for (let i = 0; i < cards.length; i++) {
-                const titleAttr = cards[i].getAttribute('data-title');
-                if (titleAttr.includes(query)) {
-                    cards[i].style.display = 'flex';
-                } else {
-                    cards[i].style.display = 'none';
-                }
-            }
+        function quickFillSearch(topicPhrase) {
+            document.getElementById('librarySearch').value = topicPhrase;
+            handleInfiniteSearchGeneration();
+        }
+
+        // INFINITE DECK GENERATION ARCHITECTURE
+        // Creates structured visual gateways on any subject dynamically without code overhead
+        function handleInfiniteSearchGeneration() {
+            const queryRaw = document.getElementById('librarySearch').value.trim();
+            if(!queryRaw) return;
+
+            const gridContainer = document.getElementById('videoGrid');
+            gridContainer.innerHTML = ''; // Fresh workspace generation clearout
+
+            // We generate 3 targeted structural variations based on the custom input topic 
+            const trackingVariations = [
+                { title: `Core Foundation: Essentials of ${queryRaw}`, queryAppend: `${queryRaw}+essentials+tutorial` },
+                { title: `Step-by-Step Advanced Practice: ${queryRaw}`, queryAppend: `${queryRaw}+step+by+step+examples` },
+                { title: `High-Yield Exam Prep Crash Course: ${queryRaw}`, queryAppend: `${queryRaw}+crash+course+review` }
+            ];
+
+            trackingVariations.forEach((cardMeta, index) => {
+                const thumbUrl = stockThumbnails[index % stockThumbnails.length];
+                const encodedTargetUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(cardMeta.queryAppend)}`;
+
+                const cardHtml = `
+                    <div class="video-card">
+                        <div class="video-thumbnail" style="background-image: url('${thumbUrl}');">
+                            <span class="badge dynamic-tag">Resource Deck</span>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">${cardMeta.title}</div>
+                            <div class="video-actions">
+                                <a href="${encodedTargetUrl}" target="_blank" class="action-btn btn-watch">Launch Video Stream</a>
+                                <button class="action-btn btn-explain" onclick="triggerAiExplainer('${cardMeta.title.replace(/'/g, "\\'")}', 'physics')">🤖 AI Explain</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                gridContainer.innerHTML += cardHtml;
+            });
         }
 
         const explainModal = document.getElementById('explainModal');
@@ -415,19 +449,19 @@
 
         async function triggerAiExplainer(videoTitle, subjectName) {
             modalVideoTitle.innerText = videoTitle;
-            modalTopicBadge.innerText = `${subjectName.toUpperCase()} Core Resource`;
-            summaryOutput.innerText = "⏳ Paging Groq Cluster Engine... Mapping target core concept summaries...";
+            modalTopicBadge.innerText = `ACADEMIC COMPETENCY MODULE`;
+            summaryOutput.innerText = "⏳ Paging Groq Cluster Engine... Structuring high-yield conceptual summaries...";
             
             explainModal.classList.add('open');
             modalOverlay.classList.add('open');
 
             // 📊 AUTOMATED SKILL PROGRESS ENGINE
+            // Dynamically routes tracker updates straight back to the core hub dashboard variables
             try {
-                const lowerSubject = subjectName.toLowerCase(); 
-                let currentSkill = parseInt(localStorage.getItem(`brainably_metric_${lowerSubject}`) || '25');
+                let currentSkill = parseInt(localStorage.getItem('brainably_metric_physics') || '25');
                 currentSkill = Math.min(currentSkill + 8, 100);
-                localStorage.setItem(`brainably_metric_${lowerSubject}`, currentSkill);
-            } catch(e) { console.log("Analytics storage sync paused."); }
+                localStorage.setItem('brainably_metric_physics', currentSkill);
+            } catch(e) { console.log("Analytics synchronization tracking paused."); }
 
             const apiKey = localStorage.getItem('brainably_groq_key');
             if(!apiKey) {
@@ -451,7 +485,7 @@
                             },
                             { 
                                 role: "user", 
-                                content: `Generate a high-yield summary sheet and key formulas for the topic: "${videoTitle}" within the field of ${subjectName}.` 
+                                content: `Generate a high-yield summary sheet and key formulas for the topic: "${videoTitle}"` 
                             }
                         ],
                         temperature: 0.5
@@ -459,7 +493,7 @@
                 });
 
                 if (!response.ok) {
-                    summaryOutput.innerText = "❌ Connection Denied!\n\nYour API configuration key returned an authentication error. Re-copy your token freshly from the Groq console dashboard.";
+                    summaryOutput.innerText = "❌ Connection Denied!\n\nYour API configuration key returned an authentication error. Re-copy your token cleanly from the Groq dashboard console.";
                     return;
                 }
 
@@ -481,6 +515,11 @@
             explainModal.classList.remove('open');
             modalOverlay.classList.remove('open');
         }
+
+        // Initialize with a default preset population stream automatically on view load cycles
+        window.addEventListener('DOMContentLoaded', () => {
+            quickFillSearch('Quadratic Equations & Factoring');
+        });
     </script>
 </body>
 </html>
