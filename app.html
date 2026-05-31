@@ -98,7 +98,7 @@
             color: #c084fc;
         }
 
-        /* Split-Screen Workspace (Left: Chat | Right: Vibe Timer) */
+        /* Split-Screen Workspace */
         .workspace {
             flex: 1;
             display: flex;
@@ -122,6 +122,46 @@
             border-radius: 24px;
             padding: 20px;
             backdrop-filter: blur(10px);
+        }
+
+        /* High-Tech Persona Switcher Bar */
+        .persona-switcher {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+            background: rgba(3, 7, 18, 0.4);
+            padding: 6px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .persona-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            padding: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .persona-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.03);
+            color: #fff;
+        }
+
+        .persona-btn.active {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(124, 58, 237, 0.2));
+            border: 1px solid rgba(34, 211, 238, 0.4);
+            color: #22d3ee;
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
         }
 
         .messages-box {
@@ -195,7 +235,7 @@
             cursor: pointer;
         }
 
-        /* High-Tech Vibe Timer Card (Right Panel) */
+        /* High-Tech Vibe Timer Card */
         .timer-container {
             flex: 0.7;
             background: rgba(15, 23, 42, 0.65);
@@ -211,7 +251,6 @@
             transition: all 0.5s ease;
         }
 
-        /* Pulsing Glow States dependent on Mode Selection */
         .timer-container.study-vibe {
             box-shadow: 0 0 40px rgba(168, 85, 247, 0.15);
             border-color: rgba(168, 85, 247, 0.3);
@@ -295,19 +334,9 @@
             transition: all 0.2s ease;
         }
 
-        .btn-start {
-            background: #f8fafc;
-            color: #030712;
-        }
-
+        .btn-start { background: #f8fafc; color: #030712; }
         .btn-start:hover { transform: translateY(-2px); }
-
-        .btn-reset {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #e2e8f0;
-        }
-
+        .btn-reset { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); color: #e2e8f0; }
         .btn-reset:hover { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #f87171; }
 
         /* API Settings Panel Drawer */
@@ -333,7 +362,7 @@
 
         @media (max-width: 900px) {
             .workspace { flex-direction: column; overflow-y: auto; }
-            .chat-container { min-height: 450px; }
+            .chat-container { min-height: 500px; }
             .timer-container { padding: 40px 20px; }
         }
     </style>
@@ -362,8 +391,15 @@
     <main class="workspace">
         
         <section class="chat-container">
+            
+            <div class="persona-switcher">
+                <button class="persona-btn active" id="p-eli5" onclick="changePersona('eli5')">🚀 ELI5 Mode</button>
+                <button class="persona-btn" id="p-socratic" onclick="changePersona('socratic')">🧠 Socratic Coach</button>
+                <button class="persona-btn" id="p-exam" onclick="changePersona('exam')">⚔️ Exam Prep</button>
+            </div>
+
             <div class="messages-box" id="chatBox">
-                <div class="message ai">Welcome back to Brainably! Switch on the "Vibe-Check Timer" on the right side to start an intense, gamified study block.</div>
+                <div class="message ai" id="welcomeMsg">Welcome back! I am currently running in 🚀 ELI5 Mode. I'll break down complicated ideas using simple analogies and fun examples!</div>
             </div>
 
             <div class="input-area">
@@ -391,7 +427,35 @@
     </main>
 
     <script>
-        // Audio generation matrix fallback for zero dependency ding sounds
+        // CORE PERSONA DATABASE ROUTING MATRIX
+        let currentPersona = 'eli5';
+        const personas = {
+            eli5: {
+                systemPrompt: "You are Brainably running in ELI5 Mode. Your job is to explain complex school subjects to a student as if they are 5 years old. Use super simple words, fun everyday analogies, keep sentences short, and sprinkle in helpful emojis.",
+                welcome: "Switched to 🚀 ELI5 Mode! Drop any confusing concept here and I'll break it down into pure, simple language."
+            },
+            socratic: {
+                systemPrompt: "You are Brainably running in Socratic Mode. Your rule is: NEVER give the final answer directly to the student. Instead, always guide them toward discovering the answer themselves by asking short, helpful, prompting questions based on what they type.",
+                welcome: "Switched to 🧠 Socratic Coach Mode! I won't do the homework for you, but I will help you master it. What problem are we tackling?"
+            },
+            exam: {
+                systemPrompt: "You are Brainably running in Exam Prep Mode. Be direct, highly professional, scientific, and precise. Format your study guides using clear bold headers and clean, bulleted high-yield facts to help the student memorize details fast.",
+                welcome: "Switched to ⚔️ Exam Prep Mode. Let's get tactical. Drop your topics or questions, and I will format them into structured, high-yield bulleted review sheets."
+            }
+        };
+
+        function changePersona(type) {
+            currentPersona = type;
+            
+            // Toggle visual button styling states
+            document.querySelectorAll('.persona-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`p-${type}`).classList.add('active');
+
+            // Log personality shift alert inside chat matrix
+            appendBubble(personas[type].welcome, 'ai');
+        }
+
+        // Built-In Web Audio Core Synthesizer Node Engine
         function playSuccessChime() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -400,19 +464,19 @@
                 oscillator.connect(gainNode);
                 gainNode.connect(audioCtx.destination);
                 oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+                oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15);
                 gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
                 oscillator.start();
                 oscillator.stop(audioCtx.currentTime + 0.6);
-            } catch(e) { console.log('Audio Context muted or blocked by initialization security bounds.'); }
+            } catch(e) { console.log('Audio blocked.'); }
         }
 
         // TIMER DATA STORAGE LOGIC
         let countdownTimer = null;
         let isTimerRunning = false;
-        let timerType = 'study'; // 'study' or 'break'
+        let timerType = 'study';
         let secondsRemaining = 25 * 60; 
 
         const timeDisplay = document.getElementById('timeDisplay');
@@ -477,18 +541,17 @@
             switchTimerVibe(timerType);
         }
 
-        // GAMIFIED ARTIFICIAL INTELLIGENCE LOOP AUTOMATION HOOK
         function executeAiGamifiedTrigger() {
             if (timerType === 'study') {
                 appendBubble("⏱️ Focus session finished! Paging your tutor...", "ai");
-                userInput.value = "I just finished a full 25-minute study focus block on my homework! Give me a high-five, and ask me 2 highly specific, critical review questions to test out what I accomplished during this block.";
+                userInput.value = "I just finished a full 25-minute study focus block on my homework! Give me a quick evaluation or high-yield checkpoint query based on our current persona style.";
                 sendToAi();
             } else {
                 appendBubble("⏱️ Break time over! Ready to return to the zone?", "ai");
             }
         }
 
-        // BACKEND CHAT HANDLER INTERFACES 
+        // BACKEND CHAT HANDLER INTERFACES
         const chatBox = document.getElementById('chatBox');
         const userInput = document.getElementById('userInput');
         const settingsDrawer = document.getElementById('settingsDrawer');
@@ -538,7 +601,8 @@
                     body: JSON.stringify({
                         model: "llama-3.1-8b-instant", 
                         messages: [
-                            { role: "system", content: "You are Brainably, a premium, helpful, step-by-step AI homework tutor designed to clear up student confusion." },
+                            // DYNAMIC CHAT SWITCHING VIA INJECTED SELECTED OBJECT PROPERTIES
+                            { role: "system", content: personas[currentPersona].systemPrompt },
                             { role: "user", content: text }
                         ],
                         temperature: 0.7
