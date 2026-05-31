@@ -1,302 +1,436 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Brainably – Premium AI Homework Helper for Students</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&family=Playfair+Display:ital,wght=0,600;0,700;1,400&display=swap" rel="stylesheet">
-<style>
-:root {
-  --brand: #22d3ee;
-  --brand-dark: #0891b2;
-  --brand-light: rgba(34, 211, 238, 0.1);
-  --accent: #a855f7;
-  --bg-dark: #030712;
-  --card-bg: rgba(15, 23, 42, 0.6);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainably - Student Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-* { 
-  margin: 0; 
-  padding: 0; 
-  box-sizing: border-box; 
-}
+        body {
+            background-color: #030712;
+            color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-html, body {
-  height: auto;
-  min-height: 100%;
-  background-color: var(--bg-dark);
-  color: var(--text-main);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+        /* Fullscreen Confetti Layer Canvas */
+        #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            pointer-events: none;
+        }
 
-body { 
-  display: flex; 
-  flex-direction: column; 
-  position: relative;
-}
+        /* Ambient Cyber Glow Background */
+        .ambient-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.3;
+            filter: blur(130px);
+        }
 
-/* Ambient Lava Lamp Background Elements */
-.lava-lamp-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  overflow: hidden;
-  pointer-events: none;
-  opacity: 0.45;
-  filter: blur(90px);
-}
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a855f7, #06b6d4);
+            width: 600px;
+            height: 600px;
+            top: -20%;
+            left: -10%;
+        }
 
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  animation: float-around 25s infinite ease-in-out;
-}
+        /* Top Navigation Header Bar */
+        .navbar {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            z-index: 10;
+            position: relative;
+        }
 
-.blob-1 {
-  width: 500px;
-  height: 500px;
-  top: -10%;
-  right: 10%;
-  background: linear-gradient(135deg, #1e40af, #a855f7);
-  animation-duration: 35s;
-}
+        .brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #22d3ee;
+            letter-spacing: -0.03em;
+        }
 
-.blob-2 {
-  width: 450px;
-  height: 450px;
-  bottom: 20%;
-  left: -5%;
-  background: linear-gradient(45deg, #0284c7, #06b6d4);
-  animation-duration: 28s;
-  animation-delay: -7s;
-}
+        /* GAMIFIED HERO BANNER WITH INSTANT FIRE CODE COUNTERS */
+        .welcome-hero {
+            max-width: 1200px;
+            margin: 40px auto 20px auto;
+            padding: 0 20px;
+            z-index: 10;
+            position: relative;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
 
-@keyframes float-around {
-  0% { transform: translateY(0px) translateX(0px) scale(1); }
-  50% { transform: translateY(-80px) translateX(40px) scale(1.1); }
-  100% { transform: translateY(0px) translateX(0px) scale(1); }
-}
+        .hero-main {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(15, 23, 42, 0.5));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 35px;
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
 
-/* High-Tech Translucent Top Header */
-nav {
-  background: rgba(15, 23, 42, 0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  padding: 18px 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
+        .hero-main h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--brand);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  text-shadow: 0 0 15px rgba(34, 211, 238, 0.25);
-}
+        .hero-main p {
+            color: #94a3b8;
+            font-size: 1.05rem;
+            line-height: 1.5;
+        }
 
-.logo-img {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-}
+        /* CHROME GLASS STREAK INTERACTIVE DISPLAY NODE */
+        .streak-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(249, 115, 22, 0.25);
+            padding: 30px;
+            border-radius: 24px;
+            backdrop-filter: blur(15px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.08);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
 
-.school-tag {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #22d3ee;
-  background: rgba(34, 211, 238, 0.15);
-  border: 1px solid rgba(34, 211, 238, 0.2);
-  padding: 2px 10px;
-  border-radius: 20px;
-  text-transform: uppercase;
-}
+        .streak-card:hover {
+            transform: scale(1.03);
+            border-color: rgba(249, 115, 22, 0.5);
+            box-shadow: 0 0 40px rgba(249, 115, 22, 0.15);
+        }
 
-/* Hero Section */
-.hero {
-  text-align: center;
-  padding: 100px 24px 60px;
-  max-width: 950px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 32px;
-  position: relative;
-  z-index: 10;
-}
+        .fire-icon {
+            font-size: 3.5rem;
+            margin-bottom: 5px;
+            animation: pulseFire 2s infinite ease-in-out;
+        }
 
-.hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.6rem, 7.5vw, 4.5rem);
-  font-weight: 700;
-  line-height: 1.15;
-}
+        @keyframes pulseFire {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(249,115,22,0)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(249,115,22,0.6)); }
+        }
 
-.hero h1 em { 
-  font-style: italic; 
-  color: transparent;
-  background: linear-gradient(to right, #22d3ee, #a855f7);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
+        .streak-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #f97316;
+            line-height: 1;
+        }
 
-.hero p {
-  color: var(--text-muted);
-  font-size: 1.3rem;
-  max-width: 620px;
-  line-height: 1.65;
-}
+        .streak-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #cbd5e1;
+            letter-spacing: 0.08em;
+            margin-top: 5px;
+        }
 
-.launch-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  background: linear-gradient(135deg, #06b6d4 0%, #7c3aed 100%);
-  color: white;
-  text-decoration: none;
-  padding: 18px 44px;
-  font-weight: 700;
-  font-size: 1.15rem;
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(6, 182, 212, 0.25);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
+        .streak-bonus-text {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            margin-top: 8px;
+        }
 
-.launch-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 20px 45px rgba(6, 182, 212, 0.35);
-}
+        /* GRID NAVIGATION PLATFORM */
+        .dashboard-grid {
+            max-width: 1200px;
+            margin: 15px auto 60px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            z-index: 10;
+            position: relative;
+        }
 
-/* Features Studio Section Wrapper */
-.features-container {
-  max-width: 1100px;
-  margin: 0 auto 100px;
-  padding: 0 24px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 30px;
-  position: relative;
-  z-index: 10;
-}
+        .room-card {
+            background: rgba(15, 23, 42, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 240px;
+            text-decoration: none;
+            color: inherit;
+        }
 
-.feature-card {
-  background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  padding: 35px;
-  transition: transform 0.3s ease, border-color 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
+        .room-card:hover {
+            transform: translateY(-6px);
+            background: rgba(15, 23, 42, 0.5);
+        }
 
-.feature-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(34, 211, 238, 0.3);
-}
+        .room-card.study-room:hover { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 15px 35px rgba(168, 85, 247, 0.1); }
+        .room-card.academy:hover { border-color: rgba(34, 211, 238, 0.4); box-shadow: 0 15px 35px rgba(34, 211, 238, 0.1); }
+        .room-card.quest:hover { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 15px 35px rgba(16, 185, 129, 0.1); }
 
-.card-icon {
-  font-size: 2rem;
-  background: rgba(255, 255, 255, 0.04);
-  width: 55px;
-  height: 55px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
+        .room-icon {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
 
-.feature-card h3 {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #fff;
-}
+        .study-room .room-icon { background: rgba(168, 85, 247, 0.1); color: #c084fc; }
+        .academy .room-icon { background: rgba(34, 211, 238, 0.1); color: #22d3ee; }
+        .quest .room-icon { background: rgba(16, 185, 129, 0.1); color: #34d399; }
 
-.feature-card p {
-  color: var(--text-muted);
-  line-height: 1.6;
-  font-size: 1rem;
-}
+        .room-meta h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; color: #fff; }
+        .room-meta p { font-size: 0.92rem; color: #94a3b8; line-height: 1.4; }
 
-.feature-link {
-  color: var(--brand);
-  text-decoration: none;
-  font-weight: 700;
-  margin-top: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.feature-link:hover {
-  color: #fff;
-}
-
-@media (max-width: 640px) {
-  nav { padding: 15px 20px; }
-  .features-container { grid-template-columns: 1fr; }
-}
-</style>
+        @media (max-width: 900px) {
+            .welcome-hero { grid-template-columns: 1fr; }
+            .navbar { padding: 15px 20px; }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="lava-lamp-container">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-  </div>
+    <canvas id="confettiCanvas"></canvas>
 
-  <nav>
-    <a href="#" class="logo">
-      <img src="image_21b2dc.jpg" alt="Brainably Logo" class="logo-img" onerror="this.src='image_21b2dc.png'">
-      Brainably <span class="school-tag">AI Tutor</span>
-    </a>
-  </nav>
-
-  <section class="hero">
-    <h1>Stuck on schoolwork?<br>Meet <em>Brainably</em>.</h1>
-    <p>Your premium, step-by-step AI study companion designed to unpack complex subjects cleanly and completely free.</p>
-    <a href="app.html" class="launch-btn">✨ Enter Study Room &rarr;</a>
-  </section>
-
-  <section class="features-container">
-    
-    <div class="feature-card">
-      <div class="card-icon">📺</div>
-      <h3>Video Academy</h3>
-      <p>Access a curated library of high-quality, bite-sized educational videos designed to make difficult topics simple to understand.</p>
-      <a href="library.html" class="feature-link">Explore Library &rarr;</a>
+    <div class="ambient-glow">
+        <div class="blob"></div>
     </div>
 
-    <div class="feature-card">
-      <div class="card-icon">🎮</div>
-      <h3>Brain Quest Quiz</h3>
-      <p>Test your knowledge with gamified quizzes! Earn scores, challenge yourself, and master your subjects through interactive play.</p>
-      <a href="quiz.html" class="feature-link">Play Quiz &rarr;</a>
-    </div>
+    <nav class="navbar">
+        <div class="brand">Brainably Core Hub</div>
+        <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">System Stable ✓</div>
+    </nav>
 
-  </section>
+    <header class="welcome-hero">
+        <div class="hero-main">
+            <h1>Welcome to your AI Academy</h1>
+            <p>Select an environment below to begin your study acceleration pipeline. Your progress, history logs, and gamified streak achievements are stored automatically right inside your terminal profile matrix.</p>
+        </div>
 
+        <div class="streak-card" onclick="triggerManualConfettiCelebration()">
+            <div class="fire-icon">🔥</div>
+            <div class="streak-number" id="streakDisplay">0</div>
+            <div class="streak-label">Day Study Streak</div>
+            <div class="streak-bonus-text" id="streakQuote">Click for spark burst!</div>
+        </div>
+    </header>
+
+    <main class="dashboard-grid">
+
+        <a href="app.html" class="room-card study-room">
+            <div class="room-icon">🧠</div>
+            <div class="room-meta">
+                <h2>AI Deep Learning Room</h2>
+                <p>Toggle multi-mode AI personas, configure session clocks, and auto-export clean summaries instantly.</p>
+            </div>
+        </a>
+
+        <a href="library.html" class="room-card academy">
+            <div class="room-icon">🚀</div>
+            <div class="room-meta">
+                <h2>Video Library & Explainer</h2>
+                <p>Search educational video media archives and spin up dedicated AI reference breakdowns instantly.</p>
+            </div>
+        </a>
+
+        <a href="quiz.html" class="room-card quest">
+            <div class="room-icon">🎯</div>
+            <div class="room-meta">
+                <h2>Brain Quest Challenge</h2>
+                <p>Test your operational memory retention capabilities with step-by-step diagnostic scoring models.</p>
+            </div>
+        </a>
+
+    </main>
+
+    <script>
+        // CORE PERSISTENT STUDY STREAK ENGINE 
+        function evaluateUserStudyStreakLog() {
+            const currentTimestamp = new Date();
+            const year = currentTimestamp.getFullYear();
+            const month = currentTimestamp.getMonth();
+            const date = currentTimestamp.getDate();
+            // Create a normalized string identifier unique to today
+            const todayKeyString = `${year}-${month}-${date}`;
+
+            const savedStreakCount = localStorage.getItem('brainably_streak_counter') || 0;
+            const lastStudyDayStamp = localStorage.getItem('brainably_last_active_date');
+
+            let calculatedStreak = parseInt(savedStreakCount);
+
+            if (!lastStudyDayStamp) {
+                // First launch initialize base entry parameters
+                calculatedStreak = 1;
+                localStorage.setItem('brainably_streak_counter', 1);
+                localStorage.setItem('brainably_last_active_date', todayKeyString);
+                setTimeout(() => launchConfettiExplosionEngine(), 800);
+            } else if (lastStudyDayStamp !== todayKeyString) {
+                // Logic check to verify if previous activation occurred precisely yesterday
+                const previousDayObj = new Date();
+                previousDayObj.setDate(previousDayObj.getDate() - 1);
+                const yesterdayKeyString = `${previousDayObj.getFullYear()}-${previousDayObj.getMonth()}-${previousDayObj.getDate()}`;
+
+                if (lastStudyDayStamp === yesterdayKeyString) {
+                    // Streak preserved! Continuous daily activation cycle confirmed.
+                    calculatedStreak += 1;
+                    localStorage.setItem('brainably_streak_counter', calculatedStreak);
+                    localStorage.setItem('brainably_last_active_date', todayKeyString);
+                    setTimeout(() => launchConfettiExplosionEngine(), 800);
+                } else {
+                    // Broken chain timeline event tracked. System defaults back to initialization parameters.
+                    calculatedStreak = 1;
+                    localStorage.setItem('brainably_streak_counter', 1);
+                    localStorage.setItem('brainably_last_active_date', todayKeyString);
+                }
+            }
+
+            // Sync structural metrics with DOM frame text nodes
+            document.getElementById('streakDisplay').innerText = calculatedStreak;
+            
+            // Injected dynamic motivation subtexts matching achievement counts
+            const motivationalQuotes = [
+                "The journey begins! ⚡",
+                "Two days locked down! Keep pushing! 🚀",
+                "Three day milestone! You are unstoppable! 🔥",
+                "Absolute academic dominance! 👑"
+            ];
+            const quoteIndex = Math.min(calculatedStreak - 1, motivationalQuotes.length - 1);
+            document.getElementById('streakQuote').innerText = motivationalQuotes[quoteIndex];
+        }
+
+        function triggerManualConfettiCelebration() {
+            launchConfettiExplosionEngine();
+        }
+
+        // ==========================================================================
+        // HIGH PERFORMANCE HARDWARE-ACCELERATED PHYSICS CONFETTI ENGINE
+        // ==========================================================================
+        let confettiArray = [];
+        const canvasElement = document.getElementById("confettiCanvas");
+        const canvasContext = canvasElement.getContext("2d");
+
+        function resizeConfettiCanvasView() {
+            canvasElement.width = window.innerWidth;
+            canvasElement.height = window.innerHeight;
+        }
+        window.addEventListener("resize", resizeConfettiCanvasView);
+
+        class ConfettiParticleNode {
+            constructor() {
+                this.x = window.innerWidth / 2;
+                this.y = window.innerHeight + 20; // Fire up from bottom center
+                this.radius = Math.random() * 5 + 4;
+                // Launch vector parameters with custom scatter variations
+                this.speedX = (Math.random() - 0.5) * 16;
+                this.speedY = -(Math.random() * 12 + 12);
+                this.gravity = 0.38;
+                this.friction = 0.99;
+                
+                const vibrantColors = ["#22d3ee", "#a855f7", "#34d399", "#f43f5e", "#fbbf24", "#e11d48"];
+                this.particleColor = vibrantColors[Math.floor(Math.random() * vibrantColors.length)];
+                this.particleOpacity = 1;
+            }
+
+            updatePhysicsState() {
+                this.speedX *= this.friction;
+                this.speedY += this.gravity;
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                if (this.speedY > 0) {
+                    this.particleOpacity -= 0.015; // Smooth fade away once arc peaks
+                }
+            }
+
+            drawVectorUnit(ctx) {
+                ctx.save();
+                ctx.globalAlpha = this.particleOpacity;
+                ctx.fillStyle = this.particleColor;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function launchConfettiExplosionEngine() {
+            resizeConfettiCanvasView();
+            // Inject 120 vector items inside tracking arrays
+            for (let i = 0; i < 120; i++) {
+                confettiArray.push(new ConfettiParticleNode());
+            }
+            
+            // Lock recursion loop gates
+            if (confettiArray.length === 120) {
+                executeFrameTelemetryLoop();
+            }
+        }
+
+        function executeFrameTelemetryLoop() {
+            canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
+            
+            for (let i = confettiArray.length - 1; i >= 0; i--) {
+                const particle = confettiArray[i];
+                particle.updatePhysicsState();
+                particle.drawVectorUnit(canvasContext);
+
+                // Garbage collection to optimize frames
+                if (particle.particleOpacity <= 0 || particle.y > window.innerHeight + 30) {
+                    confettiArray.splice(i, 1);
+                }
+            }
+
+            if (confettiArray.length > 0) {
+                requestAnimationFrame(executeFrameTelemetryLoop);
+            } else {
+                canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
+            }
+        }
+
+        // Initialize state verification operations on load events
+        window.addEventListener('DOMContentLoaded', evaluateUserStudyStreakLog);
+    </script>
 </body>
 </html>
