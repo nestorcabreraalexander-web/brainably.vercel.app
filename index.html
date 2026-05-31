@@ -221,6 +221,28 @@
         .streak-label { font-size: 0.85rem; text-transform: uppercase; font-weight: 700; color: var(--text-main); letter-spacing: 0.08em; margin-top: 5px; }
         .streak-bonus-text { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; }
 
+        /* 📍 FEATURE 1: DISTRICT LOCALIZATION ELEMENT CARD */
+        .district-sync-section {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+            z-index: 10;
+            position: relative;
+        }
+        .district-card {
+            background: linear-gradient(90deg, rgba(34, 211, 238, 0.08), rgba(168, 85, 247, 0.03));
+            border: 1px dashed rgba(34, 211, 238, 0.3);
+            padding: 20px 30px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        .district-meta h3 { font-size: 1.15rem; font-weight: 800; color: #22d3ee; margin-bottom: 4px; }
+        .district-meta p { font-size: 0.88rem; color: var(--text-muted); }
+        .district-badge { background: #06b6d4; color: #030712; padding: 6px 14px; border-radius: 50px; font-weight: 800; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
         /* GRID PLATFORM LINK CHANNELS */
         .dashboard-grid {
             max-width: 1200px;
@@ -260,7 +282,7 @@
         /* ANALYTICS PLOT VECTORS LAYOUT PANEL */
         .analytics-section {
             max-width: 1200px;
-            margin: 40px auto 60px auto;
+            margin: 40px auto 30px auto;
             padding: 0 20px;
             z-index: 10;
             position: relative;
@@ -306,9 +328,63 @@
         .fill-physics { background: linear-gradient(90deg, #06b6d4, #22d3ee); }
         .fill-chemistry { background: linear-gradient(90deg, #10b981, #34d399); }
 
+        /* 📁 FEATURE 2 & 3: UTILITY ACTIONS & TEACHER PORTAL MATRIX */
+        .utility-deck {
+            max-width: 1200px;
+            margin: 20px auto 60px auto;
+            padding: 0 20px;
+            z-index: 10;
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        .util-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+        .util-card h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: var(--text-bright); }
+        .util-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+        .util-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            outline: none;
+        }
+        .util-btn:hover { border-color: #22d3ee; background: rgba(34,211,238,0.05); }
+
+        .teacher-box {
+            background: rgba(16, 185, 129, 0.02);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+        .teacher-textarea {
+            width: 100%;
+            height: 100px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.88rem;
+            outline: none;
+            resize: none;
+            margin-bottom: 15px;
+            display: none;
+        }
+
         @media (max-width: 900px) {
             .welcome-hero { grid-template-columns: 1fr; }
             .navbar { padding: 15px 20px; height: auto; flex-direction: column; gap: 15px; }
+            .utility-deck { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -324,7 +400,6 @@
         <div class="brand" id="navBrandText">Brainably Core Hub</div>
         
         <div class="control-station">
-            
             <select class="lang-picker" id="languageSelector" onchange="executeLanguageTranslationSwitch()">
                 <option value="en">🇺🇸 English</option>
                 <option value="es">🇪🇸 Español</option>
@@ -359,6 +434,16 @@
         </div>
     </header>
 
+    <section class="district-sync-section">
+        <div class="district-card">
+            <div class="district-meta">
+                <h3>📍 Judson ISD Active Telemetry</h3>
+                <p id="districtStatus">Connected via local node. Curriculum models matched to secondary metrics.</p>
+            </div>
+            <div class="district-badge">Judson ISD Active</div>
+        </div>
+    </section>
+
     <main class="dashboard-grid">
         <a href="app.html" class="room-card study-room" onclick="incrementSkillMetric('math', 5)">
             <div class="room-icon">🧠</div>
@@ -388,7 +473,6 @@
     <section class="analytics-section">
         <div class="analytics-title" id="analyticsHeader">📊 Subject Competency Vectors</div>
         <div class="skill-grid">
-            
             <div class="sk-card">
                 <div class="sk-header">
                     <span class="sk-name" id="track1Label">Mathematics Logic Matrix</span>
@@ -396,7 +480,6 @@
                 </div>
                 <div class="pb"><div class="pf fill-math" id="math-fill"></div></div>
             </div>
-
             <div class="sk-card">
                 <div class="sk-header">
                     <span class="sk-name" id="track2Label">Quantum & Kinematic Physics</span>
@@ -404,7 +487,6 @@
                 </div>
                 <div class="pb"><div class="pf fill-physics" id="physics-fill"></div></div>
             </div>
-
             <div class="sk-card">
                 <div class="sk-header">
                     <span class="sk-name" id="track3Label">Molecular Chemistry Stoichiometry</span>
@@ -412,81 +494,50 @@
                 </div>
                 <div class="pb"><div class="pf fill-chemistry" id="chemistry-fill"></div></div>
             </div>
+        </div>
+    </section>
 
+    <section class="utility-deck">
+        <div class="util-card">
+            <h2>📦 Local Data Exporter</h2>
+            <p>Compile and generate a local Markdown review sheet containing your current study sessions logs and competency vectors directly from browser memory.</p>
+            <button class="util-btn" onclick="exportStudyGuideLog()">Download Summary Pack (.txt)</button>
+        </div>
+
+        <div class="util-card teacher-box">
+            <h2>👨‍🏫 Teacher Administration Sandbox</h2>
+            <p>Institutional bypass gate. Click to launch the AI lesson-plan and curriculum syllabus generator for Judson ISD alignment metrics.</p>
+            <textarea class="teacher-textarea" id="teacherConsole" placeholder="Enter topic phrase (e.g., 'Linear Functions Lesson Outline')... Click button below to structure via Groq..."></textarea>
+            <button class="util-btn" style="border-color: #10b981;" id="teacherToggleBtn" onclick="toggleTeacherSandboxMode()">Open Teacher Portal Panel</button>
         </div>
     </section>
 
     <script>
         // ==========================================================================
-        // 🌐 6-LANGUAGE ARCHITECTURAL TRANSLATION LIBRARY MATRIX
+        // 🌐 TRANSLATION DICTIONARY MATRIX
         // ==========================================================================
         const translationDictionary = {
             en: {
-                brand: "Brainably Core Hub",
-                title: "Welcome to your AI Academy",
+                brand: "Brainably Core Hub", title: "Welcome to your AI Academy",
                 para: "Select an environment below to begin your study acceleration pipeline. Your progress, history logs, and gamified streak achievements are stored automatically right inside your terminal profile matrix.",
-                streak: "Day Study Streak",
-                r1T: "AI Deep Learning Room", r1D: "Toggle multi-mode AI personas, configure session clocks, and auto-export clean summaries instantly.",
+                streak: "Day Study Streak", r1T: "AI Deep Learning Room", r1D: "Toggle multi-mode AI personas, configure session clocks, and auto-export clean summaries instantly.",
                 r2T: "Video Library & Explainer", r2D: "Search educational video media archives and spin up dedicated AI reference breakdowns instantly.",
                 r3T: "Brain Quest Challenge", r3D: "Test your operational memory retention capabilities with step-by-step diagnostic scoring models.",
                 anH: "📊 Subject Competency Vectors", t1L: "Mathematics Logic Matrix", t2L: "Quantum & Kinematic Physics", t3L: "Molecular Chemistry Stoichiometry"
             },
             es: {
-                brand: "Centro Core Brainably",
-                title: "Bienvenido a tu Academia de IA",
+                brand: "Centro Core Brainably", title: "Bienvenido a tu Academia de IA",
                 para: "Selecciona un entorno a continuación para comenzar tu canalización de aceleración de estudio. Tu progreso y logros se guardan automáticamente.",
-                streak: "Días de Racha de Estudio",
-                r1T: "Sala de Aprendizaje Profundo IA", r1D: "Cambia personajes de IA, configura relojes de sesión y exporta resúmenes limpios al instante.",
+                streak: "Días de Racha de Estudio", r1T: "Sala de Aprendizaje Profundo IA", r1D: "Cambia personajes de IA, configura relojes de sesión y exporta resúmenes limpios al instante.",
                 r2T: "Biblioteca de Videos e IA", r2D: "Busca archivos multimedia educativos y genera análisis de referencia de IA dedicados al instante.",
                 r3T: "Desafío de Búsqueda Mental", r3D: "Pon a prueba tus capacidades de retención de memoria con modelos de puntuación de diagnóstico paso a paso.",
                 anH: "📊 Vectores de Competencia de Asignaturas", t1L: "Matriz Lógica de Matemáticas", t2L: "Física Cuántica y Cinemática", t3L: "Estequiometría de Química Molecular"
-            },
-            fr: {
-                brand: "Hub Central Brainably",
-                title: "Bienvenue dans votre Académie IA",
-                para: "Sélectionnez un environnement ci-dessous pour démarrer votre pipeline d'accélération d'études. Vos progrès sont stockés automatiquement.",
-                streak: "Jours de Série d'Études",
-                r1T: "Salle d'Apprentissage Profond IA", r1D: "Basculez entre les personas IA, configurez les horloges de session et exportez des résumés.",
-                r2T: "Bibliothèque Vidéo & Explicateurs", r2D: "Recherchez des archives vidéo éducatives et lancez des analyses de référence IA instantanément.",
-                r3T: "Défi Quête Cérébrale", r3D: "Testez vos capacités de rétention de mémoire avec des modèles de notation diagnostique étape par étape.",
-                anH: "📊 Vecteurs de Compétences Par Matière", t1L: "Matrice Logique Mathématique", t2L: "Physique Quantique & Cinématique", t3L: "Stœchiométrie de la Chimie Moléculaire"
-            },
-            de: {
-                brand: "Brainably Core Hub",
-                title: "Willkommen in Ihrer KI-Akademie",
-                para: "Wählen Sie unten eine Umgebung aus, um Ihre Lernbeschleunigung zu starten. Ihr Fortschritt wird automatisch gespeichert.",
-                streak: "Tage Lernsträhne",
-                r1T: "KI Deep Learning Raum", r1D: "Wechseln Sie KI-Personas, konfigurieren Sie Sitzungsuhren und exportieren Sie Zusammenfassungen.",
-                r2T: "Videobibliothek & KI-Erklärer", r2D: "Durchsuchen Sie Bildungsmedienarchive und erstellen Sie sofort dedizierte KI-Referenzanalysen.",
-                r3T: "Brain Quest Herausforderung", r3D: "Testen Sie Ihr Gedächtnis mit schrittweisen diagnostischen Bewertungsmodellen.",
-                anH: "📊 Fachkompetenz-Vektoren", t1L: "Mathematische Logikmatrix", t2L: "Quanten- & Kinematische Physik", t3L: "Molekulare Chemie-Stöchiometrie"
-            },
-            it: {
-                brand: "Hub Centrale Brainably",
-                title: "Benvenuto nella tua Accademia IA",
-                para: "Seleziona un ambiente qui sotto per iniziare la tua pipeline di accelerazione dello studio. I tuoi progressi vengono salvati.",
-                streak: "Giorni di Striscia di Studio",
-                r1T: "Sala di Apprendimento Profondo IA", r1D: "Attiva i profili IA, configura i timer di sessione ed esporta riassunti puliti istantaneamente.",
-                r2T: "Libreria Video e Spiegazioni IA", r2D: "Cerca negli archivi video didattici e avvia istantaneamente analisi di riferimento IA dedicate.",
-                r3T: "Sfida della Ricerca Mentale", r3D: "Metti alla prova la tua memoria operativa con modelli di punteggio diagnostico passo-passo.",
-                anH: "📊 Vettori di Competenza per Materia", t1L: "Matrice di Logica Matematica", t2L: "Fisica Quantistica e Cinematica", t3L: "Stechiometria della Chimica Molecolare"
-            },
-            pt: {
-                brand: "Hub Central Brainably",
-                title: "Bem-vindo à sua Academia de IA",
-                para: "Selecione um ambiente abaixo para iniciar seu pipeline de aceleração de estudos. Seu progresso é salvo automaticamente.",
-                streak: "Dias de Sequência de Estudos",
-                r1T: "Sala de Aprendizado Profundo IA", r1D: "Alterne personas de IA, configure cronômetros de sessão e exporte resumos limpos instantaneamente.",
-                r2T: "Biblioteca de Vídeos e Explicações", r2D: "Pesquise arquivos de mídia educacional e crie análises de referência de IA dedicadas instantaneamente.",
-                r3T: "Desafio da Busca Cerebral", r3D: "Teste suas capacidades de retenção de memória com modelos de pontuação diagnóstica passo a passo.",
-                anH: "📊 Vetores de Competência por Matéria", t1L: "Matriz de Lógica Matemática", t2L: "Física Quântica e Cinemática", t3L: "Estequiometria de Química Molecular"
             }
         };
 
         function executeLanguageTranslationSwitch() {
             const selectedLang = document.getElementById('languageSelector').value;
             const textSet = translationDictionary[selectedLang] || translationDictionary['en'];
-
             document.getElementById('navBrandText').innerText = textSet.brand;
             document.getElementById('heroTitle').innerText = textSet.title;
             document.getElementById('heroParagraph').innerText = textSet.para;
@@ -501,7 +552,6 @@
             document.getElementById('track1Label').innerText = textSet.t1L;
             document.getElementById('track2Label').innerText = textSet.t2L;
             document.getElementById('track3Label').innerText = textSet.t3L;
-
             localStorage.setItem('brainably_active_language', selectedLang);
         }
 
@@ -511,19 +561,14 @@
         function toggleInterfaceColorTheme() {
             const activeTheme = document.documentElement.getAttribute('data-theme');
             const targetTheme = (activeTheme === 'light') ? 'dark' : 'light';
-            
             document.documentElement.setAttribute('data-theme', targetTheme);
             document.getElementById('themeToggleIcon').innerText = (targetTheme === 'light') ? '☀️' : '🌙';
             localStorage.setItem('brainably_interface_mode', targetTheme);
         }
 
-        // ==========================================================================
-        // VIBE ACCENT GLOW CONTROLLER
-        // ==========================================================================
         function switchSystemTheme(themeColor) {
             const rootElement = document.documentElement;
             document.querySelectorAll('.cswatch').forEach(swatch => swatch.classList.remove('active'));
-
             if (themeColor === 'purple') {
                 rootElement.style.setProperty('--accent-glow-primary', '#a855f7');
                 rootElement.style.setProperty('--accent-glow-secondary', '#06b6d4');
@@ -541,7 +586,78 @@
         }
 
         // ==========================================================================
-        // CORE TRACKING DATA ENGINES
+        // 📦 FEATURE 2 FUNCTION: CLIENT-SIDE LOCAL FILES DOWNLOAD ENGINE
+        // ==========================================================================
+        function exportStudyGuideLog() {
+            const m = localStorage.getItem('brainably_metric_math') || '25';
+            const p = localStorage.getItem('brainably_metric_physics') || '25';
+            const c = localStorage.getItem('brainably_metric_chemistry') || '25';
+            const s = localStorage.getItem('brainably_streak_counter') || '0';
+
+            const outputString = `==================================================\nBRAINABLY USER DATA ACCELERATION LOG\n==================================================\n\nCurrent Study Streak: ${s} Days\n\nSubject Competency Mapping:\n- Mathematics Vector: ${m}%\n- Physics Vector: ${p}%\n- Chemistry Vector: ${c}%\n\nTarget District Node: Judson ISD Secondary Network\nTimestamp Generated: ${new Date().toLocaleString()}\n==================================================\n\nNotes & Review Space:\n[Bring this file straight to class to review your gaps!]`;
+            
+            const fileBlob = new Blob([outputString], { type: 'text/plain' });
+            const temporaryAnchor = document.createElement('a');
+            temporaryAnchor.href = URL.createObjectURL(fileBlob);
+            temporaryAnchor.download = `Brainably_Study_Guide_Log.txt`;
+            document.body.appendChild(temporaryAnchor);
+            temporaryAnchor.click();
+            document.body.removeChild(temporaryAnchor);
+        }
+
+        // ==========================================================================
+        // 👨‍🏫 FEATURE 3 FUNCTION: NO-OVERHEAD TEACHER PROMPTING PORTAL
+        // ==========================================================================
+        async function toggleTeacherSandboxMode() {
+            const consoleArea = document.getElementById('teacherConsole');
+            const actionBtn = document.getElementById('teacherToggleBtn');
+
+            if(consoleArea.style.display === 'none' || !consoleArea.style.display) {
+                consoleArea.style.display = 'block';
+                actionBtn.innerText = '⚡ Run Lesson Planner (Groq Mode)';
+            } else {
+                const topicPhrase = consoleArea.value.trim();
+                if(!topicPhrase) {
+                    consoleArea.style.display = 'none';
+                    actionBtn.innerText = 'Open Teacher Portal Panel';
+                    return;
+                }
+                
+                actionBtn.innerText = '⏳ Compiling Judson ISD Lesson Plan...';
+                const apiKey = localStorage.getItem('brainably_groq_key');
+                if(!apiKey) {
+                    consoleArea.value = "❌ API Error! Missing Groq token inside browser cache profile. Please save your key in the AI Study Room first.";
+                    actionBtn.innerText = 'Reset Panel View';
+                    return;
+                }
+
+                try {
+                    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${apiKey.trim()}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            model: "llama-3.1-8b-instant",
+                            messages: [
+                                { role: "system", content: "You are a curriculum specialist for Texas High Schools. Generate a clean lesson outline including: 1. Main Objectives, 2. A 15-minute quick activity, and 3. Two target Texas TEKS review multiple-choice challenge questions." },
+                                { role: "user", content: `Create an outline for: ${topicPhrase}` }
+                            ],
+                            temperature: 0.5
+                        })
+                    });
+                    const resData = await res.json();
+                    if(resData.choices && resData.choices[0]) {
+                        consoleArea.value = resData.choices[0].message.content;
+                        actionBtn.innerText = '✓ Plan Created! Copy Text Above';
+                    }
+                } catch(e) {
+                    consoleArea.value = "Network connectivity timeout fetching telemetry configurations.";
+                    actionBtn.innerText = 'Reset View';
+                }
+            }
+        }
+
+        // ==========================================================================
+        // DATA PROCESSING CORE ENGINES
         // ==========================================================================
         function loadSkillAnalyticsDashboard() {
             const categories = ['math', 'physics', 'chemistry'];
@@ -563,7 +679,6 @@
         function evaluateUserStudyStreakLog() {
             const currentTimestamp = new Date();
             const todayKeyString = `${currentTimestamp.getFullYear()}-${currentTimestamp.getMonth()}-${currentTimestamp.getDate()}`;
-
             const savedStreakCount = localStorage.getItem('brainably_streak_counter') || 0;
             const lastStudyDayStamp = localStorage.getItem('brainably_last_active_date');
             let calculatedStreak = parseInt(savedStreakCount);
@@ -589,18 +704,10 @@
                     localStorage.setItem('brainably_last_active_date', todayKeyString);
                 }
             }
-
             document.getElementById('streakDisplay').innerText = calculatedStreak;
-            const motivationalQuotes = ["The journey begins! ⚡", "Two days locked down! Keep pushing! 🚀", "Three day milestone! You are unstoppable! 🔥", "Absolute academic dominance! 👑"];
-            const quoteIndex = Math.min(calculatedStreak - 1, motivationalQuotes.length - 1);
-            document.getElementById('streakQuote').innerText = motivationalQuotes[quoteIndex];
         }
 
-        function triggerManualConfettiCelebration() {
-            launchConfettiExplosionEngine();
-        }
-
-        // VECTOR PARTICLE CONFETTI ENGINE
+        // CONFETTI PARTICLE RENDER ENGINE
         let confettiArray = [];
         const canvasElement = document.getElementById("confettiCanvas");
         const canvasContext = canvasElement.getContext("2d");
@@ -632,20 +739,15 @@
                 if (this.speedY > 0) this.particleOpacity -= 0.015;
             }
             drawVectorUnit(ctx) {
-                ctx.save();
-                ctx.globalAlpha = this.particleOpacity;
-                ctx.fillStyle = this.particleColor;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
+                ctx.save(); ctx.globalAlpha = this.particleOpacity; ctx.fillStyle = this.particleColor;
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fill(); ctx.restore();
             }
         }
 
         function launchConfettiExplosionEngine() {
             resizeConfettiCanvasView();
-            for (let i = 0; i < 120; i++) confettiArray.push(new ConfettiParticleNode());
-            if (confettiArray.length === 120) executeFrameTelemetryLoop();
+            for (let i = 0; i < 80; i++) confettiArray.push(new ConfettiParticleNode());
+            if (confettiArray.length === 80) executeFrameTelemetryLoop();
         }
 
         function executeFrameTelemetryLoop() {
@@ -659,12 +761,12 @@
             if (confettiArray.length > 0) requestAnimationFrame(executeFrameTelemetryLoop);
         }
 
-        // SYSTEM LOAD PIPELINES
+        function triggerManualConfettiCelebration() { launchConfettiExplosionEngine(); }
+
         window.addEventListener('DOMContentLoaded', () => {
             evaluateUserStudyStreakLog();
             loadSkillAnalyticsDashboard();
             
-            // Re-apply saved configurations on reload cycles
             const savedTheme = localStorage.getItem('brainably_active_theme');
             if(savedTheme) switchSystemTheme(savedTheme);
 
