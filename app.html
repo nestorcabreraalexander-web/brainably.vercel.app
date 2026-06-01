@@ -3,266 +3,710 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brainably - AI Deep Learning Room</title>
+    <title>Brainably Study Room</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* DESIGN SYSTEM CORE CONTROLS */
-        :root {
-            --accent-glow-primary: #a855f7;
-            --accent-glow-secondary: #06b6d4;
-            --bg-base: #030712;
-            --bg-card: rgba(15, 23, 42, 0.35);
-            --border-color: rgba(255, 255, 255, 0.06);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --text-bright: #ffffff;
-        }
-
-        [data-theme="light"] {
-            --bg-base: #f8fafc;
-            --bg-card: rgba(255, 255, 255, 0.8);
-            --border-color: rgba(15, 23, 42, 0.08);
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --text-bright: #020617;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
         body {
-            background-color: var(--bg-base);
-            color: var(--text-main);
+            background-color: #030712;
+            color: #f8fafc;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            min-height: 100vh;
-            padding: 40px 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .back-link {
-            display: inline-block;
-            color: var(--accent-glow-secondary);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            margin-bottom: 30px;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        .header-section {
-            margin-bottom: 40px;
-        }
-
-        .header-section h1 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: var(--text-bright);
-            margin-bottom: 10px;
-        }
-
-        .header-section p {
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        /* AI TEACHER PORTAL INTERFACE WORKSPACE */
-        .teacher-box {
-            background: rgba(16, 185, 129, 0.02);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 30px;
-            border-radius: 24px;
-            backdrop-filter: blur(10px);
-            margin-top: 30px;
-        }
-
-        .teacher-box h2 {
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-            color: var(--text-bright);
-        }
-
-        .teacher-box p {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .teacher-textarea {
+        /* Ambient Background Blobs */
+        .lava-lamp {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 220px;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 15px;
-            color: #ffffff;
-            font-family: inherit;
-            font-size: 0.92rem;
-            outline: none;
-            resize: none;
-            margin-bottom: 20px;
-            display: none;
-            line-height: 1.6;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.35;
+            filter: blur(90px);
         }
 
-        [data-theme="light"] .teacher-textarea {
-            background: #ffffff;
-            color: #0f172a;
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e40af, #a855f7);
+            width: 400px;
+            height: 400px;
+            top: -10%;
+            right: -10%;
         }
 
-        .util-btn {
+        /* Translucent Top Header */
+        .app-nav {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            height: 65px;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #22d3ee;
+            text-decoration: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-btn {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(16, 185, 129, 0.5);
-            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #f8fafc;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.88rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #22d3ee;
+        }
+
+        .settings-toggle {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            color: #c084fc;
+        }
+
+        /* Split-Screen Workspace */
+        .workspace {
+            flex: 1;
+            display: flex;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 24px;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        /* Chat Window Frame */
+        .chat-container {
+            flex: 1.3;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: rgba(15, 23, 42, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 24px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .persona-switcher {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+            background: rgba(3, 7, 18, 0.4);
+            padding: 6px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .persona-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            padding: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .persona-btn.active {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(124, 58, 237, 0.2));
+            border: 1px solid rgba(34, 211, 238, 0.4);
+            color: #22d3ee;
+        }
+
+        .messages-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .messages-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        .messages-box::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            line-height: 1.5;
+            font-size: 0.98rem;
+        }
+
+        .message.user {
+            background: #a855f7;
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.ai {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #f8fafc;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        /* Action bar for Inputs and Export Button */
+        .chat-controls-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-area {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 8px 8px 8px 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-area input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #06b6d4, #7c3aed);
+            color: white;
+            border: none;
             padding: 12px 24px;
             border-radius: 12px;
             font-weight: 700;
-            font-size: 0.92rem;
             cursor: pointer;
-            outline: none;
-            display: inline-block;
         }
 
-        .util-btn:hover {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: #10b981;
+        /* Glowing PDF Study Guide Button */
+        .export-btn {
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px dashed rgba(34, 211, 238, 0.4);
+            color: #22d3ee;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .export-btn:hover {
+            background: rgba(34, 211, 238, 0.2);
+            border-style: solid;
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.15);
+        }
+
+        /* High-Tech Vibe Timer Card */
+        .timer-container {
+            flex: 0.7;
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(25px);
+            position: relative;
+        }
+
+        .timer-container.study-vibe {
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        .timer-container.break-vibe {
+            box-shadow: 0 0 40px rgba(34, 211, 238, 0.15);
+            border-color: rgba(34, 211, 238, 0.3);
+        }
+
+        .timer-vibe-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 25px;
+            color: #94a3b8;
+        }
+
+        .vibe-switcher {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 35px;
+            background: rgba(3, 7, 18, 0.6);
+            padding: 6px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .vibe-btn {
+            background: transparent;
+            border: none;
+            color: #64748b;
+            padding: 8px 18px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        .vibe-btn.active-study { background: #a855f7; color: white; }
+        .vibe-btn.active-break { background: #22d3ee; color: #030712; }
+
+        .time-display {
+            font-size: 4.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 14px;
+            width: 100%;
+            max-width: 240px;
+        }
+
+        .control-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-start { background: #f8fafc; color: #030712; }
+        .btn-reset { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); color: #e2e8f0; }
+
+        /* API Settings Panel Drawer */
+        .settings-panel {
+            position: fixed;
+            top: 80px;
+            right: 30px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(25px);
+            padding: 24px;
+            border-radius: 20px;
+            width: 320px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            z-index: 100;
+            display: none;
+        }
+
+        .settings-panel h3 { font-size: 1.1rem; margin-bottom: 10px; color: #22d3ee; }
+        .settings-panel p { font-size: 0.82rem; color: #94a3b8; margin-bottom: 15px; line-height: 1.4; }
+        .settings-panel input { width: 100%; padding: 12px; background: #030712; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #fff; margin-bottom: 12px; outline: none; }
+        .save-key-btn { width: 100%; background: #22d3ee; color: #030712; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+
+        /* Hidden print window workspace container */
+        #printTemplateFrame { display: none; }
+
+        /* ADVANCED SYSTEM PRINT OVERRIDES */
+        @media print {
+            body * { display: none !important; }
+            #printTemplateFrame { display: block !important; background: #fff !important; color: #000 !important; padding: 30px !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important; }
+            .print-header { border-bottom: 3px double #000; padding-bottom: 15px; margin-bottom: 25px; text-align: center; }
+            .print-header h1 { font-size: 28px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+            .print-header p { font-size: 12px; color: #444; font-style: italic; }
+            .print-grid { display: block; }
+            .print-card { page-break-inside: avoid; border: 1px solid #ddd; border-left: 5px solid #000; padding: 15px; margin-bottom: 18px; background: #fdfdfd; }
+            .print-card-user { font-weight: 700; font-size: 13px; color: #111; margin-bottom: 4px; text-transform: uppercase; }
+            .print-card-ai { font-size: 13px; color: #222; line-height: 1.6; white-space: pre-wrap; }
+        }
+
+        @media (max-width: 900px) {
+            .workspace { flex-direction: column; overflow-y: auto; }
+            .chat-container { min-height: 500px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <a href="index.html" class="back-link" onclick="if(typeof playBrainablySound === 'function') playBrainablySound('click');">← Back to Core Hub Dashboard</a>
+    <div class="lava-lamp">
+        <div class="blob"></div>
+    </div>
 
-        <div class="header-section">
-            <h1>🧠 AI Deep Learning Room</h1>
-            <p>Welcome to the advanced prompt workspace. Use this localized learning node to review technical concepts, structure custom outlines, and access hyper-fast curriculum processing pipelines instantly.</p>
+    <nav class="app-nav">
+        <a href="index.html" class="logo">Brainably Study Room</a>
+        <div class="nav-actions">
+            <button class="nav-btn settings-toggle" onclick="toggleSettings()">⚙️ AI Settings</button>
+            <a href="index.html" class="nav-btn">&larr; Dashboard</a>
         </div>
+    </nav>
 
-        <div class="teacher-box">
-            <h2>👨‍🏫 Teacher Administration Sandbox</h2>
-            <p>Institutional bypass gate. Enter a learning target concept below to generate a comprehensive, structured lesson plan fully optimized for Judson ISD curriculum metrics via Groq Engine.</p>
+    <div class="settings-panel" id="settingsDrawer">
+        <h3>Groq AI Setup</h3>
+        <p>Paste your free Groq API key below. It saves directly inside your browser so you only have to do this once!</p>
+        <input type="password" id="apiKeyInput" placeholder="gsk_xxxxxxxxxxxxxxxxxxxx">
+        <button class="save-key-btn" onclick="saveApiKey()">Save Setup Configuration</button>
+    </div>
+
+    <main class="workspace">
+        
+        <section class="chat-container">
+            <div class="persona-switcher">
+                <button class="persona-btn active" id="p-eli5" onclick="changePersona('eli5')">🚀 ELI5 Mode</button>
+                <button class="persona-btn" id="p-socratic" onclick="changePersona('socratic')">🧠 Socratic Coach</button>
+                <button class="persona-btn" id="p-exam" onclick="changePersona('exam')">⚔️ Exam Prep</button>
+            </div>
+
+            <div class="messages-box" id="chatBox">
+                <div class="message ai">Welcome back! I am currently running in 🚀 ELI5 Mode. I'll break down complicated ideas using simple analogies and fun examples!</div>
+            </div>
+
+            <div class="chat-controls-wrapper">
+                <div class="input-area">
+                    <input type="text" id="userInput" placeholder="Ask a question or paste complex text details..." onkeydown="if(event.key === 'Enter') sendToAi()">
+                    <button class="send-btn" onclick="sendToAi()">Ask AI</button>
+                </div>
+                
+                <button class="export-btn" onclick="generateCheatSheetPdf()">
+                    ⚡ Export Study Guide Cheat Sheet (PDF)
+                </button>
+            </div>
+        </section>
+
+        <section class="timer-container study-vibe" id="timerBox">
+            <div class="timer-vibe-title" id="vibeStatusText">🔥 Current Vibe: Focus Block</div>
             
-            <textarea class="teacher-textarea" id="teacherConsole" placeholder="Enter topic phrase (e.g., 'Linear Functions Lesson Outline')... Click the button below to compile..."></textarea>
-            
-            <button class="util-btn" id="teacherToggleBtn" onclick="toggleTeacherSandboxMode()">Open Teacher Portal Panel</button>
+            <div class="vibe-switcher">
+                <button class="vibe-btn active-study" id="studyModeBtn" onclick="switchTimerVibe('study')">Study Session</button>
+                <button class="vibe-btn" id="breakModeBtn" onclick="switchTimerVibe('break')">Chill Break</button>
+            </div>
+
+            <div class="time-display" id="timeDisplay">25:00</div>
+
+            <div class="timer-controls">
+                <button class="control-btn btn-start" id="startStopBtn" onclick="toggleTimerCounter()">Start</button>
+                <button class="control-btn btn-reset" onclick="resetTimerCounter()">Reset</button>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="printTemplateFrame">
+        <div class="print-header">
+            <h1>Brainably High-Yield Study Guide</h1>
+            <p>Automated Summary Sheets Generated via Brainably AI Ecosystem Room</p>
         </div>
+        <div class="print-grid" id="printOutputGrid"></div>
     </div>
 
     <script>
-        // Auto-load client theme preference settings on mount
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedMode = localStorage.getItem('brainably_interface_mode') || 'dark';
-            document.documentElement.setAttribute('data-theme', savedMode);
-        });
-
-        // ==========================================================================
-        // ⚡ GROQ-POWERED INTERACTIVE TEACHER PORTAL ENGINE
-        // ==========================================================================
-        async function toggleTeacherSandboxMode() {
-            if (typeof playBrainablySound === 'function') playBrainablySound('click');
+        // PDF CHEAT SHEET GENERATION CONTROLLER 
+        function generateCheatSheetPdf() {
+            const chatBoxMessages = document.getElementById('chatBox').children;
+            const printOutputGrid = document.getElementById('printOutputGrid');
             
-            const consoleArea = document.getElementById('teacherConsole');
-            const actionBtn = document.getElementById('teacherToggleBtn');
+            printOutputGrid.innerHTML = '';
+            let elementsAdded = 0;
 
-            if (!consoleArea || !actionBtn) return;
+            for (let i = 0; i < chatBoxMessages.length; i++) {
+                const currentMsg = chatBoxMessages[i];
+                if (currentMsg.innerText === 'Thinking...') continue;
 
-            if (consoleArea.style.display === 'none' || !consoleArea.style.display) {
-                consoleArea.style.display = 'block';
-                actionBtn.innerText = '⚡ Run Lesson Planner (Groq Engine Active)';
-            } else {
-                const topicPhrase = consoleArea.value.trim();
-                if (!topicPhrase) {
-                    consoleArea.style.display = 'none';
-                    actionBtn.innerText = 'Open Teacher Portal Panel';
-                    return;
-                }
+                const isUser = currentMsg.classList.contains('user');
+                const speakerLabel = isUser ? "💡 Question / Topic Studied:" : "🧠 AI Breakdown Summary:";
+
+                const printCard = document.createElement('div');
+                printCard.className = 'print-card';
+
+                const roleHeader = document.createElement('div');
+                roleHeader.className = 'print-card-user';
+                roleHeader.innerText = speakerLabel;
+
+                const contentBody = document.createElement('div');
+                contentBody.className = 'print-card-ai';
+                contentBody.innerText = currentMsg.innerText;
+
+                printCard.appendChild(roleHeader);
+                printCard.appendChild(contentBody);
+                printOutputGrid.appendChild(printCard);
                 
-                actionBtn.innerText = '⏳ Processing via Groq Cloud Core...';
+                elementsAdded++;
+            }
 
-                // Checks user storage first; falls back to master key automatically if empty
-                let apiKey = localStorage.getItem('brainably_groq_key');
-                if (!apiKey || apiKey.trim() === "") {
-                    // 👇 REPLACE THIS STRING WITH YOUR ACTUAL MASTER GROQ API KEY
-                    apiKey = "gsk_your_actual_key_here"; 
-                }
+            if (elementsAdded <= 1) {
+                alert("Your workspace chat history is currently empty! Ask Brainably a few questions first to compile a full guide sheet.");
+                return;
+            }
 
-                try {
-                    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${apiKey}`
-                        },
-                        body: JSON.stringify({
-                            model: "llama3-8b-8192",
-                            messages: [
-                                {
-                                    role: "system",
-                                    content: "You are a Texas curriculum specialist. Create a professional high school lesson outline for the topic provided. Include Objectives, a 15-minute classroom activity, and 1 TEKS practice question."
-                                },
-                                {
-                                    role: "user",
-                                    content: `Create a lesson outline for: ${topicPhrase}`
-                                }
-                            ],
-                            temperature: 0.5,
-                            max_tokens: 500
-                        })
-                    });
-                    
-                    const resData = await res.json();
-                    
-                    if (resData && resData.choices && resData.choices[0].message) {
-                        consoleArea.value = resData.choices[0].message.content.trim();
-                        actionBtn.innerText = '✓ Plan Created Successfully!';
-                        if (typeof playBrainablySound === 'function') playBrainablySound('levelUp');
-                    } else {
-                        throw new Error("API configuration mismatch");
+            window.print();
+        }
+
+        // PERSONA DATABASE ROUTING MATRIX
+        let currentPersona = 'eli5';
+        const personas = {
+            eli5: {
+                systemPrompt: "You are Brainably running in ELI5 Mode. Your job is to explain complex school subjects to a student as if they are 5 years old. Use super simple words, fun everyday analogies, keep sentences short, and sprinkle in helpful emojis.",
+                welcome: "Switched to 🚀 ELI5 Mode! Drop any confusing concept here and I'll break it down into pure, simple language."
+            },
+            socratic: {
+                systemPrompt: "You are Brainably running in Socratic Mode. Your rule is: NEVER give the final answer directly to the student. Instead, always guide them toward discovering the answer themselves by asking short, helpful, prompting questions based on what they type.",
+                welcome: "Switched to 🧠 Socratic Coach Mode! I won't do the homework for you, but I will help you master it. What problem are we tackling?"
+            },
+            exam: {
+                systemPrompt: "You are Brainably running in Exam Prep Mode. Be direct, highly professional, scientific, and precise. Format your study guides using clear bold headers and clean, bulleted high-yield facts to help the student memorize details fast.",
+                welcome: "Switched to ⚔️ Exam Prep Mode. Let's get tactical. Drop your topics or questions, and I will format them into structured, high-yield bulleted review sheets."
+            }
+        };
+
+        function changePersona(type) {
+            currentPersona = type;
+            document.querySelectorAll('.persona-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`p-${type}`).classList.add('active');
+            appendBubble(personas[type].welcome, 'ai');
+        }
+
+        function playSuccessChime() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15);
+                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.6);
+            } catch(e) { console.log('Audio blocked.'); }
+        }
+
+        // TIMER LOGIC
+        let countdownTimer = null;
+        let isTimerRunning = false;
+        let timerType = 'study';
+        let secondsRemaining = 25 * 60; 
+
+        const timeDisplay = document.getElementById('timeDisplay');
+        const startStopBtn = document.getElementById('startStopBtn');
+        const timerBox = document.getElementById('timerBox');
+        const vibeStatusText = document.getElementById('vibeStatusText');
+        const studyModeBtn = document.getElementById('studyModeBtn');
+        const breakModeBtn = document.getElementById('breakModeBtn');
+
+        function updateDisplayValue() {
+            const minutes = Math.floor(secondsRemaining / 60);
+            const seconds = secondsRemaining % 60;
+            timeDisplay.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function switchTimerVibe(vibeType) {
+            clearInterval(countdownTimer);
+            isTimerRunning = false;
+            startStopBtn.innerText = 'Start';
+            timerType = vibeType;
+
+            if (vibeType === 'study') {
+                secondsRemaining = 25 * 60;
+                timerBox.className = 'timer-container study-vibe';
+                vibeStatusText.innerText = '🔥 Current Vibe: Focus Block';
+                studyModeBtn.className = 'vibe-btn active-study';
+                breakModeBtn.className = 'vibe-btn';
+            } else {
+                secondsRemaining = 5 * 60;
+                timerBox.className = 'timer-container break-vibe';
+                vibeStatusText.innerText = '🌊 Current Vibe: Chill Break';
+                studyModeBtn.className = 'vibe-btn';
+                breakModeBtn.className = 'vibe-btn active-break';
+            }
+            updateDisplayValue();
+        }
+
+        function toggleTimerCounter() {
+            if (isTimerRunning) {
+                clearInterval(countdownTimer);
+                startStopBtn.innerText = 'Start';
+                isTimerRunning = false;
+            } else {
+                startStopBtn.innerText = 'Pause';
+                isTimerRunning = true;
+                countdownTimer = setInterval(() => {
+                    secondsRemaining--;
+                    updateDisplayValue();
+
+                    if (secondsRemaining <= 0) {
+                        clearInterval(countdownTimer);
+                        playSuccessChime();
+                        isTimerRunning = false;
+                        startStopBtn.innerText = 'Start';
+                        executeAiGamifiedTrigger();
                     }
-                } catch (e) {
-                    consoleArea.value = `⚠️ Error connecting to Groq Core.\n\nFallback Outline for: ${topicPhrase}\n\n1. OBJECTIVES:\n- Review core conceptual foundations of the target unit.\n\n2. CLASSROOM ACTIVITY:\n- Whiteboard interaction session based on user metrics.\n\n[Please double-check that your master API key string is correctly embedded in the source file.]`;
-                    actionBtn.innerText = '✕ Connection Refused';
-                }
+                }, 1000);
             }
         }
 
-        // Dedicated hardware sound synthesizer engine context fallback
-        function playBrainablySound(effectType) {
-            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContextClass) return;
-            const audioCtx = new AudioContextClass();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            
-            osc.type = 'triangle';
-            if (effectType === 'click') {
-                osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.05);
-            } else if (effectType === 'levelUp') {
-                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.05);
-                osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.25);
+        function resetTimerCounter() {
+            switchTimerVibe(timerType);
+        }
+
+        function executeAiGamifiedTrigger() {
+            if (timerType === 'study') {
+                appendBubble("⏱️ Focus session finished! Paging your tutor...", "ai");
+                userInput.value = "I just finished a full 25-minute study focus block on my homework! Give me a quick evaluation or high-yield checkpoint query based on our current persona style.";
+                sendToAi();
+            } else {
+                appendBubble("⏱️ Break time over! Ready to return to the zone?", "ai");
             }
+        }
+
+        // BACKEND CHAT HANDLER
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        const settingsDrawer = document.getElementById('settingsDrawer');
+        const apiKeyInput = document.getElementById('apiKeyInput');
+
+        function toggleSettings() {
+            settingsDrawer.style.display = settingsDrawer.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function saveApiKey() {
+            const key = apiKeyInput.value.trim();
+            if(key) {
+                localStorage.setItem('brainably_groq_key', key);
+                alert('Configuration saved securely!');
+                settingsDrawer.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedKey = localStorage.getItem('brainably_groq_key');
+            if(savedKey) apiKeyInput.value = savedKey;
+            updateDisplayValue();
+        });
+
+        async function sendToAi() {
+            const text = userInput.value.trim();
+            if(!text) return;
+
+            const apiKey = localStorage.getItem('brainably_groq_key');
+            if(!apiKey) {
+                alert('Please link your Groq Key first via the top AI Settings gear panel!');
+                settingsDrawer.style.display = 'block';
+                return;
+            }
+
+            appendBubble(text, 'user');
+            userInput.value = '';
+            const loadingBubble = appendBubble('Thinking...', 'ai');
+
+            // 📊 AUTOMATED SKILL PROGRESS ENGINE
+            try {
+                let currentMathSkill = parseInt(localStorage.getItem('brainably_metric_math') || '25');
+                currentMathSkill = Math.min(currentMathSkill + 5, 100);
+                localStorage.setItem('brainably_metric_math', currentMathSkill);
+            } catch(e) { console.log("Analytics storage sync paused."); }
+
+            try {
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey.trim()}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.1-8b-instant", 
+                        messages: [
+                            { role: "system", content: personas[currentPersona].systemPrompt },
+                            { role: "user", content: text }
+                        ],
+                        temperature: 0.7
+                    })
+                });
+
+                if (!response.ok) {
+                    loadingBubble.remove();
+                    appendBubble('❌ Authorization error. Re-paste your key cleanly inside the top settings box.', 'ai');
+                    return;
+                }
+
+                const data = await response.json();
+                loadingBubble.remove();
+
+                if(data.choices && data.choices[0] && data.choices[0].message) {
+                    appendBubble(data.choices[0].message.content, 'ai');
+                }
+            } catch (error) {
+                loadingBubble.remove();
+                appendBubble('Connection timeout or networking bottleneck detected.', 'ai');
+            }
+        }
+
+        function appendBubble(content, sender) {
+            const bubble = document.createElement('div');
+            bubble.className = `message ${sender}`;
+            bubble.innerText = content;
+            chatBox.appendChild(bubble);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return bubble;
         }
     </script>
 </body>
