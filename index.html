@@ -20,6 +20,7 @@
             --text-muted: #94a3b8;
             --text-bright: #ffffff;
             --navbar-bg: rgba(15, 23, 42, 0.4);
+            --card-border-style: 1px solid var(--border-color);
         }
 
         /* Light Mode Core Matrix Override */
@@ -115,7 +116,6 @@
             gap: 15px;
         }
 
-        /* 🌐 Multi-Language Dropdown */
         .lang-picker {
             background: var(--bg-surface);
             border: 1px solid var(--border-color);
@@ -129,7 +129,6 @@
             font-family: inherit;
         }
 
-        /* 🌓 Light/Dark Theme Selection Toggle Button */
         .theme-toggle-btn {
             background: var(--bg-surface);
             border: 1px solid var(--border-color);
@@ -143,9 +142,7 @@
             cursor: pointer;
             font-size: 1.1rem;
         }
-        .theme-toggle-btn:hover { border-color: var(--accent-glow-secondary); }
 
-        /* Color Scheme Vibe Controls */
         .theme-selector-box {
             display: flex;
             align-items: center;
@@ -212,7 +209,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            box-shadow: 0 0 30px rgba(249, 115, orange, 0.05);
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.05);
             cursor: pointer;
         }
 
@@ -243,7 +240,7 @@
         .district-meta p { font-size: 0.88rem; color: var(--text-muted); }
         .district-badge { background: #06b6d4; color: #030712; padding: 6px 14px; border-radius: 50px; font-weight: 800; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
 
-        /* NOTION-STYLE WORKSPACE CUSTOMIZER GRID STYLE ARCHITECTURE */
+        /* STUDENT DESIGN STYLING ARCHITECTURE */
         .dashboard-grid {
             max-width: 1200px;
             margin: 15px auto;
@@ -257,141 +254,133 @@
 
         .room-card {
             background: var(--bg-card);
-            border: 1px solid var(--border-color);
+            border: var(--card-border-style);
             border-radius: 24px;
             padding: 30px;
             backdrop-filter: blur(10px);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 220px;
+            height: 235px;
             text-decoration: none;
             color: inherit;
             cursor: grab;
             user-select: none;
-            transition: transform 0.2s, background-color 0.3s, border-color 0.3s;
+            position: relative;
+            transition: transform 0.2s, background 0.3s, border 0.3s, box-shadow 0.3s;
         }
 
-        .room-card:hover { transform: translateY(-4px); background: var(--bg-surface); }
+        .room-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
         .room-card:active { cursor: grabbing; }
-        
-        /* Dragging States Visual Cues */
-        .room-card.dragging {
-            opacity: 0.3;
-            border: 2px dashed var(--accent-glow-secondary);
-            transform: scale(0.96);
-        }
+        .room-card.dragging { opacity: 0.3; border: 2px dashed var(--accent-glow-secondary); transform: scale(0.96); }
 
         .room-icon { font-size: 2rem; width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
-        
         .study-room .room-icon { background: rgba(168, 85, 247, 0.1); color: #c084fc; }
         .academy .room-icon { background: rgba(34, 211, 238, 0.1); color: #22d3ee; }
         .quest .room-icon { background: rgba(16, 185, 129, 0.1); color: #34d399; }
 
-        .room-meta h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; color: var(--text-bright); }
+        .room-meta h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; color: var(--text-bright); display: inline-block; }
         .room-meta p { font-size: 0.92rem; color: var(--text-muted); line-height: 1.4; }
 
+        /* Customization Focus Highlights */
+        [contenteditable="true"] { transition: background 0.2s; border-radius: 4px; padding: 2px 4px; }
+        [contenteditable="true"]:hover { background: rgba(34, 211, 238, 0.15); }
+        [contenteditable="true"]:focus { background: rgba(34, 211, 238, 0.2); outline: 2px solid var(--accent-glow-secondary); }
+
+        /* Card Customizer Quick Swatch Tool Belt */
+        .card-customizer-gear {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.9rem;
+            opacity: 0;
+            cursor: pointer;
+            background: rgba(0,0,0,0.4);
+            padding: 4px 8px;
+            border-radius: 50px;
+            color: #fff;
+            transition: opacity 0.2s;
+            z-index: 20;
+        }
+        .room-card:hover .card-customizer-gear { opacity: 1; }
+
+        /* THEME CONTROL BOX MATRIX */
+        .customizer-panel-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 24px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            z-index: 10000;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .panel-backdrop {
+            display: none;
+            position: fixed;
+            top:0; left:0; width:100vw; height:100vh;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            backdrop-filter: blur(4px);
+        }
+        .panel-section-title { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #94a3b8; margin: 15px 0 8px 0; letter-spacing: 0.05em; }
+        .design-options-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .design-pill {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #f8fafc;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .design-pill:hover { border-color: #22d3ee; }
+        .close-panel-btn {
+            background: #22d3ee; color: #0f172a; border: none; padding: 10px 20px;
+            border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 25px; width: 100%; text-align: center;
+        }
+
+        /* CUSTOM DESIGN VARIANT CLASSES */
+        .style-solid-dark { background: #111827 !important; }
+        .style-glass-purple { background: rgba(147, 51, 234, 0.15) !important; border: 1px solid rgba(147, 51, 234, 0.4) !important; }
+        .style-glass-cyan { background: rgba(6, 182, 212, 0.15) !important; border: 1px solid rgba(6, 182, 212, 0.4) !important; }
+        .style-gradient-cosmic { background: linear-gradient(135deg, rgba(88, 28, 135, 0.6), rgba(15, 23, 42, 0.8)) !important; border: 1px solid #a855f7 !important; }
+        .style-gradient-sunset { background: linear-gradient(135deg, rgba(194, 65, 12, 0.5), rgba(124, 58, 237, 0.5)) !important; border: 1px solid #f97316 !important; }
+
+        .border-dashed { border-style: dashed !important; border-width: 2px !important; }
+        .border-thick { border-width: 3px !important; }
+        .border-neon { box-shadow: 0 0 15px rgba(34, 211, 238, 0.3) !important; }
+
         /* ANALYTICS COMPETENCY MATRIX LAYER */
-        .analytics-section {
-            max-width: 1200px;
-            margin: 40px auto 30px auto;
-            padding: 0 20px;
-            z-index: 10;
-            position: relative;
-        }
+        .analytics-section { max-width: 1200px; margin: 40px auto 30px auto; padding: 0 20px; z-index: 10; position: relative; }
         .analytics-title { font-size: 1.4rem; font-weight: 800; color: var(--text-bright); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        
-        .skill-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-        }
-        .sk-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-        }
+        .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .sk-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; backdrop-filter: blur(10px); }
         .sk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .sk-name { font-size: 0.95rem; font-weight: 700; color: var(--text-main); }
         .sk-pct { font-size: 0.9rem; font-weight: 800; color: #22d3ee; }
-        
-        .pb {
-            width: 100%;
-            height: 8px;
-            background: rgba(0,0,0,0.1);
-            border-radius: 50px;
-            overflow: hidden;
-            position: relative;
-        }
+        .pb { width: 100%; height: 8px; background: rgba(0,0,0,0.1); border-radius: 50px; overflow: hidden; position: relative; }
         [data-theme="dark"] .pb { background: rgba(255,255,255,0.05); }
-
-        .pf {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            border-radius: 50px;
-            width: 0%;
-            transition: width 1.2s cubic-bezier(0.1, 1, 0.1, 1);
-        }
+        .pf { position: absolute; top: 0; left: 0; height: 100%; border-radius: 50px; width: 0%; transition: width 1.2s cubic-bezier(0.1, 1, 0.1, 1); }
         .fill-math { background: linear-gradient(90deg, #a855f7, #c084fc); }
         .fill-physics { background: linear-gradient(90deg, #06b6d4, #22d3ee); }
         .fill-chemistry { background: linear-gradient(90deg, #10b981, #34d399); }
 
         /* UTILITY CONSOLE LAYOUT UNITS */
-        .utility-deck {
-            max-width: 1200px;
-            margin: 20px auto 60px auto;
-            padding: 0 20px;
-            z-index: 10;
-            position: relative;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-        .util-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 30px;
-            border-radius: 24px;
-            backdrop-filter: blur(10px);
-        }
+        .utility-deck { max-width: 1200px; margin: 20px auto 60px auto; padding: 0 20px; z-index: 10; position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .util-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 30px; border-radius: 24px; backdrop-filter: blur(10px); }
         .util-card h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: var(--text-bright); }
         .util-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
-        .util-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.88rem;
-            cursor: pointer;
-            outline: none;
-        }
+        .util-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; outline: none; }
         .util-btn:hover { border-color: #22d3ee; background: rgba(34,211,238,0.05); }
-
-        .teacher-box {
-            background: rgba(16, 185, 129, 0.02);
-            border-color: rgba(16, 185, 129, 0.2);
-        }
-        .teacher-textarea {
-            width: 100%;
-            height: 100px;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 0.88rem;
-            outline: none;
-            resize: none;
-            margin-bottom: 15px;
-            display: none;
-        }
+        .teacher-box { background: rgba(16, 185, 129, 0.02); border-color: rgba(16, 185, 129, 0.2); }
+        .teacher-textarea { width: 100%; height: 100px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; color: #fff; font-family: inherit; font-size: 0.88rem; outline: none; resize: none; margin-bottom: 15px; display: none; }
 
         @media (max-width: 900px) {
             .welcome-hero { grid-template-columns: 1fr; }
@@ -403,9 +392,10 @@
 <body>
 
     <canvas id="confettiCanvas"></canvas>
+    <div class="panel-backdrop" id="customizerBackdrop" onclick="closeDesignCustomizerPanel();"></div>
 
     <div class="ambient-glow">
-        <div class="blob"></div>
+        <div class="blob" id="globalAmbientGlowBlob"></div>
     </div>
 
     <nav class="navbar">
@@ -457,30 +447,64 @@
     </section>
 
     <main class="dashboard-grid" id="savableWorkspaceGrid">
-        <a href="app.html" id="card-ai-room" class="room-card study-room" draggable="true" onclick="playBrainablySound('click'); incrementSkillMetric('math', 5)">
-            <div class="room-icon">🧠</div>
+        <a href="app.html" id="card-ai-room" class="room-card study-room" draggable="true" onclick="handleCardNavigation(event, 'app.html');">
+            <div class="card-customizer-gear" onclick="openDesignCustomizerPanel(event, 'card-ai-room');">🎨 Style</div>
+            <div class="room-icon" id="emoji-ai-room" contenteditable="true" onblur="saveStudentCustomizations();" onclick="event.stopPropagation();">🧠</div>
             <div class="room-meta">
-                <h2 id="room1Title">AI Deep Learning Room</h2>
+                <h2 id="title-ai-room" contenteditable="true" onblur="saveStudentCustomizations();" onclick="event.stopPropagation();">AI Deep Learning Room</h2>
                 <p id="room1Desc">Toggle multi-mode AI personas, configure session clocks, and auto-export clean summaries instantly.</p>
             </div>
         </a>
 
-        <a href="library.html" id="card-video-library" class="room-card academy" draggable="true" onclick="playBrainablySound('click'); incrementSkillMetric('physics', 8)">
-            <div class="room-icon">🚀</div>
+        <a href="library.html" id="card-video-library" class="room-card academy" draggable="true" onclick="handleCardNavigation(event, 'library.html');">
+            <div class="card-customizer-gear" onclick="openDesignCustomizerPanel(event, 'card-video-library');">🎨 Style</div>
+            <div class="room-icon" id="emoji-video-library" contenteditable="true" onblur="saveStudentCustomizations();" onclick="event.stopPropagation();">🚀</div>
             <div class="room-meta">
-                <h2 id="room2Title">Video Library & Explainer</h2>
+                <h2 id="title-video-library" contenteditable="true" onblur="saveStudentCustomizations();" onclick="event.stopPropagation();">Video Library & Explainer</h2>
                 <p id="room2Desc">Search educational video media archives and spin up dedicated AI reference breakdowns instantly.</p>
             </div>
         </a>
 
-        <a href="quiz.html" id="card-brain-quest" class="room-card quest" draggable="true" onclick="playBrainablySound('click'); incrementSkillMetric('chemistry', 15)">
-            <div class="room-icon">🎯</div>
+        <a href="quiz.html" id="card-brain-quest" class="room-card quest" draggable="true" onclick="handleCardNavigation(event, 'quiz.html');">
+            <div class="card-customizer-gear" onclick="openDesignCustomizerPanel(event, 'card-brain-quest');">🎨 Style</div>
+            <div class="room-icon" id="emoji-brain-quest" contenteditable="true" onblur="saveStudentCustomizations();" onclick="event.stopPropagation();">🎯</div>
             <div class="room-meta">
-                <h2 id="room3Title">Brain Quest Challenge</h2>
+                <h2 id="title-brain-quest" contenteditable="true" onblur="saveStudentCustomizations();" onclick="event.stopPropagation();">Brain Quest Challenge</h2>
                 <p id="room3Desc">Test your operational memory retention capabilities with step-by-step diagnostic scoring models.</p>
             </div>
         </a>
     </main>
+
+    <div class="customizer-panel-modal" id="studentDesignPanel">
+        <h2 style="font-size:1.2rem; font-weight:800; color:#fff; margin-bottom:5px;">Workspace Visual Designer</h2>
+        <p style="font-size:0.8rem; color:#94a3b8; margin-bottom:15px;">Tailor color themes and layout profiles locally.</p>
+        
+        <div class="panel-section-title">Card Canvas Color Style</div>
+        <div class="design-options-row">
+            <div class="design-pill" onclick="applyStyleTokenToActiveCard('color', 'style-solid-dark')">Solid Slate</div>
+            <div class="design-pill" onclick="applyStyleTokenToActiveCard('color', 'style-glass-purple')">Glass Purple</div>
+            <div class="design-pill" onclick="applyStyleTokenToActiveCard('color', 'style-glass-cyan')">Glass Cyan</div>
+            <div class="design-pill" onclick="applyStyleTokenToActiveCard('color', 'style-gradient-cosmic')">Cosmic Neon</div>
+            <div class="design-pill" onclick="applyStyleTokenToActiveCard('color', 'style-gradient-sunset')">Sunset Burn</div>
+        </div>
+
+        <div class="panel-section-title">Card Border Architecture</div>
+        <div class="design-options-row">
+            <div class="design-pill" onclick="applyStyleTokenToActiveCard('border', 'border-standard')">Default Flat</div>
+            <div class="design-pill" onclick="applyStyleTokenToActiveCard('border', 'border-dashed')">Dashed Edge</div>
+            <div class="design-pill" onclick="applyStyleTokenToActiveCard('border', 'border-thick')">Thick Bold</div>
+            <div class="design-pill" onclick="applyStyleTokenToActiveCard('border', 'border-neon')">Chroma Glow</div>
+        </div>
+
+        <div class="panel-section-title">Global Ambient Backing Canvas</div>
+        <div class="design-options-row">
+            <div class="design-pill" onclick="applyGlobalBackgroundMask('aurora')">Aurora Borealis</div>
+            <div class="design-pill" onclick="applyGlobalBackgroundMask('cyberpunk')">Cyber Fusion</div>
+            <div class="design-pill" onclick="applyGlobalBackgroundMask('matrix')">Deep Emerald</div>
+        </div>
+
+        <button class="close-panel-btn" onclick="closeDesignCustomizerPanel();">Lock Preferences</button>
+    </div>
 
     <section class="analytics-section">
         <div class="analytics-title" id="analyticsHeader">📊 Subject Competency Vectors</div>
@@ -525,23 +549,24 @@
     </section>
 
     <script>
+        let currentlySelectedCardIdTarget = null;
+
         // ==========================================================================
         // 🔊 AUDIO HARDWARE CHIPTUNE SYNTHESIZER ENGINE (Pure Code Audio)
         // ==========================================================================
         function playBrainablySound(effectType) {
             const AudioContextClass = window.AudioContext || window.webkitAudioContext;
             if (!AudioContextClass) return;
-
             const audioCtx = new AudioContextClass();
 
             if (effectType === 'levelUp') {
-                playTone(audioCtx, 523.25, 0.08, 0);       // Note C5
-                playTone(audioCtx, 659.25, 0.08, 0.06);    // Note E5
-                playTone(audioCtx, 783.99, 0.08, 0.12);    // Note G5
-                playTone(audioCtx, 1046.50, 0.2, 0.18);    // Note C6
+                playTone(audioCtx, 523.25, 0.08, 0);       
+                playTone(audioCtx, 659.25, 0.08, 0.06);    
+                playTone(audioCtx, 783.99, 0.08, 0.12);    
+                playTone(audioCtx, 1046.50, 0.2, 0.18);   
             } 
             else if (effectType === 'click') {
-                playTone(audioCtx, 880, 0.03, 0);          // Note A5
+                playTone(audioCtx, 880, 0.03, 0);          
             }
             else if (effectType === 'spark') {
                 playTone(audioCtx, 1200, 0.04, 0);
@@ -552,36 +577,29 @@
         function playTone(context, frequency, duration, delay) {
             const oscillator = context.createOscillator();
             const gainNode = context.createGain();
-
             oscillator.type = 'triangle';
             oscillator.frequency.setValueAtTime(frequency, context.currentTime + delay);
-
             gainNode.gain.setValueAtTime(0.12, context.currentTime + delay);
             gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + delay + duration);
-
             oscillator.connect(gainNode);
             gainNode.connect(context.destination);
-
             oscillator.start(context.currentTime + delay);
             oscillator.stop(context.currentTime + delay + duration);
         }
 
         // ==========================================================================
-        // 🛠️ NOTION-STYLE WORKSPACE CUSTOMIZER ENGINE
+        // 🛠️ NOTION-STYLE DRAG AND DROP ENGINE
         // ==========================================================================
         function initializeWorkspaceDragAndDropCustomizer() {
             const gridContainer = document.getElementById('savableWorkspaceGrid');
             const workspaceCards = gridContainer.querySelectorAll('.room-card');
 
             workspaceCards.forEach(card => {
-                card.addEventListener('dragstart', () => {
-                    card.classList.add('dragging');
-                });
-
+                card.addEventListener('dragstart', () => card.classList.add('dragging'));
                 card.addEventListener('dragend', () => {
                     card.classList.remove('dragging');
                     saveCurrentWorkspaceOrderMatrix();
-                    playBrainablySound('spark'); // Click lock sensory chime!
+                    playBrainablySound('spark');
                 });
             });
 
@@ -589,7 +607,6 @@
                 event.preventDefault();
                 const activeDraggingCard = document.querySelector('.room-card.dragging');
                 const nextSiblingCard = getDragDropTargetPlacementSibling(gridContainer, event.clientX, event.clientY);
-
                 if (nextSiblingCard == null) {
                     gridContainer.appendChild(activeDraggingCard);
                 } else {
@@ -600,12 +617,10 @@
 
         function getDragDropTargetPlacementSibling(container, mouseX, mouseY) {
             const draggableElements = [...container.querySelectorAll('.room-card:not(.dragging)')];
-
             return draggableElements.reduce((closestCard, childCard) => {
                 const cardBox = childCard.getBoundingClientRect();
                 const cardOffsetX = mouseX - cardBox.left - cardBox.width / 2;
                 const cardOffsetY = mouseY - cardBox.top - cardBox.height / 2;
-
                 if (cardOffsetX < 0 && cardOffsetY < 0 && cardOffsetX > closestCard.offset) {
                     return { offset: cardOffsetX, element: childCard };
                 } else {
@@ -623,20 +638,125 @@
         function loadSavedWorkspaceSequenceMatrix() {
             const cachedSequenceString = localStorage.getItem('brainably_workspace_sequence');
             if (!cachedSequenceString) return;
-
             const savedIDsArray = JSON.parse(cachedSequenceString);
             const gridContainer = document.getElementById('savableWorkspaceGrid');
-
             savedIDsArray.forEach(cardId => {
                 const matchingCardNode = document.getElementById(cardId);
-                if (matchingCardNode) {
-                    gridContainer.appendChild(matchingCardNode);
-                }
+                if (matchingCardNode) gridContainer.appendChild(matchingCardNode);
             });
         }
 
         // ==========================================================================
-        // 🌐 TRANSLATION LOGIC MATRIX DICTIONARY
+        // 🎨 DYNAMIC VISUAL CUSTOMIZER DESIGN MATRIX
+        // ==========================================================================
+        function openDesignCustomizerPanel(event, cardId) {
+            event.preventDefault();
+            event.stopPropagation();
+            playBrainablySound('click');
+            currentlySelectedCardIdTarget = cardId;
+            document.getElementById('customizerBackdrop').style.display = 'block';
+            document.getElementById('studentDesignPanel').style.display = 'block';
+        }
+
+        function closeDesignCustomizerPanel() {
+            document.getElementById('customizerBackdrop').style.display = 'none';
+            document.getElementById('studentDesignPanel').style.display = 'none';
+            currentlySelectedCardIdTarget = null;
+            saveStudentCustomizations();
+        }
+
+        function applyStyleTokenToActiveCard(category, styleTokenClass) {
+            if (!currentlySelectedCardIdTarget) return;
+            playBrainablySound('click');
+            const cardNode = document.getElementById(currentlySelectedCardIdTarget);
+
+            if (category === 'color') {
+                cardNode.classList.remove('style-solid-dark', 'style-glass-purple', 'style-glass-cyan', 'style-gradient-cosmic', 'style-gradient-sunset');
+                cardNode.classList.add(styleTokenClass);
+            } else if (category === 'border') {
+                cardNode.classList.remove('border-standard', 'border-dashed', 'border-thick', 'border-neon');
+                if (styleTokenClass !== 'border-standard') cardNode.classList.add(styleTokenClass);
+            }
+        }
+
+        function applyGlobalBackgroundMask(bgTokenName) {
+            playBrainablySound('levelUp');
+            const blobNode = document.getElementById('globalAmbientGlowBlob');
+            if (bgTokenName === 'aurora') {
+                blobNode.style.background = 'linear-gradient(135deg, #059669, #06b6d4)';
+            } else if (bgTokenName === 'cyberpunk') {
+                blobNode.style.background = 'linear-gradient(135deg, #a855f7, #ec4899)';
+            } else if (bgTokenName === 'matrix') {
+                blobNode.style.background = 'linear-gradient(135deg, #111827, #15803d)';
+            }
+            localStorage.setItem('brainably_global_ambient_mask', bgTokenName);
+        }
+
+        function handleCardNavigation(event, targetUrl) {
+            if (document.activeElement.getAttribute('contenteditable') === 'true') {
+                event.preventDefault();
+            } else {
+                playBrainablySound('click');
+                if (typeof incrementSkillMetric === 'function') {
+                    if (targetUrl.includes('app')) incrementSkillMetric('math', 5);
+                    if (targetUrl.includes('library')) incrementSkillMetric('physics', 8);
+                    if (targetUrl.includes('quiz')) incrementSkillMetric('chemistry', 15);
+                }
+            }
+        }
+
+        function saveStudentCustomizations() {
+            const cards = ['card-ai-room', 'card-video-library', 'card-brain-quest'];
+            const styleConfigurationsMap = {};
+
+            cards.forEach(id => {
+                const node = document.getElementById(id);
+                styleConfigurationsMap[id] = {
+                    classList: Array.from(node.classList)
+                };
+            });
+
+            const customDataMatrix = {
+                aiTitle: document.getElementById('title-ai-room').innerText,
+                aiEmoji: document.getElementById('emoji-ai-room').innerText,
+                videoTitle: document.getElementById('title-video-library').innerText,
+                videoEmoji: document.getElementById('emoji-video-library').innerText,
+                questTitle: document.getElementById('title-brain-quest').innerText,
+                questEmoji: document.getElementById('emoji-brain-quest').innerText,
+                styles: styleConfigurationsMap
+            };
+            localStorage.setItem('brainably_student_text_customizations', JSON.stringify(customDataMatrix));
+            playBrainablySound('spark');
+        }
+
+        function loadStudentCustomizations() {
+            const cachedData = localStorage.getItem('brainably_student_text_customizations');
+            if (!cachedData) return;
+            const parsedData = JSON.parse(cachedData);
+
+            if (parsedData.aiTitle) document.getElementById('title-ai-room').innerText = parsedData.aiTitle;
+            if (parsedData.aiEmoji) document.getElementById('emoji-ai-room').innerText = parsedData.aiEmoji;
+            if (parsedData.videoTitle) document.getElementById('title-video-library').innerText = parsedData.videoTitle;
+            if (parsedData.videoEmoji) document.getElementById('emoji-video-library').innerText = parsedData.videoEmoji;
+            if (parsedData.questTitle) document.getElementById('title-brain-quest').innerText = parsedData.questTitle;
+            if (parsedData.questEmoji) document.getElementById('emoji-brain-quest').innerText = parsedData.questEmoji;
+
+            if (parsedData.styles) {
+                Object.keys(parsedData.styles).forEach(id => {
+                    const node = document.getElementById(id);
+                    if (node && parsedData.styles[id].classList) {
+                        node.className = ''; 
+                        parsedData.styles[id].classList.forEach(cls => node.classList.add(cls));
+                    }
+                });
+            }
+
+            const globalMask = localStorage.getItem('brainably_global_ambient_mask');
+            if (globalMask) applyGlobalBackgroundMask(globalMask);
+        }
+
+        // ==========================================================================
+        // 🌐 TRANSLATION DICTIONARY MATRIX
         // ==========================================================================
         const translationDictionary = {
             en: {
@@ -782,7 +902,7 @@
         }
 
         // ==========================================================================
-        // CORE RECONSTRUCTION STORAGE ENGINES
+        // CORE PROGRESS STORAGE ENGINES
         // ==========================================================================
         function loadSkillAnalyticsDashboard() {
             const categories = ['math', 'physics', 'chemistry'];
@@ -892,6 +1012,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             loadSavedWorkspaceSequenceMatrix();
             initializeWorkspaceDragAndDropCustomizer();
+            loadStudentCustomizations();
             evaluateUserStudyStreakLog();
             loadSkillAnalyticsDashboard();
             
