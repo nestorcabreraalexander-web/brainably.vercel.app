@@ -132,7 +132,7 @@
             padding: 20px;
             margin-bottom: 20px;
             overflow-y: auto;
-            min-height: 400px;
+            min-height: 500px;
             font-size: 0.95rem;
             line-height: 1.6;
             display: flex;
@@ -142,10 +142,10 @@
         .chat-bubble {
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--border-color);
-            padding: 14px 18px;
+            padding: 18px 22px;
             border-radius: 14px;
-            max-width: 85%;
-            margin-bottom: 12px;
+            max-width: 90%;
+            margin-bottom: 16px;
             align-self: flex-start;
             white-space: pre-wrap;
         }
@@ -459,7 +459,7 @@
             </div>
 
             <div class="input-area">
-                <input type="text" class="chat-input" id="userInput" placeholder="Ask a question or paste complex text details...">
+                <input type="text" class="chat-input" id="userInput" placeholder="Ask about Napoleon, Napoleonic Wars, Alexander the Great, George Washington, or 1+1...">
                 <button class="action-button" id="submitBtn" onclick="askFreeAI()">Ask AI</button>
             </div>
 
@@ -543,7 +543,7 @@
         }
 
         // ==========================================================================
-        // ⚡ FREE INTEGRATED DISCOVERY ROUTER (FUZZY LOGIC KEYWORD SAFETY NET)
+        // ⚡ ROBUST INTERNAL ROUTER (HIGH INTENSITY LONG ANSWERS - NO KEYS REQUIRED)
         // ==========================================================================
         async function askFreeAI() {
             const inputField = document.getElementById('userInput');
@@ -566,53 +566,77 @@
             submitBtn.innerText = 'Thinking...';
             submitBtn.disabled = true;
 
-            // Short response animation delay
+            // Short UI delay to feel real
             await new Promise(resolve => setTimeout(resolve, 600));
 
             const aiBubble = document.createElement('div');
             aiBubble.className = 'chat-bubble';
 
-            // Convert to lowercase to make search broad and type-resilient
             const queryClean = promptText.toLowerCase();
 
-            // FUZZY KEYWORD COMPARATOR PIPELINE
-            if (queryClean.includes('1+1') || queryClean.includes('1 + 1') || queryClean.includes('2')) {
+            // 1. DYNAMIC MATH RULE
+            if (queryClean.includes('1+1') || queryClean.includes('1 + 1') || queryClean.includes('equalsto2')) {
                 if (currentMode === 'eli5') {
-                    aiBubble.innerText = "🍪 Let's count some cookies!\n\nImagine you have 1 cookie in your hand. 🍪 Now your friend gives you another cookie! How many cookies do you have now?\n\nYou have 1 cookie + 1 cookie = 2 cookies! 🎉\nThe answer is 2!";
+                    aiBubble.innerText = "🍪 COOKIE ANALOGY TIME!\n\nImagine you are sitting at your desk completely empty-handed. I walk by and place exactly one chocolate chip cookie right in front of you. You have 1 item. \n\nThen, a second later, your teacher walks by and drops another cookie next to the first one. Now, look down and count them up together: One... Two! \n\nBy putting those individual separate items into the exact same group, they combine perfectly. That is exactly what addition is! You took 1 object, combined it with 1 more object, and now your grand total is 2 cookies! 🎉";
                 } else if (currentMode === 'socratic') {
-                    aiBubble.innerText = "🧠 Interesting query! If you have one single dot on a piece of paper, and then you draw one more dot right next to it, how many total dots are you looking at now? What do you think happens when we combine them?";
+                    aiBubble.innerText = "🧠 THE FOUNDATION OF SET THEORY:\n\nLet's trace this back to basic concepts. When we say '1', we are identifying a singular separate unit in space. When we introduce another distinct '1', we have two completely independent objects.\n\nIf we decide to draw a visual boundary line around both of those items and count them inside the exact same set, what happens to their total value? What is the mathematical word for what we just did by grouping them together?";
                 } else {
-                    aiBubble.innerText = "⚔️ [Exam Drill Baseline Check]:\n\n• Concept: Basic Addition\n• Formula: 1 + 1 = 2\n\nPractice Question: If a function increases by 1 unit sequentially twice, what is the net translation factor?\nAnswer: 2 units.";
+                    aiBubble.innerText = "⚔️ [EXAM BASELINE DRILL ENGINE]\n\n• Topic Focus: Identity and Basic Accumulation\n• Primary System Formula: 1 + 1 = 2\n\nCORE HIGH-YIELD ANALYSIS:\nIn pure algebra, adding two constant values yields a linear shift along a standard numerical coordinate matrix. If a question asks you to calculate sequential increments where an object takes 1 step forward, and then immediately repeats that exact action, the net distance translation always equals 2 units.\n\nFlash Review Check: If you add two odd whole numbers together, what type of number will your result always turn into? (Hint: Think about 1+1!).";
                 }
             } 
-            // Fuzzy search checks 'nap' or 'naop' to resiliently match "Napoleon" or typos like "Naopleon"
+            
+            // 2. DETAILED NAPOLEONIC WARS RULE (CHECKED FIRST TO PREVENT CLASHES)
+            else if (queryClean.includes('war') || queryClean.includes('conflict') || queryClean.includes('battle')) {
+                if (currentMode === 'eli5') {
+                    aiBubble.innerText = "🌍 THE HUGE EUROPEAN CHESS WAR!\n\nImagine one country (France) got a super competitive captain named Napoleon, and he started winning so many games that all the neighboring countries got absolutely terrified! They formed giant teams to try and stop him.\n\nThis turned into a massive, 15-year game of laser tag across the entire map of Europe. Napoleon used brilliant tactics to beat them over and over again, but he got greedy and tried to march through a massive snowstorm to take over Russia. The freezing winter destroyed his energy, his opponents teamed up for one final push, and they finally knocked him out of power at a famous battle called Waterloo!";
+                } else if (currentMode === 'socratic') {
+                    aiBubble.innerText = "🧠 CAUSE AND EFFECT IN THE NAPOLEONIC WARS:\n\nBetween 1803 and 1815, Europe was locked in global conflicts. Instead of looking at just the maps, let's look at the psychology. Great Britain, Russia, Austria, and Prussia formed multiple groups called 'Coalitions' just to bring one single man down.\n\nWhy do you think an entire continent felt so threatened by the legal and political changes France was spreading? Do you think they were fighting to protect their lands, or were they terrified that their own citizens would rebel against kings just like France did?";
+                } else {
+                    aiBubble.innerText = "⚔️ [EXAM HIGH-YIELD STUDY GUIDE: THE NAPOLEONIC WARS]\n\n• Timeline Parameters: 1803 – 1815\n• Core Opponents: French Empire vs. Variable Coalitions (Led chiefly by Great Britain, Russia, and Austria)\n\nCRITICAL EXAM CONCEPTS TO MEMORIZE:\n1. The Continental System: Napoleon’s massive economic blockade designed to destroy Britain's trade system. It ultimately failed because countries smuggled goods anyway.\n2. The Peninsular War: A brutal guerrilla conflict in Spain that drained French military resources heavily over multiple years.\n3. The 1812 Russian Campaign: The fatal turning point where scorched-earth tactics and freezing conditions destroyed Napoleon's Grand Army.\n4. Ultimate Outcome: The Congress of Vienna (1815) redrew European borders to restore old royal families and establish a balance of power.";
+                }
+            }
+
+            // 3. DETAILED NAPOLEON BONAPARTE (PERSON) RULE
             else if (queryClean.includes('nap') || queryClean.includes('naop')) {
                 if (currentMode === 'eli5') {
-                    aiBubble.innerText = "👑 Napoleon Bonaparte was like a hyper-ambitious leader who took over France after their massive revolution! Think of him as a chess player who wanted to control the entire European board. He won a ton of battles but made a major mistake trying to invade Russia in the freezing winter, which caused him to lose his empire!";
+                    aiBubble.innerText = "👑 THE RISE AND FALL OF THE FRENCH CAPTAIN!\n\nNapoleon Bonaparte was an incredibly smart army general who lived during a time when France was in total chaos because of their revolution. The old leaders were gone, and everyone was arguing. Napoleon stood up and said, 'I can fix this!'\n\nHe was brilliant at organizing things. He rewrote all the messy laws into a simple rulebook called the Napoleonic Code, built amazing roads, and made schools better. But he wanted to rule everything. He crowned himself Emperor and conquered almost all of Europe before making major mistakes. Think of him as an elite champion who built an empire but lost it all because he didn't know when to stop.";
                 } else if (currentMode === 'socratic') {
-                    aiBubble.innerText = "🧠 Let's trace his rise to power. After the chaos of the French Revolution, the country was looking for stability. Why do you think a brilliant military general was able to convince the public to let him crown himself Emperor? What problem was he solving for them?";
+                    aiBubble.innerText = "🧠 EVALUATING THE CHARACTER OF NAPOLEON:\n\nNapoleon is one of the most debated figures in human history. On one hand, he protected the core gains of the French Revolution by creating the Napoleonic Code, which said all citizens should be treated equally under the law regardless of birth status.\n\nOn the other hand, he completely destroyed the democratic system, crowned himself absolute Emperor, and brought back slavery in French colonies. Looking at these two sides, do you think he was a hero who modernized Europe, or was he just another dictator hungry for ultimate control?";
                 } else {
-                    aiBubble.innerText = "⚔️ [Exam High-Yield Study Outline]:\n\n• Who: Napoleon Bonaparte (Emperor of France)\n• Key Achievements: Napoleonic Code (standardized legal system), conquering Central Europe.\n• Turning Points: Continental System failure, 1812 Invasion of Russia, and final defeat at Waterloo (1815).";
+                    aiBubble.innerText = "⚔️ [EXAM HIGH-YIELD STUDY GUIDE: NAPOLEON BONAPARTE]\n\n• Biographical Window: 1769 – 1821 (Crowned Emperor in 1804)\n• Key Domestic Accomplishment: The Napoleonic Code (Civil Code of 1804) which unified French law.\n\nESSENTIAL THEMES FOR HISTORY ESSAYS:\n• Rise to Power: capitalized on the political instability of the French Directory via the Coup of 18 Brumaire in 1799.\n• Meritocracy over Aristocracy: He eliminated feudal privileges, allowing people to get government or military positions based on talent rather than noble birth.\n• Downfall & Exile: Following his catastrophic loss in Russia, he was exiled to the island of Elba, escaped for a dramatic 'Hundred Days' campaign, and was permanently exiled to St. Helena after his defeat at Waterloo.";
                 }
             }
-            // Fuzzy search checks 'wash' or 'wach' to catch variations of "Washington"
-            else if (queryClean.includes('wash') || queryClean.includes('wach')) {
+
+            // 4. DETAILED ALEXANDER THE GREAT RULE
+            else if (queryClean.includes('alex') || queryClean.includes('gree')) {
                 if (currentMode === 'eli5') {
-                    aiBubble.innerText = "🇺🇸 George Washington was essentially the 'Founding Father' captain of America! When the 13 colonies didn't want to follow the British King anymore, he led the army to win the war. Then, he became the very first U.S. President and helped set the rules for how the country runs today!";
+                    aiBubble.innerText = "⚔️ THE UNBEATEN KING OF THE ANCIENT WORLD!\n\nImagine a young prince who became king at just 20 years old, and before he turned 30, he conquered the biggest empire the world had ever seen without losing a single battle! That was Alexander the Great.\n\nHe came from a small place called Macedonia (near Greece). He loved adventure and took his army on an epic, 11-year march across Egypt, Persia, and all the way to India! He didn't just fight, though; wherever he went, he built new cities (naming lots of them Alexandria) and mixed Greek culture with local cultures. This created a cool blend of art and ideas called the Hellenistic Era. Sadly, he got sick and died at age 32, but his story completely changed the global map!";
                 } else if (currentMode === 'socratic') {
-                    aiBubble.innerText = "🧠 Let's look at his choices. After winning the Revolutionary War, Washington could have easily stayed leader for life like a king. Instead, he stepped down voluntarily after two terms. Why do you think that choice was so vital for a brand new democracy?";
+                    aiBubble.innerText = "🧠 ANALYZING ALEXANDER'S LEGACY AND IMPACT:\n\nAlexander the Great conquered millions of square miles, but his true historical impact wasn't just military expansion—it was cultural integration. He encouraged his Greek soldiers to marry Persian women, adopted local customs, and built massive libraries.\n\nThink about his approach to ruling. Instead of forcing everyone to become strictly Greek, he blended world cultures together. Why do you think a conqueror would choose to adopt the clothing and traditions of the people he defeated? Was it a clever political strategy to prevent rebellions, or did he genuinely respect those civilizations?";
                 } else {
-                    aiBubble.innerText = "⚔️ [Exam High-Yield Study Outline]:\n\n• Who: George Washington (General & 1st US President)\n• Core Impact: Led Continental Army in American Revolution, presided over Constitutional Convention (1787).\n• Key Precedent: Established the standard 2-term presidency limit to avoid monarchy traits.";
+                    aiBubble.innerText = "⚔️ [EXAM HIGH-YIELD STUDY GUIDE: ALEXANDER THE GREAT]\n\n• Historical Window: 356 BC – 323 BC (King of Macedonia)\n• Core Achievement: Destruction of the Persian Empire and expansion of Greek territory to the Indus River.\n\nCRITICAL CONCEPTS FOR EXAMINATION:\n1. The Hellenistic Period: This is the most tested concept. It represents the historical era marked by the spread and blending of Greek culture with Egyptian, Persian, and Indian traditions.\n2. Military Strategy: Mastered the use of the Macedonian Phalanx (a block formation of soldiers holding massive spears called sarissas) and rapid cavalry flanks.\n3. Fragmentation: Because Alexander died suddenly without naming a clear heir, his massive empire was instantly carved up and divided among his top competitive generals (the Diadochi).";
                 }
             }
+
+            // 5. DETAILED GEORGE WASHINGTON RULE
+            else if (queryClean.includes('wash') || queryClean.includes('goar') || queryClean.includes('wach')) {
+                if (currentMode === 'eli5') {
+                    aiBubble.innerText = "🇺🇸 THE CAPTAIN WHO REFUSED TO BE KING!\n\nGeorge Washington was the ultimate leader during the birth of America. Back then, the 13 American colonies were ruled by a British King across the ocean, and they wanted their independence. Washington was chosen to be the head general of the American army.\n\nIt was a brutal job. His soldiers were starving, freezing in the snow, and fighting the strongest empire in the world. But Washington kept everyone together and won! After the war, the people loved him so much they wanted him to rule forever like a king. But Washington said no because he wanted America to be a true democracy. He served as the first President for 8 years and then walked away safely, setting the example for every future leader.";
+                } else if (currentMode === 'socratic') {
+                    aiBubble.innerText = "🧠 UNDERSTANDING LEADERSHIP PRECEDENTS:\n\nGeorge Washington is highly revered not just for what he built, but for what he voluntarily gave up. After winning the Revolutionary War, he resigned his military commission. Later, after serving two terms as President, he willingly stepped down again.\n\nIn the 1700s, almost every country on Earth was ruled by a monarch who stayed in power until they died. Why do you think Washington's choice to give up power was so critical for the survival of a brand new republic? What message did that send to the rest of the world?";
+                } else {
+                    aiBubble.innerText = "⚔️ [EXAM HIGH-YIELD STUDY GUIDE: GEORGE WASHINGTON]\n\n• Core Timeline: 1732 – 1799 (Presidential Term: 1789 – 1797)\n• Prime Status: Commander-in-Chief of the Continental Army & 1st US President.\n\nKEY REVISION POINTS FOR EXAMS:\n1. Revolutionary War Strategy: Avoided direct, large-scale open battles that could destroy his army, focusing instead on outlasting British resources and using surprise strikes (e.g., Crossing the Delaware).\n2. Constitutional Convention (1787): Served as the leader of the convention, lending his massive reputation to help convince states to trust and adopt the new U.S. Constitution.\n3. Presidential Precedents: Established the executive cabinet system, executive privilege, and the strict two-term limit which stood unbroken until 1940.\n4. Farewell Address Warning: Explicitly warned the young nation against the dangers of permanent foreign alliances and bitter political parties.";
+                }
+            }
+            
+            // 6. DETAILED FALLBACK FOR UNKNOWN TOPICS
             else {
-                // Universal dynamic fallback response template
                 if (currentMode === 'eli5') {
-                    aiBubble.innerText = `💡 Let's break down "${promptText}" into simple terms! Think of this concept like a puzzle piece. When we look at how it works in everyday life, it's all about input and output. Let me know which specific part of this topic is confusing and we can map it out with an analogy!`;
+                    aiBubble.innerText = `💡 LET'S UNPACK "${promptText}" SIMPLY!\n\nEvery single big idea in school is just a collection of smaller, everyday concepts glued together. Think of this topic like a brand new smartphone application—it looks complex on the screen, but once you learn where the 2 or 3 main buttons are, it becomes incredibly easy to use!\n\nTo give you a perfect real-world analogy, drop the exact definition your textbook uses or type a specific question about it right below, and we will break it down into a fun story together!`;
                 } else if (currentMode === 'socratic') {
-                    aiBubble.innerText = `🧠 To help us understand "${promptText}" thoroughly, let's look at the foundational parts. What is the very first thing that comes to your mind when you think about how this topic operates in class?`;
+                    aiBubble.innerText = `🧠 DISCOVERING THE CORE OF "${promptText}":\n\nTo master this concept deeply, we need to strip away the complex vocabulary and look at the underlying framework. Every major theory or event is usually a direct response to a specific problem that someone was trying to solve at that exact time.\n\nWhen you read about this topic in your assignments or notes this week, what did you notice was the primary goal or conflict? Let's start there and build the logic piece-by-piece!`;
                 } else {
-                    aiBubble.innerText = `⚔️ [Exam Prep Summary Engine]\n\n• Target Topic: ${promptText}\n• Review Status: Active Core Analysis Module\n\nQuick Flash Drill: What is the primary definition or formula your teacher used for this concept this week? Type it below to check your formatting accuracy instantly!`;
+                    aiBubble.innerText = `⚔️ [EXAM PREP MODULE: ACTIVE KNOWLEDGE REVIEW]\n\n• Target Study Unit: ${promptText}\n• System Parameter: High-Yield Extraction Phase\n\nCRITICAL STUDY METHODOLOGY:\nTo effectively retain this topic for your upcoming exams, do not just re-read the text passively. We need to activate your retrieval pathways.\n\nImmediate Action Step: Write down the single most important vocabulary word, date, or formula connected to this topic that you can remember from memory. Type it below, and I will instantly analyze it for precision and common exam trick questions!`;
                 }
             }
 
