@@ -36,7 +36,6 @@
         .chat-display { flex: 1; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px; margin-bottom: 20px; overflow-y: auto; min-height: 500px; font-size: 0.95rem; line-height: 1.6; display: flex; flex-direction: column; }
         .chat-bubble { background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); padding: 18px 22px; border-radius: 14px; max-width: 90%; margin-bottom: 16px; align-self: flex-start; }
         
-        /* Dynamic Tag CSS Styling */
         .subject-tag {
             display: inline-block;
             font-size: 0.75rem;
@@ -102,7 +101,7 @@
             </div>
 
             <div class="input-area">
-                <input type="text" class="chat-input" id="userInput" placeholder="Ask about Napoleon, Napoleonic Wars, Alexander the Great, George Washington, or 1+1...">
+                <input type="text" class="chat-input" id="userInput" placeholder="Ask any math question (like 123+98, 45*6) or history topic...">
                 <button class="action-button" id="submitBtn" onclick="handleWorkspaceSubmit()">Ask AI</button>
             </div>
 
@@ -165,7 +164,7 @@
 
             if (!userPrompt) return;
 
-            // Display User Bubble
+            // 1. Render User Question Bubble
             const userBubble = document.createElement('div');
             userBubble.className = 'chat-bubble';
             userBubble.style.marginLeft = 'auto';
@@ -176,46 +175,46 @@
             
             inputField.value = '';
 
-            // Smart Automatic Local Tag Processor Engine
+            // 2. Clean up text formatting to find raw math expressions
+            let mathEquation = userPrompt.replace(/[a-zA-Z?]/g, '').trim();
+            
             let calculatedTag = 'general';
             let finalResponseText = '';
-            const query = userPrompt.toLowerCase();
 
-            // 1. Tag Assignment Checks
-            if (query.includes('napoleon') || query.includes('history') || query.includes('washington') || query.includes('alexander')) {
-                calculatedTag = 'history';
-            } else if (query.includes('1+1') || query.includes('math') || query.includes('+') || query.includes('calculus') || query.includes('30+76') || query.includes('100+89')) {
+            // 3. Automated Operation Detection Engine
+            if (/[\+\-\*\/]/.test(mathEquation)) {
                 calculatedTag = 'math';
-            }
-
-            // 2. Dynamic Content Assignment Blocks matched to chosen study module layout
-            if (calculatedTag === 'math') {
-                if (query.includes('30+76')) {
-                    finalResponseText = "Let's count up this package! 30 plus 76 gives us a grand total of 106 blocks! 🚀";
-                } else if (query.includes('100+89')) {
-                    finalResponseText = "Let's combine these totals. Adding 100 and 89 gives us exactly 189 items in our inventory! 🔢";
-                } else {
-                    finalResponseText = "Imagine you have 1 cookie in your hand. 🍪 Now your friend gives you another cookie! You have 1 cookie + 1 cookie = 2 cookies! 🎉";
+                try {
+                    // Instantly calculate the answer inside the browser safely
+                    let mathResult = Function(`"use strict"; return (${mathEquation})`)();
+                    finalResponseText = `Let's break this math down! Calculating **${mathEquation}** yields a final balance of **${mathResult}**. 🚀`;
+                } catch (e) {
+                    finalResponseText = "I see a mathematical operation sequence there! Make sure the equation syntax is clean so we can finish it perfectly.";
                 }
-            } else if (calculatedTag === 'history') {
+            } 
+            // 4. Automated History Matching Engine
+            else if (userPrompt.toLowerCase().match(/(napoleon|history|washington|alexander|war)/)) {
+                calculatedTag = 'history';
                 if (currentMode === 'eli5') {
                     finalResponseText = "Think of historical leaders like players on a massive game board! They moved across maps, built big castles, and changed how rules work for everyone living there today.";
                 } else if (currentMode === 'socratic') {
                     finalResponseText = "Fascinating historical choice! Before analyzing their complete impact, what do you think was the main motivation behind expanding their territory?";
                 } else {
-                    finalResponseText = "⚔️ [High-Yield Core Summary]:\n• Key Objective: Territorial expansion and legal consolidation.\n• Core Pitfall: Overextending logistics lines across vast geographic regions.";
+                    finalResponseText = "⚔️ **[High-Yield Core Summary]**:\n• Key Objective: Territorial expansion and legal consolidation.\n• Core Pitfall: Overextending logistics lines across vast geographic regions.";
                 }
-            } else {
+            } 
+            // 5. General Fallback Response
+            else {
                 finalResponseText = `I've categorized this under general study. In ${currentMode.toUpperCase()} mode, let's look at this like a puzzle piece. Tell me more details about what you're working on!`;
             }
 
-            // Build Beautiful Category Badges HTML elements
+            // 6. Generate the exact subject badge layout 
             let tagBadgeHtml = '';
             if (calculatedTag === 'history') tagBadgeHtml = '<span class="subject-tag tag-history">📚 History</span>';
             else if (calculatedTag === 'math') tagBadgeHtml = '<span class="subject-tag tag-math">🔢 Mathematics</span>';
             else tagBadgeHtml = '<span class="subject-tag tag-general">💡 General Study</span>';
 
-            // Render output smoothly
+            // 7. Inject everything smoothly into the UI
             const aiBubble = document.createElement('div');
             aiBubble.className = 'chat-bubble';
             aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">${finalResponseText}</div>`;
@@ -224,7 +223,7 @@
             chatDisplay.scrollTop = chatDisplay.scrollHeight;
         }
 
-        // Timer Module Code
+        // Timer Mechanics
         let timer, isRunning = false, timerType = 'study', timeRemaining = 1500;
         function updateTimerDisplay() {
             const min = Math.floor(timeRemaining / 60), sec = timeRemaining % 60;
