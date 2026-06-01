@@ -148,14 +148,14 @@
 
         <div class="header-section">
             <h1>🧠 AI Deep Learning Room</h1>
-            <p>Welcome to the advanced prompt workspace. Use this localized learning node to review technical concepts, structure custom outlines, and access keyless curriculum processing pipelines instantly.</p>
+            <p>Welcome to the advanced prompt workspace. Use this localized learning node to review technical concepts, structure custom outlines, and access hyper-fast curriculum processing pipelines instantly.</p>
         </div>
 
         <div class="teacher-box">
             <h2>👨‍🏫 Teacher Administration Sandbox</h2>
-            <p>Institutional bypass gate. Enter a learning target concept below to generate a comprehensive, structured lesson plan fully optimized for Judson ISD curriculum metrics.</p>
+            <p>Institutional bypass gate. Enter a learning target concept below to generate a comprehensive, structured lesson plan fully optimized for Judson ISD curriculum metrics via Groq Engine.</p>
             
-            <textarea class="teacher-textarea" id="teacherConsole" placeholder="Enter topic phrase (e.g., 'Linear Functions Lesson Outline' or 'Systems of Equations')... Click the button below to compile..."></textarea>
+            <textarea class="teacher-textarea" id="teacherConsole" placeholder="Enter topic phrase (e.g., 'Linear Functions Lesson Outline')... Click the button below to compile..."></textarea>
             
             <button class="util-btn" id="teacherToggleBtn" onclick="toggleTeacherSandboxMode()">Open Teacher Portal Panel</button>
         </div>
@@ -169,24 +169,19 @@
         });
 
         // ==========================================================================
-        // ⚡ ZERO-API KEY FREE AI TEACHER PORTAL ENGINE (FOR APP.HTML)
+        // ⚡ GROQ-POWERED INTERACTIVE TEACHER PORTAL ENGINE
         // ==========================================================================
         async function toggleTeacherSandboxMode() {
-            // Execute synthetic audio triggers smoothly if available
             if (typeof playBrainablySound === 'function') playBrainablySound('click');
             
             const consoleArea = document.getElementById('teacherConsole');
             const actionBtn = document.getElementById('teacherToggleBtn');
 
-            // Safety check to verify that DOM layout nodes are fully parsed
-            if (!consoleArea || !actionBtn) {
-                console.error("Missing expected HTML elements: teacherConsole or teacherToggleBtn nodes cannot be found.");
-                return;
-            }
+            if (!consoleArea || !actionBtn) return;
 
             if (consoleArea.style.display === 'none' || !consoleArea.style.display) {
                 consoleArea.style.display = 'block';
-                actionBtn.innerText = '⚡ Run Lesson Planner (Free Public AI Mode)';
+                actionBtn.innerText = '⚡ Run Lesson Planner (Groq Engine Active)';
             } else {
                 const topicPhrase = consoleArea.value.trim();
                 if (!topicPhrase) {
@@ -195,38 +190,51 @@
                     return;
                 }
                 
-                actionBtn.innerText = '⏳ Compiling Judson ISD Lesson Plan via Public Cloud Node...';
+                actionBtn.innerText = '⏳ Processing via Groq Cloud Core...';
+
+                // Checks user storage first; falls back to master key automatically if empty
+                let apiKey = localStorage.getItem('brainably_groq_key');
+                if (!apiKey || apiKey.trim() === "") {
+                    // 👇 REPLACE THIS STRING WITH YOUR ACTUAL MASTER GROQ API KEY
+                    apiKey = "gsk_your_actual_key_here"; 
+                }
 
                 try {
-                    // Pipeline calls a public, free serverless Hugging Face endpoint directly from the browser
-                    const res = await fetch('https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta', {
+                    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKey}`
+                        },
                         body: JSON.stringify({
-                            inputs: `<|system|>\nYou are a Texas curriculum specialist. Create a high school lesson outline for the topic provided. Include Objectives, a 15-minute classroom activity, and 1 TEKS practice question.\n<|user|>\nCreate a lesson outline for: ${topicPhrase}\n<|assistant|>\n`,
-                            parameters: { max_new_tokens: 400, temperature: 0.6 }
+                            model: "llama3-8b-8192",
+                            messages: [
+                                {
+                                    role: "system",
+                                    content: "You are a Texas curriculum specialist. Create a professional high school lesson outline for the topic provided. Include Objectives, a 15-minute classroom activity, and 1 TEKS practice question."
+                                },
+                                {
+                                    role: "user",
+                                    content: `Create a lesson outline for: ${topicPhrase}`
+                                }
+                            ],
+                            temperature: 0.5,
+                            max_tokens: 500
                         })
                     });
                     
                     const resData = await res.json();
                     
-                    if (resData && resData[0] && resData[0].generated_text) {
-                        // Extract output and isolate it from the system prompt instruction templates
-                        let cleanOutput = resData[0].generated_text.split('<|assistant|>')[1] || resData[0].generated_text;
-                        consoleArea.value = cleanOutput.trim();
+                    if (resData && resData.choices && resData.choices[0].message) {
+                        consoleArea.value = resData.choices[0].message.content.trim();
                         actionBtn.innerText = '✓ Plan Created Successfully!';
                         if (typeof playBrainablySound === 'function') playBrainablySound('levelUp');
-                    } else if (resData.error && resData.error.includes('loading')) {
-                        consoleArea.value = "⏳ The public AI engine is waking up on the cloud server. Please click the button again in 10 seconds!";
-                        actionBtn.innerText = 'Retry Compilation';
                     } else {
-                        throw new Error("Invalid response structural packet layout");
+                        throw new Error("API configuration mismatch");
                     }
                 } catch (e) {
-                    // BULLETPROOF SAFEGUARD: Instant, hyper-realistic mock data output if school Wi-Fi blocks or delays the request
-                    consoleArea.value = `=== 📍 JUDSON ISD LOCAL BACKUP LESSON ARCHIVE ===\nTOPIC: ${topicPhrase}\n\n1. LESSON OBJECTIVES:\n- Understand core conceptual foundations of the target unit.\n- Apply computational models to solve secondary-level problem sets.\n\n2. 15-MINUTE CLASSROOM ACTIVITY:\n- Interactive Peer Matrix: Students team up in pairs to map out the foundational equations on a classroom whiteboard, using Brainably's dashboard metrics to check their accuracy.\n\n3. TARGET TEKS CHALLENGE QUESTION:\nWhich system component is best optimized by utilizing zero-overhead client-side storage?\nA) Centralized Cloud Server\nB) Local Browser Cache (Correct)\nC) Third-party Analytical API\n\n[Note: This backup outline was compiled safely via local node redundancy.]`;
-                    actionBtn.innerText = '✓ Plan Populated (Local Node Mode)';
-                    if (typeof playBrainablySound === 'function') playBrainablySound('levelUp');
+                    consoleArea.value = `⚠️ Error connecting to Groq Core.\n\nFallback Outline for: ${topicPhrase}\n\n1. OBJECTIVES:\n- Review core conceptual foundations of the target unit.\n\n2. CLASSROOM ACTIVITY:\n- Whiteboard interaction session based on user metrics.\n\n[Please double-check that your master API key string is correctly embedded in the source file.]`;
+                    actionBtn.innerText = '✕ Connection Refused';
                 }
             }
         }
