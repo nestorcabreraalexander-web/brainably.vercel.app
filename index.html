@@ -18,14 +18,13 @@
             color: #f8fafc;
             height: 100vh;
             display: grid;
-            /* Creates 2 columns: Sidebar is 260px wide, Main Content takes the rest */
             grid-template-columns: 260px 1fr; 
             overflow: hidden;
         }
 
         /* 2. SIDEBAR STYLES */
         .sidebar {
-            background-color: #1e293b; /* Slightly lighter dark blue */
+            background-color: #1e293b;
             border-right: 1px solid #334155;
             display: flex;
             flex-direction: column;
@@ -35,7 +34,7 @@
         .brand-logo {
             font-size: 24px;
             font-weight: bold;
-            color: #38bdf8; /* Bright neon blue color */
+            color: #38bdf8;
             margin-bottom: 40px;
             padding-left: 12px;
             letter-spacing: 0.5px;
@@ -44,34 +43,28 @@
         .nav-menu {
             display: flex;
             flex-direction: column;
-            gap: 8px; /* Spaces out the buttons */
+            gap: 8px;
             list-style: none;
-        }
-
-        .nav-item {
-            width: 100%;
         }
 
         .nav-link {
             display: block;
             width: 100%;
             padding: 14px 16px;
-            color: #94a3b8; /* Muted gray text */
+            color: #94a3b8;
             text-decoration: none;
             font-weight: 500;
             border-radius: 8px;
-            /* Makes the color change smooth when hovered */
             transition: all 0.2s ease-in-out; 
+            cursor: pointer;
         }
 
-        /* Hover animations for menu buttons */
         .nav-link:hover {
             background-color: #334155;
             color: #f8fafc;
-            padding-left: 20px; /* Slight slide-right effect */
+            padding-left: 20px;
         }
 
-        /* Highlight style for the current active page */
         .nav-link.active {
             background-color: #0284c7;
             color: #ffffff;
@@ -81,11 +74,24 @@
         /* 3. MAIN CONTENT AREA STYLES */
         .main-content {
             padding: 40px;
-            overflow-y: auto; /* Lets the page scroll if content gets too long */
+            overflow-y: auto;
+        }
+
+        /* PAGE VIEWS (Hidden by default, shown via JavaScript) */
+        .page-view {
+            display: none;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 900px;
+        }
+
+        /* Active class to display the current page */
+        .page-view.active-view {
+            display: flex;
         }
 
         .dashboard-header {
-            margin-bottom: 32px;
+            margin-bottom: 8px;
         }
 
         .dashboard-header h1 {
@@ -97,12 +103,32 @@
             color: #94a3b8;
         }
 
-        /* Layout grid for dashboard app modules */
-        .dashboard-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            max-width: 900px;
+        /* Grid for stats cards on the home page */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .stat-card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .stat-card h4 {
+            color: #94a3b8;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #38bdf8;
         }
 
         /* Reusable Card Style */
@@ -167,7 +193,6 @@
             white-space: pre-wrap;
         }
 
-        /* Flexbox row for secondary tools */
         .tool-row {
             display: flex;
             gap: 16px;
@@ -189,65 +214,109 @@
         <div class="brand-logo">Brainably</div>
         
         <ul class="nav-menu">
-            <li class="nav-item"><a href="#" class="nav-link active">🏠 Dashboard</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">🤖 AI Teacher Sandbox</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">📊 Study Metrics</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">⚙️ Settings</a></li>
+            <li class="nav-item"><a class="nav-link active" data-target="homePage">🏠 Home</a></li>
+            <li class="nav-item"><a class="nav-link" data-target="sandboxPage">🤖 AI Teacher Sandbox</a></li>
+            <li class="nav-item"><a class="nav-link" data-target="metricsPage">📊 Study Metrics</a></li>
         </ul>
     </nav>
 
     <main class="main-content">
-        <header class="dashboard-header">
-            <h1>Welcome back!</h1>
-            <p>Track your study sessions and generate automated lesson outlines.</p>
-        </header>
 
-        <div class="dashboard-grid">
-            
-            <section class="app-card">
-                <h3>🤖 AI Teacher Sandbox</h3>
-                <p style="color: #94a3b8; font-size: 14px;">Enter a topic to automatically generate a structured lesson outline aligned with study standards.</p>
-                
-                <div class="input-group">
-                    <input type="text" id="topicInput" placeholder="e.g., Photosynthesis, Linear Equations...">
-                    <button onclick="generateLesson()">Generate Outline</button>
-                </div>
-                
-                <div class="output-box" id="aiOutput">
-                    Your generated lesson plan will appear here...
-                </div>
-            </section>
+        <div id="homePage" class="page-view active-view">
+            <header class="dashboard-header">
+                <h1>Welcome to Brainably!</h1>
+                <p>Your central hub for building tools, tracking study metrics, and generating lessons.</p>
+            </header>
 
-            <section class="app-card">
-                <h3>🎵 Focus Audio Environment</h3>
-                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;">Trigger synthesized sound frequencies directly from the browser to enhance deep focus.</p>
-                
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Lessons Generated</h4>
+                    <div class="value">12</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Study Streak</h4>
+                    <div class="value">5 Days</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Focus Score</h4>
+                    <div class="value">94%</div>
+                </div>
+            </div>
+
+            <section class="app-card" style="margin-top: 8px;">
+                <h3>🎵 Quick Focus Audio</h3>
+                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;">Turn on background frequencies to stay locked in while working on the home screen.</p>
                 <div class="tool-row">
                     <button class="btn-secondary" onclick="playFocusSound()">🔊 Play Focus Tone</button>
                     <button class="btn-secondary" style="background-color: #991b1b;" onclick="stopFocusSound()">⏹️ Stop</button>
                 </div>
             </section>
-
         </div>
+
+        <div id="sandboxPage" class="page-view">
+            <header class="dashboard-header">
+                <h1>AI Teacher Sandbox</h1>
+                <p>Create automated curriculum outlines mapped to regional education standards.</p>
+            </header>
+
+            <section class="app-card">
+                <h3>🤖 Generate Outline</h3>
+                <div class="input-group">
+                    <input type="text" id="topicInput" placeholder="e.g., Photosynthesis, Linear Equations...">
+                    <button onclick="generateLesson()">Generate Outline</button>
+                </div>
+                <div class="output-box" id="aiOutput">
+                    Your generated lesson plan will appear here...
+                </div>
+            </section>
+        </div>
+
+        <div id="metricsPage" class="page-view">
+            <header class="dashboard-header">
+                <h1>Study Metrics</h1>
+                <p>Detailed performance analytics and school data tracking.</p>
+            </header>
+            <section class="app-card">
+                <h3>Analytics Coming Soon</h3>
+                <p style="color: #94a3b8;">This section will display advanced breakdown charts of learning trends.</p>
+            </section>
+        </div>
+
     </main>
 
     <script>
-        // Placeholder function for your existing Groq API integration logic
+        // 1. NAVIGATION LOGIC
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pageViews = document.querySelectorAll('.page-view');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                // Remove 'active' status from all menu items
+                navLinks.forEach(item => item.classList.remove('active'));
+                // Hide all page contents
+                pageViews.forEach(view => view.classList.remove('active-view'));
+
+                // Add 'active' status to the clicked button
+                link.classList.add('active');
+                // Find and display the matching page view using the data-target
+                const targetId = link.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active-view');
+            });
+        });
+
+        // 2. AI SANDBOX LOGIC
         function generateLesson() {
             const input = document.getElementById('topicInput').value;
             const output = document.getElementById('aiOutput');
-            
             if (!input) {
                 output.innerText = "Please enter a topic first!";
                 return;
             }
-            
             output.innerText = `Connecting to cloud engine... Generating lesson outline for: "${input}"`;
-            
-            // Your existing fetch logic goes here to update output.innerText with the real data
+            // Connect your real fetch script logic here
         }
 
-        // Placeholder functions for your built-in Web Audio API synth logic
+        // 3. SYNTH AUDIO LOGIC
         let audioCtx;
         let oscillator;
 
@@ -256,7 +325,7 @@
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 oscillator = audioCtx.createOscillator();
                 oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(220, audioCtx.currentTime); // Relaxing low frequency
+                oscillator.frequency.setValueAtTime(220, audioCtx.currentTime);
                 oscillator.connect(audioCtx.destination);
                 oscillator.start();
             }
@@ -271,6 +340,5 @@
             }
         }
     </script>
-
 </body>
 </html>
