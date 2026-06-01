@@ -36,7 +36,6 @@
         .chat-display { flex: 1; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px; margin-bottom: 20px; overflow-y: auto; min-height: 500px; font-size: 0.95rem; line-height: 1.6; display: flex; flex-direction: column; }
         .chat-bubble { background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); padding: 18px 22px; border-radius: 14px; max-width: 90%; margin-bottom: 16px; align-self: flex-start; position: relative; }
         
-        /* SUBJECT TAG DESIGN ELEMENT */
         .subject-tag {
             display: inline-block;
             font-size: 0.75rem;
@@ -80,8 +79,6 @@
         .stat-val { font-size: 1.3rem; font-weight: 800; color: var(--accent-cyan); }
         .stat-lbl { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
         .history-list { display: flex; flex-direction: column; gap: 8px; }
-        .history-item { background: rgba(255, 255, 255, 0.01); border-left: 3px solid var(--accent-purple); padding: 10px 14px; border-radius: 4px 8px 8px 4px; font-size: 0.8rem; display: flex; justify-content: space-between; }
-        .history-empty { font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 10px 0; font-style: italic; }
     </style>
 </head>
 <body>
@@ -101,7 +98,7 @@
 
             <div class="chat-display" id="chatDisplay">
                 <div class="chat-bubble" id="welcomeBubble">
-                    <div class="chat-text">Welcome to your study room! Ask any question or paste textbook details to begin.</div>
+                    <div class="chat-text">Welcome to your study room! Ask any question to test your real AI integration.</div>
                 </div>
             </div>
 
@@ -140,15 +137,16 @@
                     <div class="stat-box"><div class="stat-val" id="totalSessionsDisplay">0</div><div class="stat-lbl">Blocks Done</div></div>
                     <div class="stat-box"><div class="stat-val" id="totalMinutesDisplay">0m</div><div class="stat-lbl">Time Tracked</div></div>
                 </div>
-                <div style="font-size: 0.85rem; font-weight:700; margin-bottom:10px; color:var(--text-main)">Session Log</div>
-                <div class="history-list" id="historyLogList">
-                    <div class="history-empty">No blocks saved yet today.</div>
-                </div>
             </div>
         </div>
     </main>
 
     <script>
+        // ==========================================================================
+        // 🔑 CONFIGURATION: PASTE YOUR API KEY HERE FOR DIRECT BROWSER CHAT
+        // ==========================================================================
+        const GROQ_API_KEY = "YOUR_GROQ_API_KEY_HERE"; 
+
         let currentMode = 'eli5';
         function setMode(mode) {
             currentMode = mode;
@@ -164,6 +162,11 @@
 
             if (!userPrompt) return;
 
+            if (GROQ_API_KEY === "YOUR_GROQ_API_KEY_HERE") {
+                alert("Please open your code file and insert your Groq API Key on line 125!");
+                return;
+            }
+
             // Render User Bubble
             const userBubble = document.createElement('div');
             userBubble.className = 'chat-bubble';
@@ -177,31 +180,53 @@
             submitBtn.innerText = 'Thinking...';
             submitBtn.disabled = true;
 
-            // Create AI response container
             const aiBubble = document.createElement('div');
             aiBubble.className = 'chat-bubble';
             chatDisplay.appendChild(aiBubble);
 
+            // Constructing Instructions directly inside the front-end fetch request
+            let systemInstruction = "You are an advanced academic tutor helper.";
+            if (currentMode === 'eli5') {
+                systemInstruction = "Explain the user's topic like I am 5. Use simple, vivid everyday analogies.";
+            } else if (currentMode === 'socratic') {
+                systemInstruction = "Act as an elite Socratic professor. Guide the user with active recall analysis prompts.";
+            } else if (currentMode === 'exam') {
+                systemInstruction = "Act as a high-yield exam prep guide. Provide structured outlines and target pitfalls.";
+            }
+            systemInstruction += " You must return your response formatted as a strict JSON object containing exactly two keys: 'tag' (which must be 'history', 'math', or 'general' depending on the content) and 'answer' (your full text response). Do not wrap the JSON object in markdown formatting tags.";
+
             try {
-                // Call back-end server
-                const response = await fetch('http://localhost:3000/api/chat', {
+                // Hitting Groq directly from the browser window 
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: userPrompt, mode: currentMode })
+                    headers: {
+                        'Authorization': `Bearer ${GROQ_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.3-70b-specdec",
+                        messages: [
+                            { role: "system", content: systemInstruction },
+                            { role: "user", content: userPrompt }
+                        ],
+                        response_format: { type: "json_object" },
+                        temperature: 0.4
+                    })
                 });
 
-                const data = await response.json();
+                const cloudData = await response.json();
+                const resultJson = JSON.parse(cloudData.choices[0].message.content);
                 
-                // Append the subject metadata tag along with the text content response
                 let tagHtml = '';
-                if (data.tag === 'history') tagHtml = '<span class="subject-tag tag-history">📚 History</span>';
-                else if (data.tag === 'math') tagHtml = '<span class="subject-tag tag-math">🔢 Mathematics</span>';
+                if (resultJson.tag === 'history') tagHtml = '<span class="subject-tag tag-history">📚 History</span>';
+                else if (resultJson.tag === 'math') tagHtml = '<span class="subject-tag tag-math">🔢 Mathematics</span>';
                 else tagHtml = '<span class="subject-tag tag-general">💡 General Study</span>';
 
-                aiBubble.innerHTML = `${tagHtml}<div class="chat-text">${data.answer}</div>`;
+                aiBubble.innerHTML = `${tagHtml}<div class="chat-text">${resultJson.answer}</div>`;
 
             } catch (err) {
-                aiBubble.innerHTML = `<div class="chat-text">⚠️ Connection error. Make sure your local backend server is turned on and running!</div>`;
+                console.error(err);
+                aiBubble.innerHTML = `<div class="chat-text">⚠️ API Processing Error. Double-check that your API key is active and correctly formatted inside the code file.</div>`;
             }
 
             submitBtn.innerText = 'Ask AI';
@@ -209,7 +234,7 @@
             chatDisplay.scrollTop = chatDisplay.scrollHeight;
         }
 
-        // Timer Logic
+        // Timer Mechanics
         let timer, isRunning = false, timerType = 'study', timeRemaining = 1500;
         function updateTimerDisplay() {
             const min = Math.floor(timeRemaining / 60), sec = timeRemaining % 60;
