@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brainably Dashboard</title>
+    <title>Brainably Workspace</title>
     <style>
-        /* 1. RESET & BASE STYLES */
+        /* 1. BASE STYLES & BACKGROUND */
         * {
             margin: 0;
             padding: 0;
@@ -14,309 +14,185 @@
         }
 
         body {
-            background-color: #0f172a; /* Deep dark blue background */
+            background-color: #0f172a; /* Deep obsidian blue background */
             color: #f8fafc;
-            height: 100vh;
-            display: grid;
-            grid-template-columns: 260px 1fr; 
-            overflow: hidden;
-        }
-
-        /* 2. SIDEBAR STYLES */
-        .sidebar {
-            background-color: #1e293b;
-            border-right: 1px solid #334155;
             display: flex;
-            flex-direction: column;
-            padding: 24px 16px;
-        }
-
-        .brand-logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #38bdf8;
-            margin-bottom: 40px;
-            padding-left: 12px;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            list-style: none;
-        }
-
-        .nav-link {
-            display: block;
-            width: 100%;
-            padding: 14px 16px;
-            color: #94a3b8;
-            text-decoration: none;
-            font-weight: 500;
-            border-radius: 8px;
-            transition: all 0.2s ease-in-out; 
-            cursor: pointer;
-        }
-
-        .nav-link:hover {
-            background-color: #334155;
-            color: #f8fafc;
-            padding-left: 20px;
-        }
-
-        .nav-link.active {
-            background-color: #0284c7;
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
-        }
-
-        /* 3. MAIN CONTENT AREA STYLES */
-        .main-content {
-            padding: 40px;
-            overflow-y: auto;
-        }
-
-        /* PAGE VIEWS (Hidden by default, shown via JavaScript) */
-        .page-view {
-            display: none;
-            flex-direction: column;
-            gap: 24px;
-            max-width: 900px;
-        }
-
-        /* Active class to display the current page */
-        .page-view.active-view {
-            display: flex;
-        }
-
-        .dashboard-header {
-            margin-bottom: 8px;
-        }
-
-        .dashboard-header h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        .dashboard-header p {
-            color: #94a3b8;
-        }
-
-        /* Grid for stats cards on the home page */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-
-        .stat-card {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             padding: 20px;
         }
 
-        .stat-card h4 {
+        /* 2. CENTERED APPLICATION CONTAINER */
+        .app-container {
+            background-color: #1e293b; /* Sleek slate card color */
+            border: 1px solid #334155;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 750px;
+            padding: 32px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 3. HEADER STYLES */
+        .app-header {
+            text-align: center;
+            margin-bottom: 28px;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 20px;
+        }
+
+        .app-header h1 {
+            font-size: 32px;
+            color: #38bdf8; /* Vibrant neon blue */
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .app-header p {
             color: #94a3b8;
             font-size: 14px;
+        }
+
+        /* 4. SECTION & CARD LAYOUTS */
+        .section-block {
+            margin-bottom: 24px;
+        }
+
+        .section-block h3 {
+            font-size: 16px;
             text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        .stat-card .value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #38bdf8;
-        }
-
-        /* Reusable Card Style */
-        .app-card {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 24px;
-        }
-
-        .app-card h3 {
-            font-size: 18px;
+            letter-spacing: 1px;
+            color: #94a3b8;
             margin-bottom: 12px;
-            color: #38bdf8;
         }
 
-        /* Form elements for the AI Sandbox */
+        /* 5. INPUT & BUTTON DESIGN */
         .input-group {
             display: flex;
             gap: 12px;
-            margin-top: 16px;
         }
 
         input[type="text"] {
             flex: 1;
-            padding: 12px 16px;
+            padding: 14px 16px;
             border-radius: 8px;
             border: 1px solid #475569;
             background-color: #0f172a;
             color: #f8fafc;
             font-size: 15px;
+            transition: border-color 0.2s;
         }
 
         input[type="text"]:focus {
             outline: none;
-            border-color: #38bdf8;
+            border-color: #38bdf8; /* Glow border on focus */
         }
 
         button {
-            padding: 12px 24px;
+            padding: 14px 24px;
             background-color: #0284c7;
             color: white;
             border: none;
             border-radius: 8px;
             font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease-in-out;
         }
 
         button:hover {
             background-color: #0369a1;
+            transform: translateY(-1px); /* Slight lift animation */
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4); /* Neon button glow */
         }
 
+        /* 6. OUTPUT TERMINAL BOX */
         .output-box {
-            margin-top: 16px;
-            padding: 16px;
+            margin-top: 14px;
+            padding: 18px;
             background-color: #0f172a;
             border-radius: 8px;
             border: 1px solid #334155;
-            min-height: 100px;
+            min-height: 120px;
             color: #cbd5e1;
+            font-size: 15px;
+            line-height: 1.6;
             white-space: pre-wrap;
         }
 
-        .tool-row {
+        /* 7. AUDIO CONTROLS ROW */
+        .audio-row {
             display: flex;
-            gap: 16px;
+            gap: 12px;
         }
 
-        .btn-secondary {
+        .btn-audio {
             background-color: #334155;
             color: #f8fafc;
+            flex: 1;
         }
 
-        .btn-secondary:hover {
+        .btn-audio:hover {
             background-color: #475569;
+            box-shadow: 0 4px 12px rgba(71, 85, 105, 0.3);
+        }
+
+        .btn-stop {
+            background-color: #991b1b;
+        }
+
+        .btn-stop:hover {
+            background-color: #b91c1c;
+            box-shadow: 0 4px 12px rgba(185, 28, 28, 0.4);
         }
     </style>
 </head>
 <body>
 
-    <nav class="sidebar">
-        <div class="brand-logo">Brainably</div>
+    <div class="app-container">
         
-        <ul class="nav-menu">
-            <li class="nav-item"><a class="nav-link active" data-target="homePage">🏠 Home</a></li>
-            <li class="nav-item"><a class="nav-link" data-target="sandboxPage">🤖 AI Teacher Sandbox</a></li>
-            <li class="nav-item"><a class="nav-link" data-target="metricsPage">📊 Study Metrics</a></li>
-        </ul>
-    </nav>
+        <header class="app-header">
+            <h1>Brainably</h1>
+            <p>Integrated AI Teacher Sandbox & Focus Environment</p>
+        </header>
 
-    <main class="main-content">
-
-        <div id="homePage" class="page-view active-view">
-            <header class="dashboard-header">
-                <h1>Welcome to Brainably!</h1>
-                <p>Your central hub for building tools, tracking study metrics, and generating lessons.</p>
-            </header>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h4>Lessons Generated</h4>
-                    <div class="value">12</div>
-                </div>
-                <div class="stat-card">
-                    <h4>Study Streak</h4>
-                    <div class="value">5 Days</div>
-                </div>
-                <div class="stat-card">
-                    <h4>Focus Score</h4>
-                    <div class="value">94%</div>
-                </div>
+        <main class="section-block">
+            <h3>🤖 AI Teacher Sandbox</h3>
+            <div class="input-group">
+                <input type="text" id="topicInput" placeholder="Enter a lesson topic (e.g., Photosynthesis)...">
+                <button onclick="generateLesson()">Generate Outline</button>
             </div>
+            <div class="output-box" id="aiOutput">Your generated lesson plan outline will appear here...</div>
+        </main>
 
-            <section class="app-card" style="margin-top: 8px;">
-                <h3>🎵 Quick Focus Audio</h3>
-                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;">Turn on background frequencies to stay locked in while working on the home screen.</p>
-                <div class="tool-row">
-                    <button class="btn-secondary" onclick="playFocusSound()">🔊 Play Focus Tone</button>
-                    <button class="btn-secondary" style="background-color: #991b1b;" onclick="stopFocusSound()">⏹️ Stop</button>
-                </div>
-            </section>
-        </div>
+        <footer class="section-block" style="margin-bottom: 0;">
+            <h3>🎵 Focus Audio Environment</h3>
+            <div class="audio-row">
+                <button class="btn-audio" onclick="playFocusSound()">🔊 Start Focus Frequency</button>
+                <button class="btn-audio btn-stop" onclick="stopFocusSound()">⏹️ Stop Audio</button>
+            </div>
+        </footer>
 
-        <div id="sandboxPage" class="page-view">
-            <header class="dashboard-header">
-                <h1>AI Teacher Sandbox</h1>
-                <p>Create automated curriculum outlines mapped to regional education standards.</p>
-            </header>
-
-            <section class="app-card">
-                <h3>🤖 Generate Outline</h3>
-                <div class="input-group">
-                    <input type="text" id="topicInput" placeholder="e.g., Photosynthesis, Linear Equations...">
-                    <button onclick="generateLesson()">Generate Outline</button>
-                </div>
-                <div class="output-box" id="aiOutput">
-                    Your generated lesson plan will appear here...
-                </div>
-            </section>
-        </div>
-
-        <div id="metricsPage" class="page-view">
-            <header class="dashboard-header">
-                <h1>Study Metrics</h1>
-                <p>Detailed performance analytics and school data tracking.</p>
-            </header>
-            <section class="app-card">
-                <h3>Analytics Coming Soon</h3>
-                <p style="color: #94a3b8;">This section will display advanced breakdown charts of learning trends.</p>
-            </section>
-        </div>
-
-    </main>
+    </div>
 
     <script>
-        // 1. NAVIGATION LOGIC
-        const navLinks = document.querySelectorAll('.nav-link');
-        const pageViews = document.querySelectorAll('.page-view');
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                // Remove 'active' status from all menu items
-                navLinks.forEach(item => item.classList.remove('active'));
-                // Hide all page contents
-                pageViews.forEach(view => view.classList.remove('active-view'));
-
-                // Add 'active' status to the clicked button
-                link.classList.add('active');
-                // Find and display the matching page view using the data-target
-                const targetId = link.getAttribute('data-target');
-                document.getElementById(targetId).classList.add('active-view');
-            });
-        });
-
-        // 2. AI SANDBOX LOGIC
+        // Placeholder function for your existing Groq API integration logic
         function generateLesson() {
             const input = document.getElementById('topicInput').value;
             const output = document.getElementById('aiOutput');
+            
             if (!input) {
                 output.innerText = "Please enter a topic first!";
                 return;
             }
+            
             output.innerText = `Connecting to cloud engine... Generating lesson outline for: "${input}"`;
-            // Connect your real fetch script logic here
+            
+            // Your custom fetch logic drops directly right here to update output.innerText
         }
 
-        // 3. SYNTH AUDIO LOGIC
+        // Built-in browser synthesizer audio logic
         let audioCtx;
         let oscillator;
 
@@ -325,7 +201,7 @@
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 oscillator = audioCtx.createOscillator();
                 oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(220, audioCtx.currentTime);
+                oscillator.frequency.setValueAtTime(220, audioCtx.currentTime); // Relaxing tone
                 oscillator.connect(audioCtx.destination);
                 oscillator.start();
             }
@@ -340,5 +216,6 @@
             }
         }
     </script>
+
 </body>
 </html>
