@@ -30,6 +30,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         /* NAVBAR STYLES */
@@ -123,6 +124,8 @@
             min-height: 250px;
             font-size: 0.95rem;
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
         }
 
         .chat-bubble {
@@ -132,6 +135,8 @@
             border-radius: 14px;
             max-width: 85%;
             margin-bottom: 12px;
+            align-self: flex-start;
+            white-space: pre-wrap;
         }
 
         .input-area {
@@ -165,10 +170,6 @@
             cursor: pointer;
         }
 
-        .action-button:hover {
-            opacity: 0.9;
-        }
-
         .pdf-btn {
             width: 100%;
             background: rgba(6, 182, 212, 0.05);
@@ -180,8 +181,56 @@
             cursor: pointer;
         }
 
-        .pdf-btn:hover {
-            background: rgba(6, 182, 212, 0.1);
+        /* GROQ API CONFIGURATION MODAL PANEL */
+        .api-modal {
+            position: absolute;
+            top: 80px;
+            right: 40px;
+            width: 320px;
+            background: #0f172a;
+            border: 1px solid var(--accent-cyan);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            display: none; /* Controlled via setting button toggle */
+        }
+
+        .api-modal h4 {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .api-modal p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            line-height: 1.4;
+        }
+
+        .api-input {
+            width: 100%;
+            background: #030712;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+            outline: none;
+        }
+
+        .api-save-btn {
+            width: 100%;
+            background: #06b6d4;
+            color: black;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
         }
 
         /* SIDEBAR TIMER WORKSPACE */
@@ -262,10 +311,17 @@
 </head>
 <body>
 
+    <div class="api-modal" id="apiModal">
+        <h4>Groq AI Setup</h4>
+        <p>Paste your free Groq API key below. It saves directly inside your browser so you only have to do this once!</p>
+        <input type="password" class="api-input" id="apiKeyInput" placeholder="gsk_xxxxxxxxxxxxxxxxxxxx">
+        <button class="api-save-btn" onclick="saveApiKey()">Save Setup Configuration</button>
+    </div>
+
     <nav class="navbar">
         <div class="nav-logo">Brainably Study Room</div>
         <div class="nav-actions">
-            <button class="nav-btn btn-purple">⚙️ AI Settings</button>
+            <button class="nav-btn btn-purple" onclick="toggleApiModal()">⚙️ AI Settings</button>
             <button class="nav-btn">← Dashboard</button>
         </div>
     </nav>
@@ -287,7 +343,7 @@
 
             <div class="input-area">
                 <input type="text" class="chat-input" id="userInput" placeholder="Ask a question or paste complex text details...">
-                <button class="action-button" id="submitBtn" onclick="askFreeAI()">Ask AI</button>
+                <button class="action-button" id="submitBtn" onclick="askGroqAI()">Ask AI</button>
             </div>
 
             <button class="pdf-btn" onclick="exportToTxt()">⚡ Export Study Guide Cheat Sheet (TXT)</button>
@@ -312,12 +368,12 @@
     </main>
 
     <script>
-        // 1. AI MODE CONFIGURATION
+        // 1. SYSTEM MODE DEFINITIONS
         let currentMode = 'eli5';
         const modePrompts = {
-            eli5: "You are an educator using ELI5 Mode. Break down complicated ideas using simple analogies and fun examples tailored for middle or high school students.",
-            socratic: "You are a Socratic Coach. Do not give the answer directly. Ask short, guiding questions that lead the student to discover the concept themselves.",
-            exam: "You are an Exam Preparation assistant. Extract key definitions, create actionable flashcard review blocks, and give 1 multiple-choice test question based on the topic."
+            eli5: "You are an educator using ELI5 Mode. Break down complicated ideas using simple analogies, emojis, and fun examples tailored for students.",
+            socratic: "You are a Socratic Coach. Do not give the answer directly. Ask short, guiding questions that lead the student to discover the math or science concept themselves.",
+            exam: "You are an Exam Preparation assistant. Extract key definitions, create actionable flashcard review blocks, and provide a multiple-choice practice question."
         };
 
         function setMode(mode) {
@@ -326,18 +382,40 @@
             document.getElementById(`btn-${mode}`).classList.add('active');
             
             const welcomeMsg = {
-                eli5: "Switched to 🚀 ELI5 Mode. I'll explain complex things simply!",
-                socratic: "Switched to 🧠 Socratic Coach Mode. Let's think through your questions together.",
-                exam: "Switched to ⚔️ Exam Prep Mode. Ready to generate practice questions and cheat sheets!"
+                eli5: "Welcome back! I am currently running in 🚀 ELI5 Mode. I'll break down complicated ideas using simple analogies and fun examples!",
+                socratic: "Welcome back! I am currently running in 🧠 Socratic Coach Mode. Let's explore your questions together step-by-step.",
+                exam: "Welcome back! I am currently running in ⚔️ Exam Prep Mode. Let's assemble high-yield practice drills and definitions."
             };
             
             document.getElementById('welcomeBubble').innerText = welcomeMsg[mode];
         }
 
+        // 2. MODAL & LOCALSTORAGE API STORAGE 
+        function toggleApiModal() {
+            const modal = document.getElementById('apiModal');
+            modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
+            
+            const savedKey = localStorage.getItem('user_groq_key');
+            if (savedKey) {
+                document.getElementById('apiKeyInput').value = savedKey;
+            }
+        }
+
+        function saveApiKey() {
+            const keyVal = document.getElementById('apiKeyInput').value.trim();
+            if(keyVal) {
+                localStorage.setItem('user_groq_key', keyVal);
+                alert("Groq Configuration Saved Successfully!");
+                document.getElementById('apiModal').style.display = 'none';
+            } else {
+                alert("Please enter a valid key structure.");
+            }
+        }
+
         // ==========================================================================
-        // ⚡ UNIFIED KEYLESS COGNITIVE FETCH ENGINE (HUGGING FACE TRANSFERS)
+        // ⚡ RELIABLE GROQ API REDIRECT SYSTEM (SECURE & FUNCTIONAL)
         // ==========================================================================
-        async function askFreeAI() {
+        async function askGroqAI() {
             const inputField = document.getElementById('userInput');
             const chatDisplay = document.getElementById('chatDisplay');
             const submitBtn = document.getElementById('submitBtn');
@@ -345,7 +423,15 @@
 
             if (!promptText) return;
 
-            // Append student question to chat view
+            // Check if user has a browser-saved configuration configuration key
+            const activeKey = localStorage.getItem('user_groq_key');
+            if (!activeKey) {
+                alert("Configuration Required: Please click the '⚙️ AI Settings' button above and paste your free Groq API key first!");
+                toggleApiModal();
+                return;
+            }
+
+            // Append student prompt text
             const userBubble = document.createElement('div');
             userBubble.className = 'chat-bubble';
             userBubble.style.marginLeft = 'auto';
@@ -355,56 +441,54 @@
             chatDisplay.appendChild(userBubble);
             
             inputField.value = '';
-            submitBtn.innerText = '⏳ Thinking...';
+            submitBtn.innerText = 'Ask AI...';
             submitBtn.disabled = true;
 
-            // Generate structural system prompt based on active selected layout button
-            const systemInstruction = modePrompts[currentMode];
-
             try {
-                // Fetch direct from public serverless processing layer
-                const res = await fetch('https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta', {
+                // Connecting to the ultra-fast Groq endpoint directly via custom keys
+                const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Authorization': `Bearer ${activeKey}`,
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({
-                        inputs: `<|system|>\n${systemInstruction}\n<|user|>\n${promptText}\n<|assistant|>\n`,
-                        parameters: { max_new_tokens: 350, temperature: 0.6 }
+                        model: "llama3-8b-8192", // Fast, accurate open-weights model
+                        messages: [
+                            { role: "system", content: modePrompts[currentMode] },
+                            { role: "user", content: promptText }
+                        ],
+                        temperature: 0.7
                     })
                 });
 
                 const data = await res.json();
-
                 const aiBubble = document.createElement('div');
                 aiBubble.className = 'chat-bubble';
 
-                if (data && data[0] && data[0].generated_text) {
-                    let cleanText = data[0].generated_text.split('<|assistant|>')[1] || data[0].generated_text;
-                    aiBubble.innerText = cleanText.trim();
-                } else if (data.error && data.error.includes('loading')) {
-                    aiBubble.innerText = "⏳ The server node is waking up. Please resend your message in a few seconds!";
+                if (data.choices && data.choices[0]) {
+                    aiBubble.innerText = data.choices[0].message.content;
                 } else {
-                    throw new Error("Formatting variance");
+                    aiBubble.innerText = "⚠️ API Error: Unable to access Groq processor node. Please verify your API key in settings.";
                 }
-
                 chatDisplay.appendChild(aiBubble);
 
             } catch (error) {
-                // Offline fallback sandbox processing array
-                const fallbackBubble = document.createElement('div');
-                fallbackBubble.className = 'chat-bubble';
-                fallbackBubble.innerText = `=== 📍 BRAINABLY ARCHIVE ENGINE READOUT ===\n\n[Mode: ${currentMode.toUpperCase()}]\nYour query "${promptText}" has been received. Let's analyze this step by step using your core metrics workbook! Review your current vocabulary indices while the public pipeline synchronizes.`;
-                chatDisplay.appendChild(fallbackBubble);
+                const errBubble = document.createElement('div');
+                errBubble.className = 'chat-bubble';
+                errBubble.innerText = "❌ Network Error: Could not reach the engine. Verify your internet connection or key parameters.";
+                chatDisplay.appendChild(errBubble);
             }
 
             submitBtn.innerText = 'Ask AI';
             submitBtn.disabled = false;
-            chatDisplay.scrollTop = chatDisplay.scrollHeight; // Auto Scroll
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
         }
 
-        // 2. POMODORO TIMER MECHANICAL CODE
+        // 3. POMODORO TIMER MECHANICAL CODE
         let timer;
         let isRunning = false;
-        let timeRemaining = 1500; // 25 Minutes standard entry
+        let timeRemaining = 1500;
 
         function updateTimerDisplay() {
             const minutes = Math.floor(timeRemaining / 60);
@@ -428,7 +512,7 @@
                         updateTimerDisplay();
                     } else {
                         clearInterval(timer);
-                        alert("Session complete! Time to switch vibes.");
+                        alert("Session complete!");
                         resetTimer();
                     }
                 }, 1000);
@@ -451,7 +535,7 @@
             resetTimer();
         }
 
-        // 3. DOCUMENT MANAGEMENT FILE OUTPUTS
+        // 4. TXT STUDY GUIDE EXPORTER
         function exportToTxt() {
             const historyText = document.getElementById('chatDisplay').innerText;
             const blob = new Blob([historyText], { type: "text/plain" });
