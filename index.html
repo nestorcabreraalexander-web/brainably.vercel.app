@@ -115,7 +115,7 @@
             gap: 15px;
         }
 
-        /* 🌐 6-LANGUAGE Dropdown Matrix Element */
+        /* 🌐 Multi-Language Dropdown */
         .lang-picker {
             background: var(--bg-surface);
             border: 1px solid var(--border-color);
@@ -129,7 +129,7 @@
             font-family: inherit;
         }
 
-        /* 🌓 Light/Dark Mode Mode Selection Toggle Circular Button */
+        /* 🌓 Light/Dark Theme Selection Toggle Button */
         .theme-toggle-btn {
             background: var(--bg-surface);
             border: 1px solid var(--border-color);
@@ -212,7 +212,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            box-shadow: 0 0 30px rgba(249, 115, 22, 0.05);
+            box-shadow: 0 0 30px rgba(249, 115, orange, 0.05);
             cursor: pointer;
         }
 
@@ -221,7 +221,7 @@
         .streak-label { font-size: 0.85rem; text-transform: uppercase; font-weight: 700; color: var(--text-main); letter-spacing: 0.08em; margin-top: 5px; }
         .streak-bonus-text { font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; }
 
-        /* DISTRICT LOCALIZATION ELEMENT CARD */
+        /* DISTRICT LOCALIZATION CARD */
         .district-sync-section {
             max-width: 1200px;
             margin: 20px auto;
@@ -243,7 +243,7 @@
         .district-meta p { font-size: 0.88rem; color: var(--text-muted); }
         .district-badge { background: #06b6d4; color: #030712; padding: 6px 14px; border-radius: 50px; font-weight: 800; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
 
-        /* GRID PLATFORM LINK CHANNELS */
+        /* NOTION-STYLE WORKSPACE CUSTOMIZER GRID STYLE ARCHITECTURE */
         .dashboard-grid {
             max-width: 1200px;
             margin: 15px auto;
@@ -267,9 +267,21 @@
             height: 220px;
             text-decoration: none;
             color: inherit;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.2s, background-color 0.3s, border-color 0.3s;
         }
 
         .room-card:hover { transform: translateY(-4px); background: var(--bg-surface); }
+        .room-card:active { cursor: grabbing; }
+        
+        /* Dragging States Visual Cues */
+        .room-card.dragging {
+            opacity: 0.3;
+            border: 2px dashed var(--accent-glow-secondary);
+            transform: scale(0.96);
+        }
+
         .room-icon { font-size: 2rem; width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
         
         .study-room .room-icon { background: rgba(168, 85, 247, 0.1); color: #c084fc; }
@@ -279,7 +291,7 @@
         .room-meta h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; color: var(--text-bright); }
         .room-meta p { font-size: 0.92rem; color: var(--text-muted); line-height: 1.4; }
 
-        /* ANALYTICS PLOT VECTORS LAYOUT PANEL */
+        /* ANALYTICS COMPETENCY MATRIX LAYER */
         .analytics-section {
             max-width: 1200px;
             margin: 40px auto 30px auto;
@@ -328,7 +340,7 @@
         .fill-physics { background: linear-gradient(90deg, #06b6d4, #22d3ee); }
         .fill-chemistry { background: linear-gradient(90deg, #10b981, #34d399); }
 
-        /* UTILITY ACTIONS & TEACHER PORTAL MATRIX */
+        /* UTILITY CONSOLE LAYOUT UNITS */
         .utility-deck {
             max-width: 1200px;
             margin: 20px auto 60px auto;
@@ -444,8 +456,8 @@
         </div>
     </section>
 
-    <main class="dashboard-grid">
-        <a href="app.html" class="room-card study-room" onclick="playBrainablySound('click'); incrementSkillMetric('math', 5)">
+    <main class="dashboard-grid" id="savableWorkspaceGrid">
+        <a href="app.html" id="card-ai-room" class="room-card study-room" draggable="true" onclick="playBrainablySound('click'); incrementSkillMetric('math', 5)">
             <div class="room-icon">🧠</div>
             <div class="room-meta">
                 <h2 id="room1Title">AI Deep Learning Room</h2>
@@ -453,7 +465,7 @@
             </div>
         </a>
 
-        <a href="library.html" class="room-card academy" onclick="playBrainablySound('click'); incrementSkillMetric('physics', 8)">
+        <a href="library.html" id="card-video-library" class="room-card academy" draggable="true" onclick="playBrainablySound('click'); incrementSkillMetric('physics', 8)">
             <div class="room-icon">🚀</div>
             <div class="room-meta">
                 <h2 id="room2Title">Video Library & Explainer</h2>
@@ -461,7 +473,7 @@
             </div>
         </a>
 
-        <a href="quiz.html" class="room-card quest" onclick="playBrainablySound('click'); incrementSkillMetric('chemistry', 15)">
+        <a href="quiz.html" id="card-brain-quest" class="room-card quest" draggable="true" onclick="playBrainablySound('click'); incrementSkillMetric('chemistry', 15)">
             <div class="room-icon">🎯</div>
             <div class="room-meta">
                 <h2 id="room3Title">Brain Quest Challenge</h2>
@@ -523,18 +535,15 @@
             const audioCtx = new AudioContextClass();
 
             if (effectType === 'levelUp') {
-                // Ascending Mario-style arcade chime
                 playTone(audioCtx, 523.25, 0.08, 0);       // Note C5
                 playTone(audioCtx, 659.25, 0.08, 0.06);    // Note E5
                 playTone(audioCtx, 783.99, 0.08, 0.12);    // Note G5
                 playTone(audioCtx, 1046.50, 0.2, 0.18);    // Note C6
             } 
             else if (effectType === 'click') {
-                // Subtle, crisp UI selection click
                 playTone(audioCtx, 880, 0.03, 0);          // Note A5
             }
             else if (effectType === 'spark') {
-                // Quick high-pitched energetic magic spark
                 playTone(audioCtx, 1200, 0.04, 0);
                 playTone(audioCtx, 1500, 0.04, 0.03);
             }
@@ -558,7 +567,76 @@
         }
 
         // ==========================================================================
-        // 🌐 TRANSLATION DICTIONARY MATRIX
+        // 🛠️ NOTION-STYLE WORKSPACE CUSTOMIZER ENGINE
+        // ==========================================================================
+        function initializeWorkspaceDragAndDropCustomizer() {
+            const gridContainer = document.getElementById('savableWorkspaceGrid');
+            const workspaceCards = gridContainer.querySelectorAll('.room-card');
+
+            workspaceCards.forEach(card => {
+                card.addEventListener('dragstart', () => {
+                    card.classList.add('dragging');
+                });
+
+                card.addEventListener('dragend', () => {
+                    card.classList.remove('dragging');
+                    saveCurrentWorkspaceOrderMatrix();
+                    playBrainablySound('spark'); // Click lock sensory chime!
+                });
+            });
+
+            gridContainer.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                const activeDraggingCard = document.querySelector('.room-card.dragging');
+                const nextSiblingCard = getDragDropTargetPlacementSibling(gridContainer, event.clientX, event.clientY);
+
+                if (nextSiblingCard == null) {
+                    gridContainer.appendChild(activeDraggingCard);
+                } else {
+                    gridContainer.insertBefore(activeDraggingCard, nextSiblingCard);
+                }
+            });
+        }
+
+        function getDragDropTargetPlacementSibling(container, mouseX, mouseY) {
+            const draggableElements = [...container.querySelectorAll('.room-card:not(.dragging)')];
+
+            return draggableElements.reduce((closestCard, childCard) => {
+                const cardBox = childCard.getBoundingClientRect();
+                const cardOffsetX = mouseX - cardBox.left - cardBox.width / 2;
+                const cardOffsetY = mouseY - cardBox.top - cardBox.height / 2;
+
+                if (cardOffsetX < 0 && cardOffsetY < 0 && cardOffsetX > closestCard.offset) {
+                    return { offset: cardOffsetX, element: childCard };
+                } else {
+                    return closestCard;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function saveCurrentWorkspaceOrderMatrix() {
+            const gridContainer = document.getElementById('savableWorkspaceGrid');
+            const layoutSequenceArray = [...gridContainer.querySelectorAll('.room-card')].map(card => card.id);
+            localStorage.setItem('brainably_workspace_sequence', JSON.stringify(layoutSequenceArray));
+        }
+
+        function loadSavedWorkspaceSequenceMatrix() {
+            const cachedSequenceString = localStorage.getItem('brainably_workspace_sequence');
+            if (!cachedSequenceString) return;
+
+            const savedIDsArray = JSON.parse(cachedSequenceString);
+            const gridContainer = document.getElementById('savableWorkspaceGrid');
+
+            savedIDsArray.forEach(cardId => {
+                const matchingCardNode = document.getElementById(cardId);
+                if (matchingCardNode) {
+                    gridContainer.appendChild(matchingCardNode);
+                }
+            });
+        }
+
+        // ==========================================================================
+        // 🌐 TRANSLATION LOGIC MATRIX DICTIONARY
         // ==========================================================================
         const translationDictionary = {
             en: {
@@ -600,7 +678,7 @@
         }
 
         // ==========================================================================
-        // 🌓 GLOBAL LIGHT / DARK INTERFACE CONTROLLER
+        // 🌓 GLOBAL THEME CONTROLLER
         // ==========================================================================
         function toggleInterfaceColorTheme() {
             playBrainablySound('click');
@@ -631,7 +709,7 @@
         }
 
         // ==========================================================================
-        // CLIENT-SIDE LOCAL FILES DOWNLOAD ENGINE
+        // TEXT FILE DOWNLOAD GENERATION PIPELINE
         // ==========================================================================
         function exportStudyGuideLog() {
             const m = localStorage.getItem('brainably_metric_math') || '25';
@@ -651,7 +729,7 @@
         }
 
         // ==========================================================================
-        // NO-OVERHEAD TEACHER PROMPTING PORTAL
+        // NO-OVERHEAD ENTERPRISE TEACHER CONSOLE CONNECTOR
         // ==========================================================================
         async function toggleTeacherSandboxMode() {
             playBrainablySound('click');
@@ -704,7 +782,7 @@
         }
 
         // ==========================================================================
-        // DATA PROCESSING CORE ENGINES
+        // CORE RECONSTRUCTION STORAGE ENGINES
         // ==========================================================================
         function loadSkillAnalyticsDashboard() {
             const categories = ['math', 'physics', 'chemistry'];
@@ -754,7 +832,7 @@
             document.getElementById('streakDisplay').innerText = calculatedStreak;
         }
 
-        // CONFETTI PARTICLE RENDER ENGINE
+        // CONFETTI VECTOR CANVAS LAYER
         let confettiArray = [];
         const canvasElement = document.getElementById("confettiCanvas");
         const canvasContext = canvasElement.getContext("2d");
@@ -810,7 +888,10 @@
 
         function triggerManualConfettiCelebration() { launchConfettiExplosionEngine(); }
 
+        // BOOT MASTER PROCESS LISTENER
         window.addEventListener('DOMContentLoaded', () => {
+            loadSavedWorkspaceSequenceMatrix();
+            initializeWorkspaceDragAndDropCustomizer();
             evaluateUserStudyStreakLog();
             loadSkillAnalyticsDashboard();
             
