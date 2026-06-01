@@ -543,7 +543,7 @@
         }
 
         // ==========================================================================
-        // ⚡ FREE INTEGRATED DISCOVERY ROUTER (NO KEYS OR PERMISSIONS REQUIRED)
+        // ⚡ FREE INTEGRATED DISCOVERY ROUTER (FUZZY LOGIC KEYWORD SAFETY NET)
         // ==========================================================================
         async function askFreeAI() {
             const inputField = document.getElementById('userInput');
@@ -566,16 +566,17 @@
             submitBtn.innerText = 'Thinking...';
             submitBtn.disabled = true;
 
-            // Artificial delay wrapper to make the study app feel live and responsive
-            await new Promise(resolve => setTimeout(resolve, 800));
+            // Short response animation delay
+            await new Promise(resolve => setTimeout(resolve, 600));
 
             const aiBubble = document.createElement('div');
             aiBubble.className = 'chat-bubble';
 
-            const queryClean = promptText.toLowerCase().replace(/\s+/g, '');
+            // Convert to lowercase to make search broad and type-resilient
+            const queryClean = promptText.toLowerCase();
 
-            // DYNAMIC CONTEXT EVALUATOR RULES
-            if (queryClean.includes('1+1') || queryClean.includes('equalsto2')) {
+            // FUZZY KEYWORD COMPARATOR PIPELINE
+            if (queryClean.includes('1+1') || queryClean.includes('1 + 1') || queryClean.includes('2')) {
                 if (currentMode === 'eli5') {
                     aiBubble.innerText = "🍪 Let's count some cookies!\n\nImagine you have 1 cookie in your hand. 🍪 Now your friend gives you another cookie! How many cookies do you have now?\n\nYou have 1 cookie + 1 cookie = 2 cookies! 🎉\nThe answer is 2!";
                 } else if (currentMode === 'socratic') {
@@ -584,7 +585,8 @@
                     aiBubble.innerText = "⚔️ [Exam Drill Baseline Check]:\n\n• Concept: Basic Addition\n• Formula: 1 + 1 = 2\n\nPractice Question: If a function increases by 1 unit sequentially twice, what is the net translation factor?\nAnswer: 2 units.";
                 }
             } 
-            else if (queryClean.includes('napoleon')) {
+            // Fuzzy search checks 'nap' or 'naop' to resiliently match "Napoleon" or typos like "Naopleon"
+            else if (queryClean.includes('nap') || queryClean.includes('naop')) {
                 if (currentMode === 'eli5') {
                     aiBubble.innerText = "👑 Napoleon Bonaparte was like a hyper-ambitious leader who took over France after their massive revolution! Think of him as a chess player who wanted to control the entire European board. He won a ton of battles but made a major mistake trying to invade Russia in the freezing winter, which caused him to lose his empire!";
                 } else if (currentMode === 'socratic') {
@@ -593,7 +595,8 @@
                     aiBubble.innerText = "⚔️ [Exam High-Yield Study Outline]:\n\n• Who: Napoleon Bonaparte (Emperor of France)\n• Key Achievements: Napoleonic Code (standardized legal system), conquering Central Europe.\n• Turning Points: Continental System failure, 1812 Invasion of Russia, and final defeat at Waterloo (1815).";
                 }
             }
-            else if (queryClean.includes('washington')) {
+            // Fuzzy search checks 'wash' or 'wach' to catch variations of "Washington"
+            else if (queryClean.includes('wash') || queryClean.includes('wach')) {
                 if (currentMode === 'eli5') {
                     aiBubble.innerText = "🇺🇸 George Washington was essentially the 'Founding Father' captain of America! When the 13 colonies didn't want to follow the British King anymore, he led the army to win the war. Then, he became the very first U.S. President and helped set the rules for how the country runs today!";
                 } else if (currentMode === 'socratic') {
