@@ -1,104 +1,235 @@
-<script>
-        let currentMode = 'eli5';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainably - Student Workspace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #030712;
+            --bg-card: #0b0f19;
+            --border-color: rgba(255, 255, 255, 0.06);
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
 
-        window.setMode = function(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`btn-${mode}`).classList.add('active');
-            
-            const welcomeText = document.querySelector('#welcomeBubble .chat-text');
-            if(mode === 'eli5') {
-                welcomeText.innerText = "Welcome back! Running in 🚀 ELI5 Mode. Try asking about a history topic or a math calculation.";
-            } else if(mode === 'socratic') {
-                welcomeText.innerText = "Socratic Coach Active. Let's break down your question step-by-step. What are your initial thoughts?";
-            } else if(mode === 'exam') {
-                welcomeText.innerText = "Exam Prep Mode Active. Ask a topic, and I will generate structured study breakdowns.";
-            }
-        };
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-base); color: var(--text-main); min-height: 100vh; display: flex; }
 
-        window.handleCloudAISubmit = function() {
-            const inputField = document.getElementById('userInput');
-            const chatDisplay = document.getElementById('chatDisplay');
-            const submitBtn = document.getElementById('submitBtn');
-            const userPrompt = inputField.value.trim();
+        /* Left Navigation Sidebar Layout */
+        .sidebar {
+            width: 280px;
+            border-right: 1px solid var(--border-color);
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            background-color: #050814;
+        }
+        .brand-logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #38bdf8;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+        }
+        .nav-item.active {
+            border-left: 3px solid var(--accent-purple);
+            border-radius: 0 12px 12px 0;
+            background: rgba(168, 85, 247, 0.05);
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        }
+        .user-info h4 { font-size: 0.9rem; font-weight: 700; }
+        .user-info p { font-size: 0.75rem; color: var(--text-muted); }
 
-            if (!userPrompt) return;
+        /* Main Workspace Container Dashboard */
+        .main-content {
+            flex: 1;
+            padding: 40px 50px;
+            overflow-y: auto;
+        }
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 36px;
+        }
+        .header-row h1 { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.5px; }
+        .header-row p { color: var(--text-muted); font-size: 0.95rem; margin-top: 4px; }
+        
+        /* Premium Feature Welcome Banner Card */
+        .welcome-banner {
+            background: linear-gradient(135deg, rgba(88, 28, 135, 0.45) 0%, rgba(15, 23, 42, 0.3) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 36px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .banner-text h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; color: #ffffff; }
+        .banner-text p { color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; max-width: 550px; }
+        .banner-action-btn {
+            background: var(--accent-purple);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+            transition: transform 0.2s ease;
+        }
+        .banner-action-btn:hover { transform: translateY(-2px); }
 
-            // 1. Display User Message
-            const userBubble = document.createElement('div');
-            userBubble.className = 'chat-bubble';
-            userBubble.style.marginLeft = 'auto';
-            userBubble.style.background = 'rgba(168, 85, 247, 0.15)';
-            userBubble.style.borderColor = 'var(--accent-purple)';
-            userBubble.innerHTML = `<div class="chat-text">${userPrompt}</div>`;
-            chatDisplay.appendChild(userBubble);
-            
-            inputField.value = '';
-            submitBtn.innerText = "Thinking...";
-            submitBtn.disabled = true;
+        /* Dashboard Application Cards Grid Layout */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+        .module-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 240px;
+            transition: border-color 0.2s ease;
+        }
+        .module-card:hover { border-color: rgba(255, 255, 255, 0.12); }
+        .module-icon {
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+        }
+        .module-title { font-size: 1.2rem; font-weight: 700; color: white; margin-bottom: 8px; }
+        .module-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 24px; }
+        .module-link {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .module-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
 
-            // 2. Setup AI Response Container
-            const aiBubble = document.createElement('div');
-            aiBubble.className = 'chat-bubble';
-            chatDisplay.appendChild(aiBubble);
+    <aside class="sidebar">
+        <div class="brand-logo">✨ Brainably</div>
+        <nav class="nav-group">
+            <a href="index.html" class="nav-item active">🏠 Home Dashboard</a>
+            <a href="app.html" class="nav-item">🚀 AI Study Room</a>
+            <a href="#" class="nav-item">📚 My Library</a>
+            <a href="#" class="nav-item">📊 Analytics Insights</a>
+            <a href="#" class="nav-item">⚙️ Setup Settings</a>
+        </nav>
+        <div class="user-profile">
+            <div class="avatar"></div>
+            <div class="user-info">
+                <h4>Workspace Demo</h4>
+                <p>Student Mode Account</p>
+            </div>
+        </div>
+    </aside>
 
-            // 3. Subject Classification Engine
-            let calculatedTag = 'general';
-            const query = userPrompt.toLowerCase();
-            let mathEquation = userPrompt.replace(/[a-zA-Z?]/g, '').trim();
+    <main class="main-content">
+        <header class="header-row">
+            <div>
+                <h1>Welcome Back, Student Workspace</h1>
+                <p>Track your target parameters and customize active models.</p>
+            </div>
+        </header>
 
-            if (query.match(/(angle|triangle|fraction|geometry|algebra|math|\+|\-|\*|\/)/)) {
-                calculatedTag = 'math';
-            } else if (query.match(/(war|history|napoleon|century|president|revolution|ww2|ii)/)) {
-                calculatedTag = 'history';
-            }
+        <section class="welcome-banner">
+            <div class="banner-text">
+                <h2>Jump Into the AI Study Room</h2>
+                <p>Launch an isolated, local browser-safe homework assistant session complete with active Pomodoro intervals, subject tracking badges, and export capabilities.</p>
+            </div>
+            <a href="app.html" class="banner-action-btn">Open Session →</a>
+        </section>
 
-            let tagBadgeHtml = '';
-            if (calculatedTag === 'history') tagBadgeHtml = '<span class="subject-tag tag-history">📚 History</span>';
-            else if (calculatedTag === 'math') tagBadgeHtml = '<span class="subject-tag tag-math">🔢 Mathematics</span>';
-            else tagBadgeHtml = '<span class="subject-tag tag-general">💡 General Study</span>';
+        <section class="modules-grid">
+            <div class="module-card">
+                <div>
+                    <div class="module-icon">🚀</div>
+                    <h3 class="module-title">AI Study Assistant Room</h3>
+                    <p class="module-desc">Interact with structural prompting systems, run target math computations, or build review outlines instantly.</p>
+                </div>
+                <a href="app.html" class="module-link">Enter Room →</a>
+            </div>
 
-            aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">...</div>`;
+            <div class="module-card">
+                <div>
+                    <div class="module-icon">📊</div>
+                    <h3 class="module-title">Analytics Tracker Hub</h3>
+                    <p class="module-desc">Monitor total completed study focus blocks, active streaks, and overall platform engagement parameters.</p>
+                </div>
+                <a href="#" class="module-link">View Progress →</a>
+            </div>
 
-            // 4. Instant Browser Database Router (100% Reliable, 0ms Delay)
-            setTimeout(() => {
-                // Topic Matrix: World War II
-                if (query.includes('ww2') || query.includes('world war 2') || query.includes('war')) {
-                    if (currentMode === 'eli5') {
-                        aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">**World War II (WW2)** was like a massive global game of tag involving almost every country from 1939 to 1945. Two huge teams—the Allies and the Axis—fought across oceans until the Allies won and worked together to make a safer world! 🌍</div>`;
-                    } else if (currentMode === 'socratic') {
-                        aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">World War II (1939–1945) involved two opposing global alliances: the Allies and the Axis powers. Before we review the global impact, what major event in Europe do you think originally triggered it?</div>`;
-                    } else {
-                        aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">⚔️ **[High-Yield Review: World War II]**:\n• **Timeline**: 1939–1945\n• **Core Alliances**: Allies (US, UK, USSR) vs. Axis (Germany, Japan, Italy).\n• **Critical Turning Points**: Invasion of Poland, Pearl Harbor, and D-Day.\n• *Exam Pitfall*: Remember that the US did not enter the conflict immediately in 1939; entry occurred in December 1941!</div>`;
-                    }
-                } 
-                // Topic Matrix: Angles / Geometry
-                else if (query.includes('angle') || query.includes('geometry')) {
-                    if (currentMode === 'eli5') {
-                        aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">Think of angles like opening up a pair of scissors! A **right angle** is perfectly square, exactly like the crisp corner of a piece of notebook paper. It measures exactly **90 degrees**! 📐</div>`;
-                    } else if (currentMode === 'socratic') {
-                        aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">An angle measures the opening between two intersecting lines. If you look closely at the clean corner of a window frame, what angle measurement do you suspect that forms?</div>`;
-                    } else {
-                        aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">📐 **[Core Geometry Summary]**:\n• **Right Angle**: Intersects at exactly **90°**.\n• **Acute Angle**: Any angle measuring strictly less than 90°.\n• **Obtuse Angle**: Any angle measuring greater than 90° but less than 180°.</div>`;
-                    }
-                } 
-                // Topic Matrix: Dynamic Math Calculation Block
-                else if (calculatedTag === 'math' && /[\+\-\*\/]/.test(mathEquation)) {
-                    try {
-                        let mathResult = Function(`"use strict"; return (${mathEquation})`)();
-                        aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">Let's calculate this equation directly! Processing **${mathEquation}** yields a precise result of **${mathResult}**. 🚀</div>`;
-                    } catch(err) {
-                        aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">I detected a math challenge! Let's double-check your operators and numbers carefully.</div>`;
-                    }
-                } 
-                // Catch-All Workspace Module
-                else {
-                    aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">I've analyzed your question under General Studies. In **${currentMode.toUpperCase()} mode**, let's look at this like a fresh puzzle piece. Tell me a bit more about the specific concept you're trying to figure out!</div>`;
-                }
+            <div class="module-card">
+                <div>
+                    <div class="module-icon">📚</div>
+                    <h3 class="module-title">Resource Document Library</h3>
+                    <p class="module-desc">Access generated study guide cheatsheets, textbook logs, and structural summary notes files.</p>
+                </div>
+                <a href="#" class="module-link">Open Library →</a>
+            </div>
+        </section>
+    </main>
 
-                submitBtn.innerText = "Ask AI";
-                submitBtn.disabled = false;
-                chatDisplay.scrollTop = chatDisplay.scrollHeight;
-            }, 400); // 400ms delay simulates natural AI "thinking time"
-        };
-    </script>
+</body>
+</html>
