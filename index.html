@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brainably Study Room</title>
+    <title>Brainably - Student Workspace</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -17,257 +17,219 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg-base); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
-        
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid var(--border-color); }
-        .nav-logo { font-size: 1.5rem; font-weight: 800; color: #38bdf8; }
-        .nav-actions { display: flex; gap: 12px; }
-        .nav-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; }
-        
-        .app-grid { display: grid; grid-template-columns: 1fr 380px; gap: 24px; padding: 30px 40px; flex: 1; }
-        .left-column { display: flex; flex-direction: column; }
-        .right-column { display: flex; flex-direction: column; gap: 24px; }
-        .card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; display: flex; flex-direction: column; }
-        
-        .modes-row { display: flex; gap: 12px; margin-bottom: 24px; }
-        .mode-btn { flex: 1; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); color: var(--text-muted); padding: 12px; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; }
-        .mode-btn.active { background: rgba(168, 85, 247, 0.1); border-color: var(--accent-purple); color: #ffffff; }
-        
-        .chat-display { flex: 1; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px; margin-bottom: 20px; overflow-y: auto; min-height: 500px; font-size: 0.95rem; line-height: 1.6; display: flex; flex-direction: column; }
-        .chat-bubble { background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); padding: 18px 22px; border-radius: 14px; max-width: 90%; margin-bottom: 16px; align-self: flex-start; }
-        
-        .subject-tag {
-            display: inline-block;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            padding: 4px 10px;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-        .tag-history { background: rgba(245, 158, 11, 0.1); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.2); }
-        .tag-math { background: rgba(6, 182, 212, 0.1); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.2); }
-        .tag-general { background: rgba(168, 85, 247, 0.1); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.2); }
+        body { background-color: var(--bg-base); color: var(--text-main); min-height: 100vh; display: flex; }
 
-        .chat-text { white-space: pre-wrap; }
-        .input-area { display: flex; gap: 12px; margin-bottom: 14px; }
-        .chat-input { flex: 1; background: #090d16; border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; color: #ffffff; font-size: 0.95rem; outline: none; }
-        .chat-input:focus { border-color: var(--accent-purple); }
-        .action-button { padding: 0 24px; background: var(--accent-purple); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
-        .pdf-btn { width: 100%; background: rgba(6, 182, 212, 0.05); border: 1px solid rgba(6, 182, 212, 0.3); color: #22d3ee; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        /* Left Navigation Sidebar Layout */
+        .sidebar {
+            width: 280px;
+            border-right: 1px solid var(--border-color);
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            background-color: #050814;
+        }
+        .brand-logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #38bdf8;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+        }
+        .nav-item.active {
+            border-left: 3px solid var(--accent-purple);
+            border-radius: 0 12px 12px 0;
+            background: rgba(168, 85, 247, 0.05);
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+        }
+        .user-info h4 { font-size: 0.9rem; font-weight: 700; }
+        .user-info p { font-size: 0.75rem; color: var(--text-muted); }
+
+        /* Main Workspace Container Dashboard */
+        .main-content {
+            flex: 1;
+            padding: 40px 50px;
+            overflow-y: auto;
+        }
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 36px;
+        }
+        .header-row h1 { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.5px; }
+        .header-row p { color: var(--text-muted); font-size: 0.95rem; margin-top: 4px; }
         
-        .timer-container { align-items: center; justify-content: center; text-align: center; }
-        .vibe-tag { font-size: 0.9rem; font-weight: 800; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 20px; text-transform: uppercase; }
-        .toggle-row { display: inline-flex; background: #090d16; padding: 6px; border-radius: 30px; margin-bottom: 30px; border: 1px solid var(--border-color); }
-        .toggle-btn { background: transparent; border: none; padding: 10px 24px; color: var(--text-muted); border-radius: 20px; font-weight: 700; font-size: 0.88rem; cursor: pointer; }
-        .toggle-btn.active { background: var(--accent-purple); color: white; }
-        .timer-digits { font-size: 4.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 30px; }
-        .timer-controls { display: flex; gap: 12px; width: 100%; max-width: 260px; }
-        .ctrl-btn { flex: 1; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; }
-        .btn-start { background: white; color: black; }
-        .btn-reset { background: #1e293b; color: var(--text-main); border: 1px solid var(--border-color); }
-        
-        .hub-title { font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 16px; }
-        .streak-badge { background: linear-gradient(135deg, #f59e0b, #ef4444); border-radius: 12px; padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-        .streak-text h5 { font-size: 1.2rem; font-weight: 800; color: white; }
-        .streak-text p { font-size: 0.8rem; color: rgba(255, 255, 255, 0.8); }
-        .streak-icon { font-size: 2rem; }
-        .stats-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .stat-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; text-align: center; }
-        .stat-val { font-size: 1.3rem; font-weight: 800; color: var(--accent-cyan); }
-        .stat-lbl { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+        /* Premium Feature Welcome Banner Card */
+        .welcome-banner {
+            background: linear-gradient(135deg, rgba(88, 28, 135, 0.45) 0%, rgba(15, 23, 42, 0.3) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 36px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .banner-text h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; color: #ffffff; }
+        .banner-text p { color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; max-width: 550px; }
+        .banner-action-btn {
+            background: var(--accent-purple);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+            transition: transform 0.2s ease;
+        }
+        .banner-action-btn:hover { transform: translateY(-2px); }
+
+        /* Dashboard Application Cards Grid Layout */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+        .module-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 240px;
+            transition: border-color 0.2s ease;
+        }
+        .module-card:hover { border-color: rgba(255, 255, 255, 0.12); }
+        .module-icon {
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+        }
+        .module-title { font-size: 1.2rem; font-weight: 700; color: white; margin-bottom: 8px; }
+        .module-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 24px; }
+        .module-link {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .module-link:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="nav-logo">Brainably Study Room</div>
-        <div class="nav-actions"><button class="nav-btn" onclick="location.href='index.html'">← Dashboard</button></div>
-    </nav>
-
-    <main class="app-grid">
-        <div class="left-column card">
-            <div class="modes-row">
-                <button class="mode-btn active" id="btn-eli5" onclick="setMode('eli5')">🚀 ELI5 Mode</button>
-                <button class="mode-btn" id="btn-socratic" onclick="setMode('socratic')">🧠 Socratic Coach</button>
-                <button class="mode-btn" id="btn-exam" onclick="setMode('exam')">⚔️ Exam Prep</button>
-            </div>
-
-            <div class="chat-display" id="chatDisplay">
-                <div class="chat-bubble" id="welcomeBubble">
-                    <div class="chat-text">Welcome back to the workspace! I am currently running in 🚀 ELI5 Mode. Try entering a calculation or a topic summary question.</div>
-                </div>
-            </div>
-
-            <div class="input-area">
-                <input type="text" class="chat-input" id="userInput" placeholder="Ask any question...">
-                <button class="action-button" id="submitBtn" onclick="handleWorkspaceSubmit()">Ask AI</button>
-            </div>
-
-            <button class="pdf-btn" onclick="exportToTxt()">⚡ Export Study Guide Cheat Sheet (TXT)</button>
-        </div>
-
-        <div class="right-column">
-            <div class="card timer-container">
-                <div class="vibe-tag">🔥 CURRENT VIBE: FOCUS BLOCK</div>
-                <div class="toggle-row">
-                    <button class="toggle-btn active" id="btn-study" onclick="setTimerType('study')">Study Session</button>
-                    <button class="toggle-btn" id="btn-break" onclick="setTimerType('break')">Chill Break</button>
-                </div>
-                <div class="timer-digits" id="timerDisplay">25:00</div>
-                <div class="timer-controls">
-                    <button class="ctrl-btn btn-start" id="startBtn" onclick="toggleTimer()">Start</button>
-                    <button class="ctrl-btn btn-reset" onclick="resetTimer()">Reset</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="hub-title">📊 Analytics Hub</div>
-                <div class="streak-badge">
-                    <div class="streak-text">
-                        <h5>0 Day Streak</h5>
-                        <p>Complete a block to heat up!</p>
-                    </div>
-                    <div class="streak-icon">🔥</div>
-                </div>
-                <div class="stats-summary">
-                    <div class="stat-box"><div class="stat-val">0</div><div class="stat-lbl">Blocks Done</div></div>
-                    <div class="stat-box"><div class="stat-val">0m</div><div class="stat-lbl">Time Tracked</div></div>
-                </div>
+    <aside class="sidebar">
+        <div class="brand-logo">✨ Brainably</div>
+        <nav class="nav-group">
+            <a href="index.html" class="nav-item active">🏠 Home Dashboard</a>
+            <a href="study.html" class="nav-item">🚀 AI Study Room</a>
+            <a href="#" class="nav-item">📚 My Library</a>
+            <a href="#" class="nav-item">📊 Analytics Insights</a>
+            <a href="#" class="nav-item">⚙️ Setup Settings</a>
+        </nav>
+        <div class="user-profile">
+            <div class="avatar"></div>
+            <div class="user-info">
+                <h4>Workspace Demo</h4>
+                <p>Student Mode Account</p>
             </div>
         </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="header-row">
+            <div>
+                <h1>Welcome Back, Student Workspace</h1>
+                <p>Track your target parameters and customize active models.</p>
+            </div>
+        </header>
+
+        <section class="welcome-banner">
+            <div class="banner-text">
+                <h2>Jump Into the AI Study Room</h2>
+                <p>Launch an isolated, local browser-safe homework assistant session complete with active Pomodoro intervals, subject tracking badges, and export capabilities.</p>
+            </div>
+            <a href="study.html" class="banner-action-btn">Open Session →</a>
+        </section>
+
+        <section class="modules-grid">
+            <div class="module-card">
+                <div>
+                    <div class="module-icon">🚀</div>
+                    <h3 class="module-title">AI Study Assistant Room</h3>
+                    <p class="module-desc">Interact with structural prompting systems, run target math computations, or build review outlines instantly.</p>
+                </div>
+                <a href="study.html" class="module-link">Enter Room →</a>
+            </div>
+
+            <div class="module-card">
+                <div>
+                    <div class="module-icon">📊</div>
+                    <h3 class="module-title">Analytics Tracker Hub</h3>
+                    <p class="module-desc">Monitor total completed study focus blocks, active streaks, and overall platform engagement parameters.</p>
+                </div>
+                <a href="#" class="module-link">View Progress →</a>
+            </div>
+
+            <div class="module-card">
+                <div>
+                    <div class="module-icon">📚</div>
+                    <h3 class="module-title">Resource Document Library</h3>
+                    <p class="module-desc">Access generated study guide cheatsheets, textbook logs, and structural summary notes files.</p>
+                </div>
+                <a href="#" class="module-link">Open Library →</a>
+            </div>
+        </section>
     </main>
 
-    <script>
-        let currentMode = 'eli5';
-
-        window.setMode = function(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`btn-${mode}`).classList.add('active');
-            
-            const welcomeText = document.querySelector('#welcomeBubble .chat-text');
-            if(mode === 'eli5') {
-                welcomeText.innerText = "Welcome back to the workspace! I am currently running in 🚀 ELI5 Mode. Try entering a calculation or a topic summary question.";
-            } else if(mode === 'socratic') {
-                welcomeText.innerText = "Socratic Coach Active. Let's work through your question step-by-step. What are your initial thoughts on this topic?";
-            } else if(mode === 'exam') {
-                welcomeText.innerText = "Exam Prep Mode Active. Send me a topic, and I will generate structured high-yield study guides and callout pitfalls.";
-            }
-        };
-
-        window.handleWorkspaceSubmit = function() {
-            const inputField = document.getElementById('userInput');
-            const chatDisplay = document.getElementById('chatDisplay');
-            const submitBtn = document.getElementById('submitBtn');
-            const userPrompt = inputField.value.trim();
-
-            if (!userPrompt) return;
-
-            // 1. Render User Bubble Instantly (Prevents any visual freezing or blank areas)
-            const userBubble = document.createElement('div');
-            userBubble.className = 'chat-bubble';
-            userBubble.style.marginLeft = 'auto';
-            userBubble.style.background = 'rgba(168, 85, 247, 0.15)';
-            userBubble.style.borderColor = 'var(--accent-purple)';
-            userBubble.innerHTML = `<div class="chat-text">${userPrompt}</div>`;
-            chatDisplay.appendChild(userBubble);
-            
-            inputField.value = '';
-            submitBtn.innerText = "Thinking...";
-            submitBtn.disabled = true;
-
-            // 2. Setup System AI Output Bubble Placeholder
-            const aiBubble = document.createElement('div');
-            aiBubble.className = 'chat-bubble';
-            chatDisplay.appendChild(aiBubble);
-            chatDisplay.scrollTop = chatDisplay.scrollHeight;
-
-            // 3. Subject Keyword Routing Scanner
-            let calculatedTag = 'general';
-            const query = userPrompt.toLowerCase();
-            let mathEquation = userPrompt.replace(/[a-zA-Z?]/g, '').trim();
-
-            if (query.match(/(angle|triangle|fraction|geometry|algebra|math|\+|\-|\*|\/)/)) {
-                calculatedTag = 'math';
-            } else if (query.match(/(war|history|napoleon|century|president|revolution|ww2|ii)/)) {
-                calculatedTag = 'history';
-            }
-
-            let tagBadgeHtml = '';
-            if (calculatedTag === 'history') tagBadgeHtml = '<span class="subject-tag tag-history">📚 History</span>';
-            else if (calculatedTag === 'math') tagBadgeHtml = '<span class="subject-tag tag-math">🔢 Mathematics</span>';
-            else tagBadgeHtml = '<span class="subject-tag tag-general">💡 General Study</span>';
-
-            // 4. Pure Local Response Execution Matrix (Zero Load Time, 100% Reliable)
-            
-            // Core History: World War II Questions
-            if (query.includes('ww2') || query.includes('world war 2') || query.includes('world war ii') || (query.includes('what was') && query.includes('war'))) {
-                if (currentMode === 'eli5') {
-                    aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">**World War II (WW2)** was like a massive global game of tag involving almost every country in the world from 1939 to 1945. Two huge teams—the Allies and the Axis—fought across oceans and continents until the Allies won and worked together to establish a more peaceful world! 🌍</div>`;
-                } else if (currentMode === 'socratic') {
-                    aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">World War II (1939–1945) was a massive global conflict involving two opposing global alliances: the Allies and the Axis powers. Before we review the global impact, what major tension or event in Europe do you think originally triggered it?</div>`;
-                } else {
-                    aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">⚔️ **[High-Yield Review: World War II]**:\n• **Timeline**: 1939–1945\n• **Core Alliances**: Allies (US, UK, USSR, France) vs. Axis (Germany, Japan, Italy).\n• **Critical Turning Points**: Invasion of Poland (trigger event), Pearl Harbor (US entry), Battle of Stalingrad, and D-Day.\n• *Exam Pitfall*: Remember that the US did not enter the conflict immediately in 1939; true entry occurred in December 1941 following the Pearl Harbor base strike!</div>`;
-                }
-            } 
-            // Core History: Shortest War Questions
-            else if (query.includes('shortest war')) {
-                aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">The shortest war in recorded history was the **Anglo-Zanzibar War** on August 27, 1896! It lasted between **38 and 45 minutes** before a ceasefire was officially declared. Talk about a lightning-fast conflict! ⏱️</div>`;
-            } 
-            // Core History: Napoleon Questions
-            else if (query.includes('napoleon')) {
-                aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">Napoleon Bonaparte was a brilliant French general who crowned himself Emperor of France! He conquered most of Europe in the early 1800s, but his ultimate downfall was trying to march his massive army into Russia during the freezing winter. ❄️</div>`;
-            }
-            // Core Math: Angle Questions
-            else if (query.includes('angle')) {
-                if (currentMode === 'eli5') {
-                    aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">Think of angles like opening up a pair of scissors! A **right angle** is perfectly square, exactly like the crisp corner of a piece of notebook paper. It measures exactly **90 degrees**! 📐</div>`;
-                } else if (currentMode === 'socratic') {
-                    aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">An angle measures the rotation or opening between two intersecting lines. If you look closely at the clean corner of a window frame, what angle measurement do you suspect that forms?</div>`;
-                } else {
-                    aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">📐 **[Core Geometry Summary]**:\n• **Right Angle**: Formed by perpendicular lines intersecting at exactly **90°**.\n• **Acute Angle**: Any angle measuring strictly less than 90°.\n• **Obtuse Angle**: Any angle measuring greater than 90° but less than 180°.</div>`;
-                }
-            } 
-            // Dynamic Math Calculation Processor Block (Handles inputs like 189+123 or 76+98)
-            else if (calculatedTag === 'math' && /[\+\-\*\/]/.test(mathEquation)) {
-                try {
-                    let mathResult = Function(`"use strict"; return (${mathEquation})`)();
-                    aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">Let's calculate this calculation directly inside the workspace! Processing **${mathEquation}** yields an absolute result of **${mathResult}**. 🚀</div>`;
-                } catch(err) {
-                    aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">I detected a math challenge! Let's check your numbers and core arithmetic signs carefully.</div>`;
-                }
-            } 
-            // General Catch-All Workspace Response
-            else {
-                aiBubble.innerHTML = `${tagBadgeHtml}<div class="chat-text">I have filed your query under General Studies. In ${currentMode.toUpperCase()} mode, let's treat this like a fresh puzzle piece. Tell me a bit more about what you want to extract from this topic!</div>`;
-            }
-
-            submitBtn.innerText = "Ask AI";
-            submitBtn.disabled = false;
-            chatDisplay.scrollTop = chatDisplay.scrollHeight;
-        };
-    </script>
-
-    <script>
-        // Timer Mechanics
-        let timer, isRunning = false, timerType = 'study', timeRemaining = 1500;
-        function updateTimerDisplay() {
-            const min = Math.floor(timeRemaining / 60), sec = timeRemaining % 60;
-            document.getElementById('timerDisplay').innerText = `${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
-        }
-        function toggleTimer() {
-            const btn = document.getElementById('startBtn');
-            if (isRunning) { clearInterval(timer); btn.innerText = 'Start'; isRunning = false; }
-            else {
-                isRunning = true; btn.innerText = 'Pause';
-                timer = setInterval(() => { if (timeRemaining > 0) { timeRemaining--; updateTimerDisplay(); } else { clearInterval(timer); resetTimer(); } }, 1000);
-            }
-        }
-        function resetTimer() { clearInterval(timer); isRunning = false; document.getElementById('startBtn').innerText = 'Start'; timeRemaining = timerType === 'study' ? 1500 : 300; updateTimerDisplay(); }
-        function setTimerType(type) { timerType = type; document.getElementById('btn-study').classList.toggle('active', type==='study'); document.getElementById('btn-break').classList.toggle('active', type==='break'); resetTimer(); }
-        function exportToTxt() { const txt = document.getElementById('chatDisplay').innerText; const blob = new Blob([txt], { type: "text/plain" }); const a = document.createElement("a"); a.download = "Brainably-Study-Guide.txt"; a.href = window.URL.createObjectURL(blob); document.body.appendChild(a); a.click(); document.body.removeChild(a); }
-    </script>
 </body>
 </html>
